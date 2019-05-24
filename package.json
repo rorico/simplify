@@ -1,0 +1,23 @@
+{
+  "name": "simplify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rorico/simplify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rorico/simplify/issues"
+  },
+  "homepage": "https://github.com/rorico/simplify#readme",
+  "dependencies": {
+    "acorn": "^6.1.1",
+    "astring": "^1.4.0"
+  }
+}

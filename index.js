@@ -27,7 +27,7 @@ function simplify(code, fname, args) {
 		vars[params[i].name] = args[i]
 	}
 	var changed = {}
-	funcs = {}
+	// funcs = {}
 	walk(body)
 	var body = func.body
 	function check(node) {
@@ -36,20 +36,28 @@ function simplify(code, fname, args) {
 		})
 	}
 
-	// function 
+	function handleLoops(node) {
+
+	}
 
 	function walk(node) {
 		var ret = {
-			ret: null,
+			ret: undefined,
 			delete: false
 		}
 		var after
+
+		if (node.delete === undefined) node.delete = 0
+		if (node.calls === undefined) node.calls = 0
+		node.calls++
 		// todo hoisted and functions
 		switch (node.type) {
 			case "VariableDeclarator":
 				//vars[node.id.name] = evalNode(node.init) && check(node.init)
 				after = (res) => {
 					vars[node.id.name] = res.init.ret
+					if (node.id.name === "funcs") 
+					console.log("ska;ldfkm", vars.funcs, node.id.name, node, res)
 				}
 				break
 			case "FunctionDeclaration":
@@ -66,22 +74,53 @@ function simplify(code, fname, args) {
 			case "IfStatement":
 				// console.log("if test ", evalNode(node.test), node, node.test)
 				if (!evalNode(node.test)) {
-					ret.delete = true
+					node.delete++
+					// ret.delete = true
 					return ret
 				}
 				break
 			case "AssignmentExpression":
 			// console.log(node)
 				changed[node.left.name] = true
+				console.log("change", node)
+				after = (res) => {
+					vars[node.left.name] = res.ret
+				}
 				break
 			case "CallExpression":
+				after = (res) => {
+					var args = res.arguments.map(a => a.ret)
+
+					if (node.callee.type !== "Identifier") {
+						ret.ret = res.callee.ret(...args)
+					} else {
+						var name = node.callee.name
+						if (funcs[name]) {
+							// todo
+						} else if (name === "require") {
+							ret.ret = require(...args)
+						} else {
+							// todo handle require special
+							console.log("undefined function", node)
+						}
+					}
+				}
 				break
 			case "ForInStatement":
-				// console.log(node)
-				return
+				console.log("ForInStatement", node)
+				// assume only 1 var for for in
+				var varname = node.left.declarations[0].id.name
+				var right = walk(node.right).ret
+				for (var i in right) {
+					vars[varname] = i
+					console.log("itersss ", varname, i, node.left.declarations, right)
+					walk(node.body)
+				}
+				return ret
 				break
 
 			case "ExpressionStatement":
+				console.log("ExpressionStatement", node.expression)
 				break
 			case "BinaryExpression":
 				break
@@ -91,19 +130,24 @@ function simplify(code, fname, args) {
 			case "VariableDeclaration":
 				break
 			case "MemberExpression":
-				console.log("member", node)
 				after = (res) => {
+					console.log(res,node, vars.funcs)
 					if (node.computed) {
-						ret.ret = vars[res.object.ret][res.property.ret]
+						ret.ret = res.object.ret[res.property.ret]
 					} else {
-						ret.ret = vars[res.object.ret][node.property.name]
+						ret.ret = res.object.ret[node.property.name]
 					}
 
 					console.log("mems", node, ret)
 				}
-				var test
 				break
 			case "ObjectExpression":
+				// console.log(node)
+				// throw Error("asdf")
+				// doesn't account for a number of things
+				ret.ret = JSON.parse(astring.generate(node))
+				console.log("obj ", ret.ret)
+				return ret
 				break
 			case "UnaryExpression":
 				//console.log("unary ", node)
@@ -132,11 +176,22 @@ function simplify(code, fname, args) {
 				return ret
 				break
 			case "Identifier":
-				ret.ret = vars[node.name]
+				ret.ret = vars[node.name] || global[node.name]
 				return ret
 				break
 			case "ReturnStatement":
 				break
+
+			case "VariableDeclaration":
+				break
+			case "ArrayExpression":
+				break
+			case "ForStatement":
+				break
+			case "UpdateExpression":
+				console.log("UpdateExpression", node)
+				break
+
 			default:
 				console.log("unexpected node type", node)
 				break
@@ -146,18 +201,20 @@ function simplify(code, fname, args) {
 		for (var key in node) {
 			var val = node[key]
 			if (Array.isArray(val)) {
+				res[key] = [];
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
-					// for now assume not used outside
-					res = walk(c)
-					if (res && res.delete) {
+					var r = walk(c)
+					// i think r isn't used and deleted at same time
+					if (r && r.delete) {
 						val.splice(i, 1)
 						i--
 					}
+					res[key][i] = r
 				}
 			} else if (val && typeof val.type === "string") {
 				var r = res[key] = walk(val)
-				if (r && r.delete) node[key] = null
+				if (r && r.delete) node[key] = undefined
 			}
 		}
 		if (after) after(res)

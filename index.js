@@ -6,38 +6,50 @@ var fs = require("fs")
 function simplify(code, fname, args) {
 	var funcs = {}
 	var vars = {}
+	var changed = {}
 	var ast = acorn.parse(code)
-	var body = ast.body
-	for (var name in body) {
-		var child = body[name]
-		if (child.type === "FunctionDeclaration") {
-			funcs[child.id.name] = child
-			//console.log(child)
-		}
-	//console.log(child, body[child])
-	}
-	var func = funcs[fname]
-	if (!funcs[fname]) {
+	// var body = ast.body
+	walk(ast)
+
+	// for (var name in body) {
+	// 	var child = body[name]
+	// 	if (child.type === "FunctionDeclaration") {
+	// 		funcs[child.id.name] = child
+	// 		//console.log(child)
+	// 	}
+	// //console.log(child, body[child])
+	// }
+	var func = vars[fname]
+	if (!func || func.type !== "FunctionDeclaration") {
 		console.log("no fname " + fname)
 		return 0
 	}
-	console.log(func)
-	var params = func.params
-	for (var i = 0 ; i < params.length ; i++) {
-		vars[params[i].name] = args[i]
-	}
-	var changed = {}
+	call(fname, args)
+	unused(func)
 	// funcs = {}
-	walk(body)
-	var body = func.body
+	// walk(body)
+	// var body = func.body
 	function check(node) {
 		return walk(node, (n) => {
 			return changed[n.name]
 		})
 	}
 
-	function handleLoops(node) {
-
+	function call(name, args) {
+		var f = vars[name]
+		var params = f.params
+		var oldVars = vars
+		vars = Object.assign(f.vars, {})
+		if (name === "simplify") {
+			// return ret
+		}
+		for (var i = 0 ; i < params.length ; i++) {
+			vars[params[i].name] = args[i]
+		}
+		f.calls++
+		var ret = walk(f.body)
+		vars = oldVars
+		return ret
 	}
 
 	function walk(node) {
@@ -49,8 +61,8 @@ function simplify(code, fname, args) {
 		var after
 
 		if (node.delete === undefined) node.delete = 0
-		if (node.calls === undefined) node.calls = 0
-		node.calls++
+		if (node.visits === undefined) node.visits = 0
+		node.visits++
 		// todo hoisted and functions
 		switch (node.type) {
 			case "VariableDeclarator":
@@ -69,17 +81,43 @@ function simplify(code, fname, args) {
 					vars: Object.assign(vars,{})
 				}
 				node.vars = vars
+				node.calls = node.calls || 0
 				vars[node.id.name] = node
 				//console.log(node)
 				// todo seperate function into different closures
 				return ret
+
+			case "CallExpression":
+				after = (res) => {
+					var args = res.arguments.map(a => a.ret)
+					console.log("CallExpression", node)
+					if (node.callee.type !== "Identifier") {
+						if (res.callee.ret !== console.log) {
+							ret.ret = res.callee.ret(...args)
+						}
+					} else {
+						var name = node.callee.name
+						if (funcs[name]) {
+							console.log("Self CallExpression", node)
+							ret.ret = call(name, res.arguments.map(a => a.ret))
+						} else if (name === "require") {
+							ret.ret = require(...args)
+						} else {
+							// todo handle require special
+							console.log("undefined function", node)
+						}
+					}
+				}
+				break
 			case "IfStatement":
-				console.log("IfStatement", node)
 				// console.log("if test ", evalNode(node.test), node, node.test)
 				var test = walk(node.test)
-				console.log("if return", test)
 				if (test.ret) {
-					walk(node.consequent)
+					var r = walk(node.consequent)
+					if (r && r.return) return r
+				} else if (node.alternate) {
+					var r = walk(node.alternate)
+					if (r && r.return) return r
 				} else {
 					node.delete++
 				}
@@ -144,6 +182,7 @@ function simplify(code, fname, args) {
 					break
 				}
 				// todo handle prefix
+				if (node.prefix) console.log("not handled prefix")
 				if (node.operator === "++") {
 					ret.ret = obj[key]++
 				} else if (node.operator === "--") {
@@ -153,36 +192,6 @@ function simplify(code, fname, args) {
 				}
 
 				console.log("UpdateExpression", node)
-				break
-			case "CallExpression":
-				after = (res) => {
-					var args = res.arguments.map(a => a.ret)
-					console.log("CallExpression", node)
-					if (node.callee.type !== "Identifier") {
-						ret.ret = res.callee.ret(...args)
-					} else {
-						var name = node.callee.name
-						if (funcs[name]) {
-							var f = vars[name]
-							var params = f.params
-							var oldVars = vars
-							vars = Object.assign(f.vars, {})
-							if (name === "simplify") {
-								return ret
-							}
-							for (var i = 0 ; i < params.length ; i++) {
-								vars[params[i].name] = {}
-							}
-							ret.ret = walk(f.body)
-							vars = oldVars
-						} else if (name === "require") {
-							ret.ret = require(...args)
-						} else {
-							// todo handle require special
-							console.log("undefined function", node)
-						}
-					}
-				}
 				break
 			case "ForInStatement":
 				// console.log("ForInStatement", node)
@@ -209,6 +218,19 @@ function simplify(code, fname, args) {
 			case "ExpressionStatement":
 				console.log("ExpressionStatement", node.expression)
 				break
+
+			case "LogicalExpression":
+				switch (node.operator) {
+					case "||":
+						ret.ret = walk(node.left).ret || walk(node.right).ret
+						break
+					case "&&":
+						ret.ret = walk(node.left).ret && walk(node.right).ret
+						break
+				}
+				return ret
+
+			// TODO: seperate these
 			case "BinaryExpression":
 				// console.log("BinaryExpression", node)
 				after = (res) => {
@@ -270,7 +292,7 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				after = (res) => {
-					console.log(res,node,vars.i)
+					console.log(res,node,vars.i, res.object.ret)
 					if (node.computed) {
 						ret.ret = res.object.ret[res.property.ret]
 					} else {
@@ -330,6 +352,8 @@ function simplify(code, fname, args) {
 
 			case "VariableDeclaration":
 				break
+			case "Program":
+				break
 			case "ArrayExpression":
 				console.log("ArrayExpression", node)
 				after = (res) => {
@@ -364,13 +388,18 @@ function simplify(code, fname, args) {
 		if (after) after(res)
 		return ret
 	}
+	function checkUnuse(node) {
+		if (node.type === "IfStatement") console.log(node)
+		return (node.delete && node.delete === node.visits)// || (node.calls === 0)
+	}
+
 	function unused(node) {
 		for (var key in node) {
 			var val = node[key]
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
-					if (c.delete && c.delete === c.calls) {
+					if (checkUnuse(c)) {
 						val.splice(i, 1)
 						i--
 					} else {
@@ -378,7 +407,7 @@ function simplify(code, fname, args) {
 					}
 				}
 			} else if (val && typeof val.type === "string") {
-				if (val.delete && val.delete === val.calls) {
+				if (checkUnuse(val)) {
 					node[key] = undefined
 				} else {
 					unused(val)
@@ -396,13 +425,15 @@ function simplify(code, fname, args) {
 		// console.log("djsksndn " + str)
 		return function() { return eval(str) }.call(context)
 	}
-	walk(body)
-	unused(body)
+	// walk(body)
+	// call()
+	// unused(body)
 	// console.log(vars)
 	console.log()
 	if (true) console.log("test")
 	if (false) console.log("test2")
 	//console.log(JSON.stringify(func, null, 4))
+	// console.log(func)
 	return astring.generate(func)
 }
 

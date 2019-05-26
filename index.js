@@ -186,7 +186,7 @@ function simplify(code, fname, args) {
 
 			case "ForStatement":
 				console.log("ForStatement", node)
-				for (walk(node.init) ; walk(node.test) ; walk(node.update)) {
+				for (walk(node.init) ; walk(node.test).ret ; walk(node.update)) {
 					console.log("asdnfjkasdf", vars.i)
 					walk(node.body)
 				}
@@ -345,6 +345,28 @@ function simplify(code, fname, args) {
 		if (after) after(res)
 		return ret
 	}
+	function unused(node) {
+		for (var key in node) {
+			var val = node[key]
+			if (Array.isArray(val)) {
+				for (var i = 0 ; i < val.length ; i++) {
+					var c = val[i]
+					if (c.delete && c.delete === c.calls) {
+						val.splice(i, 1)
+						i--
+					} else {
+						unused(c)
+					}
+				}
+			} else if (val && typeof val.type === "string") {
+				if (val.delete && val.delete === val.calls) {
+					node[key] = undefined
+				} else {
+					unused(val)
+				}
+			}
+		}
+	}
 	function evalNode(node) {
 		if (!node) return undefined
 		// console.log("eval", node)
@@ -356,6 +378,7 @@ function simplify(code, fname, args) {
 		return function() { return eval(str) }.call(context)
 	}
 	walk(body)
+	unused(body)
 	// console.log(vars)
 	console.log()
 	if (true) console.log("test")

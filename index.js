@@ -23,7 +23,7 @@ function simplify(code, fname, args) {
 	}
 	console.log(func)
 	var params = func.params
-	for (var i = 0 ; i < params ; i++) {
+	for (var i = 0 ; i < params.length ; i++) {
 		vars[params[i].name] = args[i]
 	}
 	var changed = {}
@@ -72,25 +72,57 @@ function simplify(code, fname, args) {
 				//break
 				return ret
 			case "IfStatement":
+				console.log("IfStatement", node)
 				// console.log("if test ", evalNode(node.test), node, node.test)
-				if (!evalNode(node.test)) {
+				var test = walk(node.test)
+				console.log("if return", test)
+				if (test.ret) {
+					walk(node.consequent)
+				} else {
 					node.delete++
-					// ret.delete = true
-					return ret
 				}
+				return ret
+				// if (!evalNode(node.test)) {
+				// 	node.delete++
+				// 	// ret.delete = true
+				// 	return ret
+				// }
 				break
 			case "AssignmentExpression":
 			// console.log(node)
 				changed[node.left.name] = true
 				console.log("change", node)
-				after = (res) => {
-					vars[node.left.name] = res.ret
+				// todo handle += and -=
+				var right = walk(node.right).ret
+				if (node.left.type === "Identifier") {
+					vars[node.left.name] = right
+				} else if (node.left.type === "MemberExpression") {
+					var object = walk(node.left.object)
+					var property = walk(node.left.property)
+					console.log(res, node)
+					if (node.left.computed) {
+						ret.ret = object.ret[property.ret] = right
+					} else {
+						ret.ret = object.ret[node.left.property.name] = right
+					}
+				} else {
+					console.log("unknown AssignmentExpression type", node)
 				}
+				return ret
+				// after = (res) => {
+				// 	if (node.left.type === "Identifier") {
+				// 		vars[node.left.name] = res.right.ret
+				// 	} else if (node.left.type === "MemberExpression") {
+				// 		res.left.ret = res.right.ret
+				// 	} else {
+				// 		console.log("unknown AssignmentExpression type", node)
+				// 	}
+				// }
 				break
 			case "CallExpression":
 				after = (res) => {
 					var args = res.arguments.map(a => a.ret)
-
+					console.log("CallExpression", node)
 					if (node.callee.type !== "Identifier") {
 						ret.ret = res.callee.ret(...args)
 					} else {
@@ -107,13 +139,22 @@ function simplify(code, fname, args) {
 				}
 				break
 			case "ForInStatement":
-				console.log("ForInStatement", node)
+				// console.log("ForInStatement", node)
 				// assume only 1 var for for in
 				var varname = node.left.declarations[0].id.name
 				var right = walk(node.right).ret
 				for (var i in right) {
 					vars[varname] = i
-					console.log("itersss ", varname, i, node.left.declarations, right)
+					console.log("itersss ", varname, i, right[i], node.body)
+					walk(node.body)
+				}
+				return ret
+				break
+
+			case "ForStatement":
+				console.log("ForStatement", node)
+				for (walk(node.init) ; walk(node.test) ; walk(node.update)) {
+					console.log("asdnfjkasdf", vars.i)
 					walk(node.body)
 				}
 				return ret
@@ -123,6 +164,60 @@ function simplify(code, fname, args) {
 				console.log("ExpressionStatement", node.expression)
 				break
 			case "BinaryExpression":
+				// console.log("BinaryExpression", node)
+				after = (res) => {
+					var right = res.right.ret
+					var left = res.left.ret
+					switch (node.operator) {
+						case "===":
+							ret.ret = left === right
+							break
+						case "!==":
+							ret.ret = left !== right
+							break
+						case "==":
+							ret.ret = left == right
+							break
+						case "!=":
+							ret.ret = left != right
+							break
+						case "||":
+							ret.ret = left || right
+							break
+						case "&&":
+							ret.ret = left && right
+							break
+						case ">":
+							ret.ret = left > right
+							break
+						case ">=":
+							ret.ret = left >= right
+							break
+						case "<":
+							ret.ret = left < right
+							break
+						case "<=":
+							ret.ret = left <= right
+							break
+						case "+":
+							ret.ret = left + right
+							break
+						case "-":
+							ret.ret = left - right
+							break
+						case "*":
+							ret.ret = left * right
+							break
+						case "/":
+							ret.ret = left / right
+							break
+						case "%":
+							ret.ret = left % right
+							break
+						default:
+							console.log("unexpected binary", node.operator)
+					}
+				}
 				break
 			case "BlockStatement":
 				//console.log(node)
@@ -131,7 +226,7 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				after = (res) => {
-					console.log(res,node, vars.funcs)
+					console.log(res,node)
 					if (node.computed) {
 						ret.ret = res.object.ret[res.property.ret]
 					} else {
@@ -146,13 +241,11 @@ function simplify(code, fname, args) {
 				// throw Error("asdf")
 				// doesn't account for a number of things
 				ret.ret = JSON.parse(astring.generate(node))
-				console.log("obj ", ret.ret)
 				return ret
 				break
 			case "UnaryExpression":
 				//console.log("unary ", node)
 				after = (res) => {
-					console.log(res, res.test, "lebensn")
 					res = res.argument
 					if (node.operator === "!") {
 						ret.ret = !res.ret
@@ -185,8 +278,10 @@ function simplify(code, fname, args) {
 			case "VariableDeclaration":
 				break
 			case "ArrayExpression":
-				break
-			case "ForStatement":
+				console.log("ArrayExpression", node)
+				after = (res) => {
+					ret.ret = res.elements.map(e => e.ret)
+				}
 				break
 			case "UpdateExpression":
 				console.log("UpdateExpression", node)

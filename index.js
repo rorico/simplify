@@ -43,7 +43,8 @@ function simplify(code, fname, args) {
 	function walk(node) {
 		var ret = {
 			ret: undefined,
-			delete: false
+			delete: false,
+			return: false
 		}
 		var after
 
@@ -55,21 +56,22 @@ function simplify(code, fname, args) {
 			case "VariableDeclarator":
 				//vars[node.id.name] = evalNode(node.init) && check(node.init)
 				after = (res) => {
-					vars[node.id.name] = res.init.ret
+					console.log(node)
+					vars[node.id.name] = node.init ? res.init.ret : undefined
 					if (node.id.name === "funcs") 
 					console.log("ska;ldfkm", vars.funcs, node.id.name, node, res)
 				}
 				break
 			case "FunctionDeclaration":
 				funcs[node.id.name] = node
+				funcs[node.id.name] = {
+					node: node,
+					vars: Object.assign(vars,{})
+				}
+				node.vars = vars
+				vars[node.id.name] = node
 				//console.log(node)
 				// todo seperate function into different closures
-				var params = node.params
-				//console.log("asdnfkafsd", node)
-				for (var i = 0 ; i < params.length ; i++) {
-					vars[params[i].name] = {}
-				}
-				//break
 				return ret
 			case "IfStatement":
 				console.log("IfStatement", node)
@@ -161,7 +163,18 @@ function simplify(code, fname, args) {
 					} else {
 						var name = node.callee.name
 						if (funcs[name]) {
-							// todo
+							var f = vars[name]
+							var params = f.params
+							var oldVars = vars
+							vars = Object.assign(f.vars, {})
+							if (name === "simplify") {
+								return ret
+							}
+							for (var i = 0 ; i < params.length ; i++) {
+								vars[params[i].name] = {}
+							}
+							ret.ret = walk(f.body)
+							vars = oldVars
 						} else if (name === "require") {
 							ret.ret = require(...args)
 						} else {
@@ -255,8 +268,6 @@ function simplify(code, fname, args) {
 			case "BlockStatement":
 				//console.log(node)
 				break
-			case "VariableDeclaration":
-				break
 			case "MemberExpression":
 				after = (res) => {
 					console.log(res,node,vars.i)
@@ -273,7 +284,12 @@ function simplify(code, fname, args) {
 				// console.log(node)
 				// throw Error("asdf")
 				// doesn't account for a number of things
-				ret.ret = JSON.parse(astring.generate(node))
+				console.log("obj", node)
+				ret.ret = {}
+				for (var prop of node.properties) {
+					ret.ret[prop.key.name] = walk(prop.value).ret
+				}
+				//ret.ret = JSON.parse(astring.generate(node))
 				return ret
 				break
 			case "UnaryExpression":
@@ -306,6 +322,10 @@ function simplify(code, fname, args) {
 				return ret
 				break
 			case "ReturnStatement":
+				after = (res) => {
+					ret.return = true
+					ret.ret = res.ret
+				}
 				break
 
 			case "VariableDeclaration":
@@ -331,15 +351,14 @@ function simplify(code, fname, args) {
 					var c = val[i]
 					var r = walk(c)
 					// i think r isn't used and deleted at same time
-					if (r && r.delete) {
-						val.splice(i, 1)
-						i--
+					if (r && r.return) {
+						return r 
 					}
 					res[key][i] = r
 				}
 			} else if (val && typeof val.type === "string") {
 				var r = res[key] = walk(val)
-				if (r && r.delete) node[key] = undefined
+				if (r && r.return) return r
 			}
 		}
 		if (after) after(res)

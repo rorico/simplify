@@ -119,6 +119,39 @@ function simplify(code, fname, args) {
 				// 	}
 				// }
 				break
+
+
+			case "UpdateExpression":
+				// need to update in object
+				var obj
+				var key
+				if (node.argument.type === "Identifier") {
+					obj = vars
+					key = node.argument.name
+				} else if (node.argument.type === "MemberExpression") {
+					var object = walk(node.argument.object)
+					var property = walk(node.argument.property)
+					obj = object.ret
+					if (node.argument.computed) {
+						key = property.ret
+					} else {
+						key = node.argument.property.name
+					}
+				} else {
+					console.log("unknown AssignmentExpression type", node)
+					break
+				}
+				// todo handle prefix
+				if (node.operator === "++") {
+					ret.ret = obj[key]++
+				} else if (node.operator === "--") {
+					ret.ret = obj[key]--
+				} else {
+					console.log("unknown update operator", node)
+				}
+
+				console.log("UpdateExpression", node)
+				break
 			case "CallExpression":
 				after = (res) => {
 					var args = res.arguments.map(a => a.ret)
@@ -226,7 +259,7 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				after = (res) => {
-					console.log(res,node)
+					console.log(res,node,vars.i)
 					if (node.computed) {
 						ret.ret = res.object.ret[res.property.ret]
 					} else {
@@ -269,7 +302,7 @@ function simplify(code, fname, args) {
 				return ret
 				break
 			case "Identifier":
-				ret.ret = vars[node.name] || global[node.name]
+				ret.ret = vars[node.name] === undefined ? global[node.name] : vars[node.name]
 				return ret
 				break
 			case "ReturnStatement":
@@ -282,9 +315,6 @@ function simplify(code, fname, args) {
 				after = (res) => {
 					ret.ret = res.elements.map(e => e.ret)
 				}
-				break
-			case "UpdateExpression":
-				console.log("UpdateExpression", node)
 				break
 
 			default:

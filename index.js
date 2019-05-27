@@ -20,6 +20,7 @@ function simplify(code, fname, args) {
 	// 	}
 	// //console.log(child, body[child])
 	// }
+	console.log(vars)
 	var func = vars[fname]
 	if (!func || func.type !== "FunctionDeclaration") {
 		console.log("no fname " + fname)
@@ -102,8 +103,6 @@ function simplify(code, fname, args) {
 				//vars[node.id.name] = evalNode(node.init) && check(node.init)
 				after = (res) => {
 					vars[node.id.name] = node.init ? res.init.ret : undefined
-					if (node.id.name === "funcs") 
-					console.log("ska;ldfkm", vars.funcs, node.id.name, node, res)
 				}
 				break
 			case "FunctionDeclaration":
@@ -124,10 +123,14 @@ function simplify(code, fname, args) {
 					if (node.callee.type !== "Identifier") {
 						if (res.callee.ret !== console.log) {
 							ret.ret = res.callee.ret(...args)
+						} else {
+							ret.ret = console.log("from program", ...args)
+						throw "e"
 						}
 					} else {
 						var name = node.callee.name
-						if (funcs[name]) {
+						if (vars[name]) {
+							if (vars[name].type === "FunctionDeclaration") console.log("var is not function", node)
 							console.log("Self CallExpression", node)
 							ret.ret = call(name, res.arguments.map(a => a.ret))
 						} else if (name === "require") {
@@ -161,7 +164,7 @@ function simplify(code, fname, args) {
 			case "AssignmentExpression":
 			// console.log(node)
 				changed[node.left.name] = true
-				console.log("change", node)
+				//console.log("change", node)
 				// todo handle += and -=
 				var right = walk(node.right).ret
 				if (node.left.type === "Identifier") {
@@ -169,7 +172,7 @@ function simplify(code, fname, args) {
 				} else if (node.left.type === "MemberExpression") {
 					var object = walk(node.left.object)
 					var property = walk(node.left.property)
-					console.log(res, node)
+					//console.log(res, node)
 					if (node.left.computed) {
 						ret.ret = object.ret[property.ret] = right
 					} else {
@@ -221,7 +224,7 @@ function simplify(code, fname, args) {
 					console.log("unknown update operator", node)
 				}
 
-				console.log("UpdateExpression", node)
+				//console.log("UpdateExpression", node)
 				break
 			case "ForInStatement":
 				// console.log("ForInStatement", node)
@@ -230,16 +233,16 @@ function simplify(code, fname, args) {
 				var right = walk(node.right).ret
 				for (var i in right) {
 					vars[varname] = i
-					console.log("itersss ", varname, i, right[i], node.body)
+					//console.log("itersss ", varname, i, right[i], node.body)
 					walk(node.body)
 				}
 				return ret
 				break
 
 			case "ForStatement":
-				console.log("ForStatement", node)
+				//console.log("ForStatement", node)
 				for (walk(node.init) ; walk(node.test).ret ; walk(node.update)) {
-					console.log("asdnfjkasdf", vars.i)
+					//console.log("asdnfjkasdf", vars.i)
 					walk(node.body)
 				}
 				return ret
@@ -322,14 +325,14 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				after = (res) => {
-					console.log(res,node,vars.i, res.object.ret)
+					//console.log(res,node,vars.i, res.object.ret)
 					if (node.computed) {
 						ret.ret = res.object.ret[res.property.ret]
 					} else {
 						ret.ret = res.object.ret[node.property.name]
 					}
 
-					console.log("mems", node, ret)
+					//console.log("mems", node, ret)
 				}
 				break
 			case "ObjectExpression":
@@ -377,7 +380,7 @@ function simplify(code, fname, args) {
 				after = (res) => {
 					console.log("ReturnStatement", node, res)
 					ret.return = true
-					ret.ret = res.argument.ret
+					ret.ret = (res.argument || {}).ret
 				}
 				break
 
@@ -386,7 +389,7 @@ function simplify(code, fname, args) {
 			case "Program":
 				break
 			case "ArrayExpression":
-				console.log("ArrayExpression", node)
+				//console.log("ArrayExpression", node)
 				after = (res) => {
 					ret.ret = res.elements.map(e => e.ret)
 				}

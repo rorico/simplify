@@ -9,6 +9,7 @@ function simplify(code, fname, args) {
 	var changed = {}
 	var ast = acorn.parse(code)
 	// var body = ast.body
+	initHoisted(ast)
 	walk(ast)
 
 	// for (var name in body) {
@@ -24,8 +25,13 @@ function simplify(code, fname, args) {
 		console.log("no fname " + fname)
 		return 0
 	}
-	call(fname, args)
-	unused(func)
+	console.log("start of func")
+	var ret = call(fname, args)
+	// console.log(vars)
+	// return
+	// unused(func)
+	// console.log(astring.generate(func))
+	console.log("return value", ret.ret)
 	// funcs = {}
 	// walk(body)
 	// var body = func.body
@@ -39,7 +45,7 @@ function simplify(code, fname, args) {
 		var f = vars[name]
 		var params = f.params
 		var oldVars = vars
-		vars = Object.assign(f.vars, {})
+		vars = Object.assign({}, f.vars)
 		if (name === "simplify") {
 			// return ret
 		}
@@ -47,9 +53,36 @@ function simplify(code, fname, args) {
 			vars[params[i].name] = args[i]
 		}
 		f.calls++
+		initHoisted(f.body)
 		var ret = walk(f.body)
 		vars = oldVars
 		return ret
+	}
+
+	function addFunction(node) {
+		node.vars = vars
+		node.calls = node.calls || 0
+		vars[node.id.name] = node
+	}
+
+	function initHoisted(node) {
+		if (node.type === "FunctionDeclaration") {
+			addFunction(node)
+			return
+		} else if (node.type === "VariableDeclarator") {
+			vars[node.id.name] = undefined
+		}
+		for (var key in node) {
+			var val = node[key]
+			if (Array.isArray(val)) {
+				for (var i = 0 ; i < val.length ; i++) {
+					var c = val[i]
+					var res = initHoisted(c)
+				}
+			} else if (val && typeof val.type === "string") {
+				var res = initHoisted(val)
+			}
+		}
 	}
 
 	function walk(node) {
@@ -68,21 +101,18 @@ function simplify(code, fname, args) {
 			case "VariableDeclarator":
 				//vars[node.id.name] = evalNode(node.init) && check(node.init)
 				after = (res) => {
-					console.log(node)
 					vars[node.id.name] = node.init ? res.init.ret : undefined
 					if (node.id.name === "funcs") 
 					console.log("ska;ldfkm", vars.funcs, node.id.name, node, res)
 				}
 				break
 			case "FunctionDeclaration":
-				funcs[node.id.name] = node
-				funcs[node.id.name] = {
-					node: node,
-					vars: Object.assign(vars,{})
-				}
-				node.vars = vars
-				node.calls = node.calls || 0
-				vars[node.id.name] = node
+				// funcs[node.id.name] = node
+				// funcs[node.id.name] = {
+				// 	node: node,
+				// 	vars: Object.assign(vars,{})
+				// }
+				addFunction(node)
 				//console.log(node)
 				// todo seperate function into different closures
 				return ret
@@ -345,8 +375,9 @@ function simplify(code, fname, args) {
 				break
 			case "ReturnStatement":
 				after = (res) => {
+					console.log("ReturnStatement", node, res)
 					ret.return = true
-					ret.ret = res.ret
+					ret.ret = res.argument.ret
 				}
 				break
 
@@ -376,6 +407,7 @@ function simplify(code, fname, args) {
 					var r = walk(c)
 					// i think r isn't used and deleted at same time
 					if (r && r.return) {
+						console.log(r)
 						return r 
 					}
 					res[key][i] = r
@@ -389,8 +421,11 @@ function simplify(code, fname, args) {
 		return ret
 	}
 	function checkUnuse(node) {
-		if (node.type === "IfStatement") console.log(node)
-		return (node.delete && node.delete === node.visits)// || (node.calls === 0)
+		if (node.type === "IfStatement") {
+			return (node.delete && node.delete === node.visits) || !node.visits // || (node.calls === 0)
+		}
+		// console.log(node)
+		// return (node.delete && node.delete === node.visits)// || (node.calls === 0)
 	}
 
 	function unused(node) {
@@ -461,7 +496,4 @@ var code = fs.readFileSync("index.js")
 var fname = "simplify"
 var args = [code, fname, []]
 var test = simplify(code, fname, args)
-console.log(test)
-
-
-
+// console.log(test)

@@ -70,18 +70,18 @@ function simplify(code, fname, args) {
 			var oldVars = vars
 			// TODO handle updating global variables
 			vars = {}
-			vars.__proto__ = oldVars
+			vars.__proto__ = f.vars
 			// vars = Object.assign({}, f.vars)
 			if (node.id && node.id.name === "simplify") {
 				// return
 			}
 			for (var i = 0 ; i < params.length ; i++) {
-				console.error("params", params[i].name, i, arguments[i])
+				// console.error("params", params[i].name, i, arguments[i])
 				vars[params[i].name] = arguments[i]
 			}
 			vars.arguments = arguments
 
-			console.error("starting vars", vars)
+			// console.error("starting vars", vars)
 			f.calls++
 			initHoisted(f.body)
 			var ret = walk(f.body)
@@ -188,6 +188,7 @@ function simplify(code, fname, args) {
 			case "CallExpression":
 				after = (res) => {
 					var args = res.arguments.reduce((a, arg) => {
+						console.error(a,arg)
 						if (arg.spread) {
 							return a.concat(arg.ret)
 						} else {
@@ -195,11 +196,12 @@ function simplify(code, fname, args) {
 							return a
 						}
 					}, [])
-					console.error("Call", node)//args, res, node)
-					console.log(args)
+					// console.error("Call", node,vars.res, vars.args, res.arguments, args)//args, res, node)
+					// console.log(args)
 					// console.log("CallExpression", node)
 					if (node.callee.type !== "Identifier") {
 						if (res.callee.ret !== console.log) {
+							console.log("ahhh", node, res)
 							// console.log(res,node)
 							ret.ret = res.callee.ret(...args)
 						} else {
@@ -210,10 +212,15 @@ function simplify(code, fname, args) {
 						var name = node.callee.name
 						if (vars[name]) {
 							if (!isFunction(vars[name])) console.log("var is not function", node)
-							console.log("Self CallExpression", node, vars[name], args)
+							// console.log("Self CallExpression", node, vars[name], args)
 							ret.ret = vars[name](...args)
 							//call(name, res.arguments.map(a => a.ret))
 						} else if (name === "require") {
+							if (vars.vars) console.log("we in deep", vars.node, vars.args, vars.vars, vars.res)
+								 else {
+					console.error("require", node, node.arguments, vars.res, vars.args, res.arguments, args)
+								 	
+								 }
 							ret.ret = require(...args)
 						} else {
 							// todo handle require special
@@ -281,7 +288,7 @@ function simplify(code, fname, args) {
 
 			case "UpdateExpression":
 				// need to update in object
-				console.log("UpdateExpression", node)
+				// console.log("UpdateExpression", node)
 				var o = getObj(node.argument)
 				var obj = o.obj
 				var key = o.key
@@ -400,10 +407,17 @@ function simplify(code, fname, args) {
 			case "MemberExpression":
 				after = (res) => {
 					//console.log(res,node,vars.i, res.object.ret)
+					var obj = res.object.ret
+					var key = res.property.ret
 					if (node.computed) {
 						ret.ret = res.object.ret[res.property.ret]
+						key = res.property.ret
 					} else {
 						ret.ret = res.object.ret[node.property.name]
+						key = node.property.name
+					}
+					if (obj[key] instanceof Function) {
+						ret.ret = obj[key].bind(obj)
 					}
 
 					//console.log("mems", node, ret)

@@ -9,6 +9,7 @@ function simplify(code, fname, args) {
 	var changed = {}
 	console.error(code, "aSAD")
 	var ast = acorn.parse(code)
+	fs.writeFileSync("ast.json", JSON.stringify(ast, null, 4))
 	// var body = ast.body
 	initHoisted(ast)
 	walk(ast)
@@ -63,7 +64,7 @@ function simplify(code, fname, args) {
 	function addFunction(node) {
 		node.vars = vars
 		node.calls = node.calls || 0
-		// console.log("adding", node.id && node.id.name, vars)
+		console.log("adding", node.id && node.id.name, vars, vars.__proto__)
 		var func = function() {
 			var f = node
 			var params = f.params
@@ -235,7 +236,7 @@ function simplify(code, fname, args) {
 							// throw "5"
 						}
 						if (obj[key] !== console.log) {
-							console.log("ahhh", node, res, ...args)
+							// console.log("ahhh", node, res, ...args)
 							// console.log(res,node)
 				// console.log("test2", arguments, node.id, vars.simplify.node, vars.walkC.node, vars.simplify.names, vars.walkC.names)
 							ret.ret = obj[key](...args)
@@ -499,6 +500,8 @@ function simplify(code, fname, args) {
 				break
 
 			case "VariableDeclaration":
+				break
+			case "Program":
 				// these are set in node for every module
 				// exports, require, module, __filename, __dirname
 				var exports = vars.exports = {}
@@ -507,8 +510,6 @@ function simplify(code, fname, args) {
 				vars.require = require
 				vars.__filename = __filename
 				vars.__dirname = __dirname
-				break
-			case "Program":
 				break
 			case "ArrayExpression":
 				//console.log("ArrayExpression", node)

@@ -20,13 +20,13 @@ function simplify(code, fname, args) {
 		return 0
 	}
 	console.log("start of func")
-	return
+	// return 1
 	var ret = call(fname, args)
 	// console.log(vars)
 	// return
 	// unused(func)
 	// console.log(astring.generate(func))
-	console.log("return value", ret.ret)
+	console.log("return value", ret)
 	// funcs = {}
 	// walk(body)
 	// var body = func.body
@@ -63,7 +63,7 @@ function simplify(code, fname, args) {
 	function addFunction(node) {
 		node.vars = vars
 		node.calls = node.calls || 0
-
+		// console.log("adding", node.id && node.id.name, vars)
 		var func = function() {
 			var f = node
 			var params = f.params
@@ -71,8 +71,11 @@ function simplify(code, fname, args) {
 			// TODO handle updating global variables
 			vars = {}
 			vars.__proto__ = f.vars
+			// console.log("asdf", vars, vars.__proto__, vars.__proto__.__proto__, node)
 			// vars = Object.assign({}, f.vars)
-			if (node.id && node.id.name === "simplify") {
+			if (node.id && node.id.name === "walkC") {
+				console.log("test", arguments, node.id, oldVars.simplify.node, oldVars.walkC.node, oldVars.simplify.names, oldVars.walkC.names)
+				throw "2"
 				// return
 			}
 			for (var i = 0 ; i < params.length ; i++) {
@@ -81,7 +84,7 @@ function simplify(code, fname, args) {
 			}
 			vars.arguments = arguments
 
-			// console.error("starting vars", vars)
+			console.log("starting vars", vars)
 			f.calls++
 			initHoisted(f.body)
 			var ret = walk(f.body)
@@ -91,6 +94,8 @@ function simplify(code, fname, args) {
 		}
 		if (node.id) {
 			vars[node.id.name] = func
+			func.names = node.id.name
+			func.node = node
 		}
 		return func
 		return node
@@ -149,6 +154,7 @@ function simplify(code, fname, args) {
 	}
 
 	function walk(node) {
+		if (node.name === "callback") throw "1"
 		// console.error(node)
 		var ret = {
 			ret: undefined,
@@ -168,6 +174,7 @@ function simplify(code, fname, args) {
 				//vars[node.id.name] = evalNode(node.init) && check(node.init)
 				after = (res) => {
 					vars[node.id.name] = node.init ? res.init.ret : undefined
+					if (node.id.name === "f") console.log("fdsa", vars)
 				}
 				break
 
@@ -188,7 +195,6 @@ function simplify(code, fname, args) {
 			case "CallExpression":
 				after = (res) => {
 					var args = res.arguments.reduce((a, arg) => {
-						console.error(a,arg)
 						if (arg.spread) {
 							return a.concat(arg.ret)
 						} else {
@@ -199,33 +205,46 @@ function simplify(code, fname, args) {
 					// console.error("Call", node,vars.res, vars.args, res.arguments, args)//args, res, node)
 					// console.log(args)
 					// console.log("CallExpression", node)
-					if (node.callee.type !== "Identifier") {
-						if (res.callee.ret !== console.log) {
-							console.log("ahhh", node, res)
-							// console.log(res,node)
-							ret.ret = res.callee.ret(...args)
-						} else {
-							ret.ret = console.log("from program", ...args)
-						throw "e"
-						}
-					} else {
+					if (node.callee.type === "Identifier") {
 						var name = node.callee.name
 						if (vars[name]) {
-							if (!isFunction(vars[name])) console.log("var is not function", node)
+							if (!isFunction(vars[name])) {
+								console.log("var is not function", node)
+								throw "4"
+							}
 							// console.log("Self CallExpression", node, vars[name], args)
 							ret.ret = vars[name](...args)
 							//call(name, res.arguments.map(a => a.ret))
 						} else if (name === "require") {
-							if (vars.vars) console.log("we in deep", vars.node, vars.args, vars.vars, vars.res)
-								 else {
-					console.error("require", node, node.arguments, vars.res, vars.args, res.arguments, args)
-								 	
-								 }
+							// if (vars.vars) console.log("we in deep", vars.node, vars.args, vars.vars, vars.res)
+							// else {
+							// 	console.error("require", node, node.arguments, vars.res, vars.args, res.arguments, args)	 	
+							// }
 							ret.ret = require(...args)
 						} else {
 							// todo handle require special
 							console.log("undefined function", node)
 						}
+					} else if (node.callee.type === "MemberExpression") {
+						// do it this way to maintain thisArg
+						var o = getObj(node.callee)
+						var obj = o.obj
+						var key = o.key
+						if (node.callee.object.name === "vars" && node.callee.property.name === "name") {
+				console.log("test2", arguments, node.id, obj, key, res, vars.simplify.names, vars.walkC.names)
+							// throw "5"
+						}
+						if (obj[key] !== console.log) {
+							console.log("ahhh", node, res, ...args)
+							// console.log(res,node)
+				// console.log("test2", arguments, node.id, vars.simplify.node, vars.walkC.node, vars.simplify.names, vars.walkC.names)
+							ret.ret = obj[key](...args)
+						} else {
+							ret.ret = obj[key]("from program", ...args)
+						// throw "e"
+						}
+					} else {
+						console.log("unexpected callee type")
 					}
 				}
 				break
@@ -233,6 +252,7 @@ function simplify(code, fname, args) {
 			case "ConditionalExpression":
 			case "IfStatement":
 				// console.log("if test ", evalNode(node.test), node, node.test)
+				// console.log("IfStatement", node)
 				var test = walk(node.test)
 				if (test.ret) {
 					var r = walk(node.consequent)
@@ -281,6 +301,7 @@ function simplify(code, fname, args) {
 				// todo handle += and -=
 				var right = walk(node.right).ret
 				var o = getObj(node.left)
+				if (o.key === "f") console.log("fdsa", vars)
 				ret.ret = o.obj[o.key] = right
 				return ret
 				break
@@ -396,6 +417,9 @@ function simplify(code, fname, args) {
 						case "%":
 							ret.ret = left % right
 							break
+						case "instanceof":
+							ret.ret = left instanceof right
+							break
 						default:
 							console.log("unexpected binary", node.operator)
 					}
@@ -416,9 +440,11 @@ function simplify(code, fname, args) {
 						ret.ret = res.object.ret[node.property.name]
 						key = node.property.name
 					}
-					if (obj[key] instanceof Function) {
-						ret.ret = obj[key].bind(obj)
-					}
+					var o = getObj(node)
+					ret.ret = o.obj[o.key]
+					// if (obj[key] instanceof Function) {
+					// 	ret.ret = obj[key].bind(obj)
+					// }
 
 					//console.log("mems", node, ret)
 				}
@@ -449,7 +475,7 @@ function simplify(code, fname, args) {
 
 			case "SpreadElement":
 				after = (res) => {
-					console.log("SpreadElement", node, res,vars)
+					// console.log("SpreadElement", node, res,vars)
 					ret.spread = true
 					ret.ret = res.argument.ret
 				}
@@ -466,13 +492,21 @@ function simplify(code, fname, args) {
 
 			case "ReturnStatement":
 				after = (res) => {
-					console.log("ReturnStatement", node, res)
+					// console.log("ReturnStatement", node, res)
 					ret.return = true
 					ret.ret = (res.argument || {}).ret
 				}
 				break
 
 			case "VariableDeclaration":
+				// these are set in node for every module
+				// exports, require, module, __filename, __dirname
+				var exports = vars.exports = {}
+				vars.module = {exports: exports}
+				// might have to do some path stuff
+				vars.require = require
+				vars.__filename = __filename
+				vars.__dirname = __dirname
 				break
 			case "Program":
 				break
@@ -480,8 +514,13 @@ function simplify(code, fname, args) {
 				//console.log("ArrayExpression", node)
 				after = (res) => {
 					ret.ret = res.elements.map(e => e.ret)
+					// console.log("ArrayExpression", res, ret)
 				}
 				break
+
+			case "ThrowStatement":
+				console.log(walk(node.argument).ret)
+				throw Error("thrown error from program " + walk(node.argument).ret)
 
 			default:
 				console.log("unexpected node type", node)
@@ -498,7 +537,7 @@ function simplify(code, fname, args) {
 					var r = walk(c)
 					// i think r isn't used and deleted at same time
 					if (breakOut(r)) {
-						console.log(r)
+						// console.log(r)
 						return r 
 					}
 					res[key][i] = r
@@ -560,7 +599,7 @@ function simplify(code, fname, args) {
 	if (false) console.log("test2")
 	//console.log(JSON.stringify(func, null, 4))
 	// console.log(func)
-	return astring.generate(func)
+	return astring.generate(func.node)
 }
 
 function walkC(node, callback) {
@@ -583,8 +622,13 @@ function walkC(node, callback) {
 	}
 }
 
-var code = fs.readFileSync("index.js")
-var fname = "simplify"
-var args = [code, fname, []]
-var test = simplify(code, fname, args)
+// var code = fs.readFileSync("index.js")
+// var fname = "simplify"
+// var args = [code, fname, []]
+// var test = simplify(code, fname, args)
+module.exports = simplify
+// var code = fs.readFileSync("index.js")
+// var fname = "simplify"
+// var args = [fs.readFileSync("test2.js"), "f1", []]
+// var test = simplify(code, fname, args)
 // console.log(test)

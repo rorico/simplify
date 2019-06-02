@@ -1,4 +1,4 @@
-var a
+// /var a
 
 function b(r) {
 	var a = 4 + r

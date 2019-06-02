@@ -7,7 +7,6 @@ function simplify(code, fname, args) {
 	var funcs = {}
 	var vars = {}
 	var changed = {}
-	console.error(code, "aSAD")
 	var ast = acorn.parse(code)
 	fs.writeFileSync("ast.json", JSON.stringify(ast, null, 4))
 	// var body = ast.body
@@ -132,6 +131,8 @@ function simplify(code, fname, args) {
 				obj = obj.__proto__
 			}
 		} else if (node.type === "MemberExpression") {
+			if (!node.object || !node.property)
+				console.log("missing member object or project")
 			var object = walk(node.object)
 			var property = walk(node.property)
 			obj = object.ret
@@ -154,10 +155,6 @@ function simplify(code, fname, args) {
 	}
 
 	function walk(node) {
-		if (lognode[node.type])
-			console.log(node.type, node)
-
-		// console.error(node)
 		var ret = {
 			ret: undefined,
 			delete: false,
@@ -166,6 +163,12 @@ function simplify(code, fname, args) {
 			spread: false
 		}
 		var after
+		if (!node) {
+			console.log("unexpected null node")
+			return ret
+		}
+		if (lognode[node.type])
+			console.log(node.type, node)
 
 		if (node.delete === undefined) node.delete = 0
 		if (node.visits === undefined) node.visits = 0
@@ -253,6 +256,9 @@ function simplify(code, fname, args) {
 				// console.log("IfStatement", node)
 				var test = walk(node.test)
 				if (test.ret) {
+					if (!node.consequent) {
+						console.log("missing if consequent")
+					}
 					var r = walk(node.consequent)
 					if (breakOut(r)) return r
 					ret.ret = r.ret
@@ -269,13 +275,16 @@ function simplify(code, fname, args) {
 				// console.log("SwitchStatement", node)
 				var d = walk(node.discriminant).ret
 				var b = false
+				var cont = false
 				for (var c of node.cases) {
-					// todo default
-					if (walk(c.test).ret === d) {
+					// default has no test
+					if (cont || !c.test || walk(c.test).ret === d) {
+						cont = true
 						for (var s of c.consequent) {
 							var r = walk(s)
 							if (r.return) return r
 							if (r.break) {
+								cont = false
 								b = true
 								break
 							}
@@ -360,7 +369,7 @@ function simplify(code, fname, args) {
 				break
 			case "WhileStatement":
 				//console.log("ForStatement", node)
-				while (walk(node.test)) {
+				while (walk(node.test).ret) {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
@@ -449,7 +458,7 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				var o = getObj(node)
-				console.log("memb", !!vars.vars, node, o)
+				// console.log("memb", !!vars.vars, node, o)
 				ret.ret = o.obj[o.key]
 				return ret
 

@@ -10,7 +10,7 @@ function simplify(code, fname, args) {
 	var ast = acorn.parse(code)
 	initHoisted(ast)
 	walk(ast)
-	console.log("parsed through global")
+	console.log("parsed through file")
 
 	var func = vars[fname]
 	if (!func || !isFunction(func)) {
@@ -20,7 +20,7 @@ function simplify(code, fname, args) {
 	console.log("start of func")
 	var ret = call(fname, args)
 	// return
-	// unused(func)
+	unused(ast)
 	// console.log(astring.generate(func))
 	console.log("return value", ret)
 
@@ -45,8 +45,7 @@ function simplify(code, fname, args) {
 		// need a seperate closure for each call
 		var closure = vars
 		var func = function() {
-			var f = node
-			var params = f.params
+			var params = node.params
 			var oldVars = vars
 			// TODO handle updating global variables
 			vars = {}
@@ -56,13 +55,15 @@ function simplify(code, fname, args) {
 			}
 			vars.arguments = arguments
 
-			f.calls++
-			initHoisted(f.body)
-			var ret = walk(f.body)
+			node.calls++
+			initHoisted(node.body)
+			var ret = walk(node.body)
 			vars = oldVars
 			return ret.ret
 
 		}
+		// for access to node from function
+		func.node = node
 		if (node.id) {
 			vars[node.id.name] = func
 		}
@@ -487,11 +488,63 @@ function simplify(code, fname, args) {
 		return ret
 	}
 	function checkUnuse(node) {
-		if (node.type === "IfStatement") {
-			return (node.delete && node.delete === node.visits) || !node.visits // || (node.calls === 0)
+		switch (node.type) {
+			case "VariableDeclarator":
+				break
+			case "FunctionExpression":
+			case "ArrowFunctionExpression":
+			case "FunctionDeclaration":
+			console.log(node, node.calls)
+				return !node.calls
+			case "CallExpression":
+				break
+			case "ConditionalExpression":
+				break
+			case "IfStatement":
+				return (node.delete && node.delete === node.visits) || !node.visits
+			case "SwitchStatement":
+				break
+			case "BreakStatement":
+				break
+			case "AssignmentExpression":
+				break
+			case "UpdateExpression":
+				break
+			case "ForInStatement":
+				break
+			case "ForStatement":
+				break
+			case "ExpressionStatement":
+				break
+			case "LogicalExpression":
+				break
+			case "BinaryExpression":
+				break
+			case "BlockStatement":
+				break
+			case "MemberExpression":
+				break
+			case "ObjectExpression":
+				break
+			case "UnaryExpression":
+				break
+			case "SpreadElement":
+				break
+			case "Literal":
+				break
+			case "Identifier":
+				break
+			case "ReturnStatement":
+				break
+			case "VariableDeclaration":
+				break
+			case "Program":
+				break
+			case "ArrayExpression":
+				break
+			case "ThrowStatement":
+				break
 		}
-		// console.log(node)
-		// return (node.delete && node.delete === node.visits)// || (node.calls === 0)
 	}
 
 	function unused(node) {
@@ -518,16 +571,7 @@ function simplify(code, fname, args) {
 	}
 	if (true) console.log("test")
 	if (false) console.log("test2")
-	return astring.generate(func.node)
+	return astring.generate(ast)
 }
 
-var code = fs.readFileSync("index.js")
-var fname = "simplify"
-var args = [code, fname, []]
-var test = simplify(code, fname, args)
 module.exports = simplify
-// var code = fs.readFileSync("index.js")
-// var fname = "simplify"
-// var args = [fs.readFileSync("test2.js"), "f1", []]
-// var test = simplify(code, fname, args)
-// console.log(test)

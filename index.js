@@ -12,7 +12,7 @@ function simplify(code, fname, args) {
 	walk(ast)
 	console.log("parsed through file")
 
-	var func = vars[fname]
+	var func = getVar(fname)
 	if (!func || !isFunction(func)) {
 		console.log("no fname " + fname)
 		return 0
@@ -31,7 +31,7 @@ function simplify(code, fname, args) {
 	}
 
 	function call(name, args) {
-		var f = vars[name]
+		var f = getVar(name)
 		return f(...args)
 	}
 
@@ -51,9 +51,9 @@ function simplify(code, fname, args) {
 			vars = {}
 			vars.__proto__ = closure
 			for (var i = 0 ; i < params.length ; i++) {
-				vars[params[i].name] = arguments[i]
+				addVar(params[i].name, arguments[i], node.params[i])
 			}
-			vars.arguments = arguments
+			addVar("arguments", arguments)
 
 			node.calls++
 			initHoisted(node.body)
@@ -65,7 +65,7 @@ function simplify(code, fname, args) {
 		// for access to node from function
 		func.node = node
 		if (node.id) {
-			vars[node.id.name] = func
+			addVar(node.id.name, func, node)
 		}
 		return func
 	}
@@ -75,7 +75,7 @@ function simplify(code, fname, args) {
 			addFunction(node)
 			return
 		} else if (node.type === "VariableDeclarator") {
-			vars[node.id.name] = undefined
+			addVar(node.id.name, undefined)
 		}
 		for (var key in node) {
 			var val = node[key]
@@ -89,7 +89,34 @@ function simplify(code, fname, args) {
 			}
 		}
 	}
-
+	function addVar(name, val, node) {
+		// if (vars.hasOwnProperty(name)) {
+		// 	// already set in this closure
+		// 	var v = vars[name]
+		// 	if (v.node) {
+		// 		v.used = v.uses > 0
+		// 	}
+		// }
+		vars[name] = {
+			uses: 0,
+			val: val,
+			node: node
+		}
+		return val
+	}
+	function getVar(name) {
+		if (vars[name] === undefined) {
+			// do something about this
+			return global[name]
+		} else {
+			var v = vars[name]
+			v.uses++
+			if (v.uses === 1 && v.node) {
+				v.node.used = v.node.used ? v.node.used + 1 : 1
+			}
+			return v.val
+		}
+	}
 	function getObj(node) {
 		var obj
 		var key
@@ -100,17 +127,13 @@ function simplify(code, fname, args) {
 			while (obj.__proto__ && !obj.hasOwnProperty(key)) {
 				obj = obj.__proto__
 			}
+			obj = obj[key]
+			key = "val"
 		} else if (node.type === "MemberExpression") {
 			if (!node.object || !node.property)
 				console.log("missing member object or project")
-			var object = walk(node.object)
-			var property = walk(node.property)
-			obj = object.ret
-			if (node.computed) {
-				key = property.ret
-			} else {
-				key = node.property.name
-			}
+			obj = walk(node.object).ret
+			key = node.computed ? walk(node.property).ret : node.property.name
 		} else {
 			console.log("unknown AssignmentExpression type", node)
 		}
@@ -147,7 +170,7 @@ function simplify(code, fname, args) {
 		switch (node.type) {
 			case "VariableDeclarator":
 				after = (res) => {
-					vars[node.id.name] = node.init ? res.init.ret : undefined
+					addVar(node.id.name, node.init ? res.init.ret : undefined, node)
 				}
 				break
 
@@ -173,12 +196,13 @@ function simplify(code, fname, args) {
 
 					if (node.callee.type === "Identifier") {
 						var name = node.callee.name
-						if (vars[name]) {
-							if (!isFunction(vars[name])) {
+						var func = getVar(name)
+						if (func) {
+							if (!isFunction(func)) {
 								console.log("var is not function", node)
 								throw "4"
 							}
-							ret.ret = vars[name](...args)
+							ret.ret = func(...args)
 						} else {
 							console.log("undefined function", node)
 						}
@@ -278,7 +302,7 @@ function simplify(code, fname, args) {
 				var varname = node.left.declarations[0].id.name
 				var right = walk(node.right).ret
 				for (var i in right) {
-					vars[varname] = i
+					addVar(varname, i)
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
@@ -290,7 +314,7 @@ function simplify(code, fname, args) {
 				var varname = node.left.declarations[0].id.name
 				var right = walk(node.right).ret
 				for (var i of right) {
-					vars[varname] = i
+					addVar(varname, i)
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
@@ -392,7 +416,6 @@ function simplify(code, fname, args) {
 				break
 			case "MemberExpression":
 				var o = getObj(node)
-				// console.log("memb", !!vars.vars, node, o)
 				ret.ret = o.obj[o.key]
 				return ret
 			case "ObjectExpression":
@@ -430,7 +453,7 @@ function simplify(code, fname, args) {
 				return ret
 
 			case "Identifier":
-				ret.ret = vars[node.name] === undefined ? global[node.name] : vars[node.name]
+				ret.ret = getVar(node.name)
 				return ret
 
 			case "ReturnStatement":
@@ -445,12 +468,12 @@ function simplify(code, fname, args) {
 			case "Program":
 				// these are set in node for every module
 				// exports, require, module, __filename, __dirname
-				var exports = vars.exports = {}
-				vars.module = {exports: exports}
+				var exports = addVar("exports", {})
+				addVar("module", {exports: exports})
 				// might have to do some path stuff
-				vars.require = require
-				vars.__filename = __filename
-				vars.__dirname = __dirname
+				addVar("require", require)
+				addVar("__filename", __filename)
+				addVar("__dirname", __dirname)
 				break
 			case "ArrayExpression":
 				after = (res) => {
@@ -490,11 +513,10 @@ function simplify(code, fname, args) {
 	function checkUnuse(node) {
 		switch (node.type) {
 			case "VariableDeclarator":
-				break
+				return !node.used
 			case "FunctionExpression":
 			case "ArrowFunctionExpression":
 			case "FunctionDeclaration":
-			console.log(node, node.calls)
 				return !node.calls
 			case "CallExpression":
 				break
@@ -537,6 +559,7 @@ function simplify(code, fname, args) {
 			case "ReturnStatement":
 				break
 			case "VariableDeclaration":
+				return !node.declarations.length
 				break
 			case "Program":
 				break
@@ -553,18 +576,16 @@ function simplify(code, fname, args) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
-					if (checkUnuse(c)) {
+					if (checkUnuse(c) ||
+						(unused(c), checkUnuse(c))) {
 						val.splice(i, 1)
 						i--
-					} else {
-						unused(c)
 					}
 				}
 			} else if (val && typeof val.type === "string") {
-				if (checkUnuse(val)) {
+				if (checkUnuse(val) ||
+					(unused(val), checkUnuse(val))) {
 					node[key] = undefined
-				} else {
-					unused(val)
 				}
 			}
 		}

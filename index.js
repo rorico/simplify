@@ -271,6 +271,7 @@ function simplify(code, fname, args) {
 			case "IfStatement":
 				var test = walk(node.test)
 				if (test.ret) {
+					node.true = node.true ? node.true + 1 : 1
 					if (!node.consequent) {
 						console.log("missing if consequent")
 					}
@@ -281,8 +282,6 @@ function simplify(code, fname, args) {
 					var r = walk(node.alternate)
 					if (breakOut(r)) return r
 					ret.ret = r.ret
-				} else {
-					node.delete++
 				}
 				return ret
 
@@ -620,7 +619,7 @@ function simplify(code, fname, args) {
 		}
 		switch (node.type) {
 			case "VariableDeclarator":
-				ret.remove = !node.used && !addSide(node).length
+				ret.remove = !node.used
 				if (ret.remove && node.varUsed) {
 					ret.remove = false
 					node.init = null
@@ -638,7 +637,8 @@ function simplify(code, fname, args) {
 			case "ConditionalExpression":
 				break
 			case "IfStatement":
-				ret.remove = (node.delete && node.delete === node.visits) || !node.visits
+				// TODO always false with alternate
+				ret.remove = !node.true && !node.alternate
 				break
 			case "SwitchStatement":
 				break
@@ -699,6 +699,9 @@ function simplify(code, fname, args) {
 	function checkOrRecurse(node) {
 		var che = checkUnuse(node)
 		if (che.remove) {
+			if (addSide(node).length) {
+				return false
+			}
 			return true
 		}
 		if (che.stop) {

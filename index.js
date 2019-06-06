@@ -356,7 +356,7 @@ function simplify(code, fname, args) {
 					}
 
 					closuresMod.add(obj)
-					// ret.ret = addVar(arg.name, right, arg)
+					// use this to show the variable was used
 					getVar(arg.name)
 					var v = vars[arg.name]
 					if (node.operator === "++") {
@@ -370,7 +370,6 @@ function simplify(code, fname, args) {
 					v.uses = 0
 					return ret
 				}
-				// todo handle prefix
 				if (node.operator === "++") {
 					ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
 				} else if (node.operator === "--") {

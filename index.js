@@ -7,7 +7,6 @@ function simplify(code, fname, args) {
 	var funcs = {}
 	var vars = {}
 	var changed = {}
-	var currentLevel = 0
 	var levelMod = 0
 	var closuresMod = new Set()
 	var ast = acorn.parse(code)
@@ -55,7 +54,6 @@ function simplify(code, fname, args) {
 			// TODO handle updating global variables
 			vars = {}
 			vars.__proto__ = closure
-			currentLevel++
 			for (var i = 0 ; i < params.length ; i++) {
 				addVar(params[i].name, arguments[i], node.params[i])
 			}
@@ -64,9 +62,10 @@ function simplify(code, fname, args) {
 			node.calls++
 			initHoisted(node.body)
 			var ret = walk(node.body)
+			// this can happen if a higher function modifies this one
+			// remove just in case
 			closuresMod.delete(vars)
 			vars = oldVars
-			currentLevel--
 			return ret.ret
 
 		}
@@ -108,8 +107,7 @@ function simplify(code, fname, args) {
 		vars[name] = {
 			uses: 0,
 			val: val,
-			node: node,
-			level: currentLevel
+			node: node
 		}
 		return val
 	}
@@ -169,7 +167,8 @@ function simplify(code, fname, args) {
 			delete: false,
 			return: false,
 			break: false,
-			spread: false
+			spread: false,
+			var: null
 		}
 		var after
 		if (!node) {
@@ -233,15 +232,17 @@ function simplify(code, fname, args) {
 						if (obj[key] === console.log) {
 							// to seperate logs from code
 							ret.ret = obj[key]("from program", ...args)
+							// console is a global side effect
+							closuresMod.add(global)
 						} else {
 							ret.ret = obj[key](...args)
 						}
 					} else {
 						console.log("unexpected callee type")
 					}
-					if (closuresMod.length) {
+					if (closuresMod.size) {
 						node.side = true
-						for (var c of closuresMod.vales()) {
+						for (var c of closuresMod.values()) {
 							var contained = false
 							var o = c
 							while (o) {
@@ -252,18 +253,12 @@ function simplify(code, fname, args) {
 								o = o.__proto__
 							}
 							if (contained) {
-							
 							} else {
-								currClo.add(c)
+								currClos.add(c)
 							}
 						}
 					}
 					closuresMod = currClos
-					if (levelMod < currentLevel + 1) {
-						node.side = levelMod
-					} else {
-						levelMod = currentLevel
-					}
 				}
 				break
 
@@ -327,6 +322,7 @@ function simplify(code, fname, args) {
 						obj = obj.__proto__
 					}
 
+					closuresMod.add(obj)
 					// ret.ret = addVar(node.left.name, right, node.left)
 					var v = vars[node.left.name]
 					if (levelMod > v.level) {
@@ -346,6 +342,24 @@ function simplify(code, fname, args) {
 				var o = getObj(node.argument)
 				var obj = o.obj
 				var key = o.key
+				var arg = node.argument
+				if (arg.type === "Identifier") {
+					obj = vars
+					key = arg.name
+					// update in higher closure if thats where it comes from
+					while (obj.__proto__ && !obj.hasOwnProperty(key)) {
+						obj = obj.__proto__
+					}
+
+					closuresMod.add(obj)
+					// ret.ret = addVar(arg.name, right, arg)
+					var v = vars[arg.name]
+					if (levelMod > v.level) {
+						levelMod = v.level
+					}
+					ret.ret = v.val = right
+					return ret
+				}
 				// todo handle prefix
 				if (node.prefix) console.log("not handled prefix")
 				if (node.operator === "++") {
@@ -574,6 +588,7 @@ function simplify(code, fname, args) {
 	}
 	function addSide(node) {
 		var ret = []
+		console.log("a", node)
 		if (node.side) {
 			ret.push(node)
 			return ret
@@ -589,34 +604,52 @@ function simplify(code, fname, args) {
 				ret.push(...addSide(val))
 			}
 		}
+		return ret
 	}
 	function checkUnuse(node) {
+		var ret = {
+			stop: false,
+			remove: false
+		}
 		switch (node.type) {
 			case "VariableDeclarator":
-				return !node.used
+				ret.remove = !node.used && !addSide(node).length
+				ret.stop = true
+				console.log(node, addSide(node))
+				break
 			case "FunctionExpression":
 			case "ArrowFunctionExpression":
 			case "FunctionDeclaration":
-				return !node.calls
+				ret.remove = !node.calls
+				break
 			case "CallExpression":
+				ret.remove = !node.side
 				break
 			case "ConditionalExpression":
 				break
 			case "IfStatement":
-				return (node.delete && node.delete === node.visits) || !node.visits
+				ret.remove = (node.delete && node.delete === node.visits) || !node.visits
+				break
 			case "SwitchStatement":
 				break
 			case "BreakStatement":
 				break
 			case "AssignmentExpression":
+				ret.remove = !node.used && !node.side
 				break
 			case "UpdateExpression":
+				ret.remove = !node.used && !node.side
 				break
 			case "ForInStatement":
 				break
 			case "ForStatement":
 				break
 			case "ExpressionStatement":
+				// removing things can result in invalid trees
+				if (!node.expression) {
+					ret.remove = true
+					ret.stop = true
+				}
 				break
 			case "LogicalExpression":
 				break
@@ -637,17 +670,32 @@ function simplify(code, fname, args) {
 			case "Identifier":
 				break
 			case "ReturnStatement":
+				ret.stop = true
 				break
 			case "VariableDeclaration":
-				return !node.declarations.length
+				ret.remove = !node.declarations.length
 				break
 			case "Program":
 				break
 			case "ArrayExpression":
 				break
 			case "ThrowStatement":
+				ret.stop = true
 				break
 		}
+		return ret
+	}
+
+	function checkOrRecurse(node) {
+		var che = checkUnuse(node)
+		if (che.remove) {
+			return true
+		}
+		if (che.stop) {
+			return false
+		}
+		unused(node)
+		return checkUnuse(node).remove
 	}
 
 	function unused(node) {
@@ -656,16 +704,13 @@ function simplify(code, fname, args) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
-					if (checkUnuse(c) ||
-						(unused(c), checkUnuse(c))) {
+					if (checkOrRecurse(c)) {
 						val.splice(i, 1)
 						i--
-
 					}
 				}
 			} else if (val && typeof val.type === "string") {
-				if (checkUnuse(val) ||
-					(unused(val), checkUnuse(val))) {
+				if (checkOrRecurse(val)) {
 					node[key] = undefined
 				}
 			}

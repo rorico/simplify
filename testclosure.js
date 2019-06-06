@@ -15,6 +15,8 @@ function b(r) {
 function c() {
 	var d = b(1)
 	b(2)
+	var e = b(2)
+	var f = console.log("test")
 	if (b < 5) return 4
 	return d()
 }

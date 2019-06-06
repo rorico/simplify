@@ -1,4 +1,6 @@
 var a
+var x = 1
+
 
 function a() {
 	var d = b(1)
@@ -12,11 +14,17 @@ function b(r) {
 		return a
 	}
 }
+
+function y() {
+	x = 5
+	return x
+}
 function c() {
 	var d = b(1)
 	b(2)
 	var e = b(2)
 	var f = console.log("test")
+	var g = y()
 	if (b < 5) return 4
 	return d()
 }

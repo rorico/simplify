@@ -7,7 +7,6 @@ function simplify(code, fname, args) {
 	var funcs = {}
 	var vars = {}
 	var changed = {}
-	var levelMod = 0
 	var closuresMod = new Set()
 	var ast = acorn.parse(code)
 	
@@ -24,6 +23,7 @@ function simplify(code, fname, args) {
 	console.log("start of func")
 	var ret = call(fname, args)
 	// return
+	fs.writeFileSync("ast.json", JSON.stringify(ast, null, 4))
 	unused(ast)
 	// console.log(astring.generate(func))
 	console.log("return value", ret)
@@ -107,7 +107,8 @@ function simplify(code, fname, args) {
 		vars[name] = {
 			uses: 0,
 			val: val,
-			node: node
+			node: node,
+			init: node
 		}
 		return val
 	}
@@ -120,6 +121,10 @@ function simplify(code, fname, args) {
 			v.uses++
 			if (v.uses === 1 && v.node) {
 				v.node.used = v.node.used ? v.node.used + 1 : 1
+			}
+			if (v.uses === 1 && v.init) {
+				// todo if uncount is ever used
+				v.init.varUsed = true
 			}
 			return v.val
 		}
@@ -325,10 +330,9 @@ function simplify(code, fname, args) {
 					closuresMod.add(obj)
 					// ret.ret = addVar(node.left.name, right, node.left)
 					var v = vars[node.left.name]
-					if (levelMod > v.level) {
-						levelMod = v.level
-					}
 					ret.ret = v.val = right
+					v.node = node
+					v.uses = 0
 					return ret
 				}
 				var o = getObj(node.left)
@@ -354,10 +358,9 @@ function simplify(code, fname, args) {
 					closuresMod.add(obj)
 					// ret.ret = addVar(arg.name, right, arg)
 					var v = vars[arg.name]
-					if (levelMod > v.level) {
-						levelMod = v.level
-					}
 					ret.ret = v.val = right
+					v.node = node
+					v.uses = 0
 					return ret
 				}
 				// todo handle prefix
@@ -588,7 +591,7 @@ function simplify(code, fname, args) {
 	}
 	function addSide(node) {
 		var ret = []
-		console.log("a", node)
+		// console.log("a", node)
 		if (node.side) {
 			ret.push(node)
 			return ret
@@ -614,8 +617,11 @@ function simplify(code, fname, args) {
 		switch (node.type) {
 			case "VariableDeclarator":
 				ret.remove = !node.used && !addSide(node).length
+				if (ret.remove && node.varUsed) {
+					ret.remove = false
+					node.init = null
+				}
 				ret.stop = true
-				console.log(node, addSide(node))
 				break
 			case "FunctionExpression":
 			case "ArrowFunctionExpression":

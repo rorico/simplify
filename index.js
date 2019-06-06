@@ -7,7 +7,12 @@ function simplify(code, fname, args) {
 	var funcs = {}
 	var vars = {}
 	var changed = {}
+	var currentLevel = 0
+	var levelMod = 0
+	var closuresMod = new Set()
 	var ast = acorn.parse(code)
+	
+
 	initHoisted(ast)
 	walk(ast)
 	console.log("parsed through file")
@@ -50,6 +55,7 @@ function simplify(code, fname, args) {
 			// TODO handle updating global variables
 			vars = {}
 			vars.__proto__ = closure
+			currentLevel++
 			for (var i = 0 ; i < params.length ; i++) {
 				addVar(params[i].name, arguments[i], node.params[i])
 			}
@@ -58,7 +64,9 @@ function simplify(code, fname, args) {
 			node.calls++
 			initHoisted(node.body)
 			var ret = walk(node.body)
+			closuresMod.delete(vars)
 			vars = oldVars
+			currentLevel--
 			return ret.ret
 
 		}
@@ -100,7 +108,8 @@ function simplify(code, fname, args) {
 		vars[name] = {
 			uses: 0,
 			val: val,
-			node: node
+			node: node,
+			level: currentLevel
 		}
 		return val
 	}
@@ -115,6 +124,13 @@ function simplify(code, fname, args) {
 				v.node.used = v.node.used ? v.node.used + 1 : 1
 			}
 			return v.val
+		}
+	}
+	function uncount(name) {
+		var v = vars[name]
+		v.uses--
+		if (v.uses === 0 && v.node) {
+			v.node.used--
 		}
 	}
 	function getObj(node) {
@@ -194,6 +210,9 @@ function simplify(code, fname, args) {
 						}
 					}, [])
 
+					var currClos = closuresMod
+					closuresMod = new Set()
+
 					if (node.callee.type === "Identifier") {
 						var name = node.callee.name
 						var func = getVar(name)
@@ -219,6 +238,31 @@ function simplify(code, fname, args) {
 						}
 					} else {
 						console.log("unexpected callee type")
+					}
+					if (closuresMod.length) {
+						node.side = true
+						for (var c of closuresMod.vales()) {
+							var contained = false
+							var o = c
+							while (o) {
+								if (o === vars) {
+									contained = true
+									break
+								}
+								o = o.__proto__
+							}
+							if (contained) {
+							
+							} else {
+								currClo.add(c)
+							}
+						}
+					}
+					closuresMod = currClos
+					if (levelMod < currentLevel + 1) {
+						node.side = levelMod
+					} else {
+						levelMod = currentLevel
 					}
 				}
 				break
@@ -275,6 +319,22 @@ function simplify(code, fname, args) {
 				changed[node.left.name] = true
 				// todo handle += and -=
 				var right = walk(node.right).ret
+				if (node.left.type === "Identifier") {
+					obj = vars
+					key = node.left.name
+					// update in higher closure if thats where it comes from
+					while (obj.__proto__ && !obj.hasOwnProperty(key)) {
+						obj = obj.__proto__
+					}
+
+					// ret.ret = addVar(node.left.name, right, node.left)
+					var v = vars[node.left.name]
+					if (levelMod > v.level) {
+						levelMod = v.level
+					}
+					ret.ret = v.val = right
+					return ret
+				}
 				var o = getObj(node.left)
 				ret.ret = o.obj[o.key] = right
 				return ret
@@ -417,6 +477,7 @@ function simplify(code, fname, args) {
 			case "MemberExpression":
 				var o = getObj(node)
 				ret.ret = o.obj[o.key]
+				ret.var = o.var
 				return ret
 			case "ObjectExpression":
 				ret.ret = {}
@@ -454,6 +515,7 @@ function simplify(code, fname, args) {
 
 			case "Identifier":
 				ret.ret = getVar(node.name)
+				ret.var = node.name
 				return ret
 
 			case "ReturnStatement":
@@ -509,6 +571,24 @@ function simplify(code, fname, args) {
 		}
 		if (after) after(res)
 		return ret
+	}
+	function addSide(node) {
+		var ret = []
+		if (node.side) {
+			ret.push(node)
+			return ret
+		}
+		for (var key in node) {
+			var val = node[key]
+			if (Array.isArray(val)) {
+				for (var i = 0 ; i < val.length ; i++) {
+					var c = val[i]
+					ret.push(...addSide(c))
+				}
+			} else if (val && typeof val.type === "string") {
+				ret.push(...addSide(val))
+			}
+		}
 	}
 	function checkUnuse(node) {
 		switch (node.type) {
@@ -580,6 +660,7 @@ function simplify(code, fname, args) {
 						(unused(c), checkUnuse(c))) {
 						val.splice(i, 1)
 						i--
+
 					}
 				}
 			} else if (val && typeof val.type === "string") {

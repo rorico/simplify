@@ -357,18 +357,24 @@ function simplify(code, fname, args) {
 
 					closuresMod.add(obj)
 					// ret.ret = addVar(arg.name, right, arg)
+					getVar(arg.name)
 					var v = vars[arg.name]
-					ret.ret = v.val = right
+					if (node.operator === "++") {
+						ret.ret = (node.prefix ? ++v.val : v.val++)
+					} else if (node.operator === "--") {
+						ret.ret = (node.prefix ? --v.val : v.val--)
+					} else {
+						console.log("unknown update operator", node)
+					}
 					v.node = node
 					v.uses = 0
 					return ret
 				}
 				// todo handle prefix
-				if (node.prefix) console.log("not handled prefix")
 				if (node.operator === "++") {
-					ret.ret = obj[key]++
+					ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
 				} else if (node.operator === "--") {
-					ret.ret = obj[key]--
+					ret.ret = (node.prefix ? --obj[key] : obj[key]--)
 				} else {
 					console.log("unknown update operator", node)
 				}
@@ -591,7 +597,6 @@ function simplify(code, fname, args) {
 	}
 	function addSide(node) {
 		var ret = []
-		// console.log("a", node)
 		if (node.side) {
 			ret.push(node)
 			return ret

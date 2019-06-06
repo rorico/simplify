@@ -17,6 +17,7 @@ function b(r) {
 
 function y() {
 	x = 5
+	--x
 	return x
 }
 function c() {

@@ -22,8 +22,8 @@ function y() {
 }
 function c() {
 	var d = b(1)
-	b(2)
-	var e = b(2)
+	// b(2)
+	// var e = b(2)
 	var f = console.log("test")
 	var g = y()
 	if (b < 5) return 4

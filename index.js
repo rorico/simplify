@@ -244,10 +244,10 @@ function simplify(code, fname, args) {
 						} else {
 							ret.ret = obj[key](...args)
 						}
-					} else if (node.callee.type === "FunctionExpression") {
+					} else if (node.callee.type === "FunctionExpression" || node.callee.type === "ArrowFunctionExpression") {
 						res.callee.ret(...args)
 					} else {
-						console.log("unexpected callee type")
+						console.log("unexpected callee type", node.callee.type)
 					}
 					if (closuresMod.size) {
 						node.side = true

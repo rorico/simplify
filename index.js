@@ -244,6 +244,8 @@ function simplify(code, fname, args) {
 						} else {
 							ret.ret = obj[key](...args)
 						}
+					} else if (node.callee.type === "FunctionExpression") {
+						res.callee.ret(...args)
 					} else {
 						console.log("unexpected callee type")
 					}

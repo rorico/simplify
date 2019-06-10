@@ -4,4 +4,8 @@ function f1() {
 function f2() {
 	return 2
 }
-console.log(f1())
+
+-----------------------------------
+"f1"
+[]
+1

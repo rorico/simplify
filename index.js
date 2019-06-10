@@ -805,7 +805,11 @@ function simplify(code, fname, args) {
 	}
 	if (true) console.log("test")
 	if (false) console.log("test2")
-	return astring.generate(ast)
+	return {
+		ret: ret,
+		code: astring.generate(ast)
+	}
+	// return astring.generate(ast)
 }
 
 module.exports = simplify

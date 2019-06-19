@@ -462,6 +462,12 @@ function simplify(code, fname, args) {
 						case "&&":
 							ret.ret = left && right
 							break
+						case "|":
+							ret.ret = left | right
+							break
+						case "&":
+							ret.ret = left & right
+							break
 						case ">":
 							ret.ret = left > right
 							break
@@ -488,6 +494,9 @@ function simplify(code, fname, args) {
 							break
 						case "%":
 							ret.ret = left % right
+							break
+						case "in":
+							ret.ret = left in right
 							break
 						case "instanceof":
 							ret.ret = left instanceof right

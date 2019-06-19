@@ -516,7 +516,9 @@ function simplify(code, fname, args) {
 			case "ObjectExpression":
 				ret.ret = {}
 				for (var prop of node.properties) {
-					ret.ret[prop.key.name] = walk(prop.value).ret
+					// the other is literal
+					var name = prop.key.type === "Identifier" ? prop.key.name : prop.key.value
+					ret.ret[name] = walk(prop.value).ret
 				}
 				return ret
 			case "UnaryExpression":

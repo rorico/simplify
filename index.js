@@ -581,8 +581,30 @@ function simplify(code, fname, args) {
 				break
 
 			case "ThrowStatement":
-				console.log(walk(node.argument).ret)
-				throw Error("thrown error from program " + walk(node.argument).ret)
+				// TODO make this message global
+				// throw Error("thrown error from program " + walk(node.argument).ret)
+				throw walk(node.argument).ret
+
+			case "TryStatement":
+				try {
+					var r = walk(node.block)
+					if (breakOut(r)) return r
+				} catch (e) {
+					if (node.handler) {
+						addVar(node.handler.param.name, e)
+						var r = walk(node.handler.body)
+						if (breakOut(r)) return r
+					}
+				} finally {
+					if (node.finalizer) {
+						var r = walk(node.finalizer)
+						if (breakOut(r)) return r
+					}
+				}
+				return ret
+
+			case "EmptyStatement":
+				break
 
 			default:
 				console.log("unexpected node type", node)

@@ -407,7 +407,7 @@ function simplify(code, fname, args) {
 				return ret
 
 			case "ForStatement":
-				for (walk(node.init) ; walk(node.test).ret ; walk(node.update)) {
+				for (node.init ? walk(node.init) : "" ; node.test ? walk(node.test).ret : true ; node.update ? walk(node.update) : "") {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
@@ -523,6 +523,7 @@ function simplify(code, fname, args) {
 				return ret
 			case "UnaryExpression":
 				after = (res) => {
+					if (!node.prefix) console.log ("unary not prefixed")
 					res = res.argument
 					if (node.operator === "!") {
 						ret.ret = !res.ret

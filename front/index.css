@@ -1,0 +1,21 @@
+.hover:hover {
+	color: blue;
+	cursor: pointer;
+}
+.hover {
+}/*
+.half {
+	width: 49%;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	overflow-x: scroll;
+	float: left;
+}*/
+.inline {
+	display:inline;
+}
+.remove {
+	/*text-decoration: line-through;*/
+	opacity: 0.3;
+}

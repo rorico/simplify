@@ -384,7 +384,7 @@ function simplify(code, fname, args) {
 				break
 			case "ForInStatement":
 				// assume only 1 var for for in
-				var varname = node.left.declarations[0].id.name
+				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
 				var right = walk(node.right).ret
 				for (var i in right) {
 					addVar(varname, i)
@@ -396,7 +396,7 @@ function simplify(code, fname, args) {
 				break
 			case "ForOfStatement":
 				// assume only 1 var for for of
-				var varname = node.left.declarations[0].id.name
+				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
 				var right = walk(node.right).ret
 				for (var i of right) {
 					addVar(varname, i)

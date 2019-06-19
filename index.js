@@ -776,6 +776,7 @@ function simplify(code, opts) {
 			case "VariableDeclaration":
 				break
 			case "Program":
+				addVar("this", this)
 				if (opts.node) {
 					// these are set in node for every module
 					// exports, require, module, __filename, __dirname

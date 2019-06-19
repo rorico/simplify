@@ -728,17 +728,22 @@ function simplify(code, opts) {
 				}
 				return ret
 			case "UnaryExpression":
+				// typeof is special in that it can handle variables never defined
+				if (node.operator === "typeof" && node.argument && !(node.argument.name in vars)) {
+					ret.ret = "undefined"
+					return ret
+				}
 				after = (res) => {
-					if (!node.prefix) console.log ("unary not prefixed")
-					res = res.argument
+					if (!node.prefix) console.log("unary not prefixed")
+					arg = res.argument.ret
 					if (node.operator === "!") {
-						ret.ret = !res.ret
+						ret.ret = !arg
 					} else if (node.operator === "+") {
-						ret.ret = +res.ret
+						ret.ret = +arg
 					} else if (node.operator === "-") {
-						ret.ret = -res.ret
+						ret.ret = -arg
 					} else if (node.operator === "typeof") {
-						ret.ret = typeof res.ret
+						ret.ret = typeof arg
 					} else {
 						console.log("unknown unary", node.operator)
 					}

@@ -59,6 +59,7 @@ function simplify(code, fname, args) {
 				addVar(params[i].name, arguments[i], node.params[i])
 			}
 			addVar("arguments", arguments)
+			addVar("this", this)
 
 			node.calls++
 			initHoisted(node.body)
@@ -204,72 +205,92 @@ function simplify(code, fname, args) {
 				ret.ret = addFunction(node)
 				return ret
 
+			case "NewExpression":
 			case "CallExpression":
-				after = (res) => {
-					var args = res.arguments.reduce((a, arg) => {
-						if (arg.spread) {
-							return a.concat(arg.ret)
-						} else {
-							a.push(arg.ret)
-							return a
-						}
-					}, [])
-
-					var currClos = closuresMod
-					closuresMod = new Set()
-
-					if (node.callee.type === "Identifier") {
-						var name = node.callee.name
-						var func = getVar(name)
-						if (func) {
-							if (!isFunction(func)) {
-								console.log("var is not function", node)
-								throw "4"
-							}
-							node.func = func
-							ret.ret = func(...args)
-						} else {
-							console.log("undefined function", node)
-						}
-					} else if (node.callee.type === "MemberExpression") {
-						// do it this way to maintain thisArg
-						var o = getObj(node.callee)
-						var obj = o.obj
-						var key = o.key
-						if (obj[key] === console.log) {
-							// to seperate logs from code
-							ret.ret = obj[key]("from program", ...args)
-							// console is a global side effect
-							closuresMod.add(global)
-						} else {
-							ret.ret = obj[key](...args)
-						}
-					} else if (node.callee.type === "FunctionExpression" || node.callee.type === "ArrowFunctionExpression") {
-						res.callee.ret(...args)
+				var args = node.arguments.reduce((a, arg) => {
+					arg = walk(arg)
+					if (arg.spread) {
+						return a.concat(arg.ret)
 					} else {
-						console.log("unexpected callee type", node.callee.type)
+						a.push(arg.ret)
+						return a
 					}
-					if (closuresMod.size) {
-						node.side = true
-						for (var c of closuresMod.values()) {
-							var contained = false
-							var o = c
-							while (o) {
-								if (o === vars) {
-									contained = true
-									break
-								}
-								o = o.__proto__
+				}, [])
+
+				var obj
+				var func
+				if (node.callee.type === "Identifier") {
+					var name = node.callee.name
+					var func = getVar(name)
+					if (!func || !isFunction(func)) {
+						console.log("var is not function", node)
+						throw "4"
+					}
+				} else if (node.callee.type === "MemberExpression") {
+					// do it this way to maintain thisArg
+					// can bind it, but that removes/changes some properties added
+					// like name, node
+					var o = getObj(node.callee)
+					obj = o.obj
+					key = o.key
+					// don't use this as a function
+					func = obj[key]
+					if (obj[key] === console.log) {
+						// to seperate logs from code
+						args.unshift("from program")
+						// console is a global side effect
+						closuresMod.add(global)
+					}
+				} else if (node.callee.type === "FunctionExpression" || node.callee.type === "ArrowFunctionExpression") {
+					// res.callee.ret(...args)
+					func = walk(node.callee).ret
+				} else {
+					console.log("unexpected callee type", node.callee.type)
+				}
+
+				if (func.node) {
+					var n = func.node
+					node.func = func
+				}
+
+				var currClos = closuresMod
+				closuresMod = new Set()
+
+
+				var isNew = node.type === "NewExpression"
+				if (node.callee.type === "MemberExpression") {
+					if (isNew) {
+						ret.ret = new obj[key](...args)
+					} else {
+						ret.ret = obj[key](...args)
+					}
+				} else {
+					if (isNew) {
+						ret.ret = new func(...args)
+					} else {
+						ret.ret = func(...args)
+					}
+				}
+
+				if (closuresMod.size) {
+					node.side = true
+					for (var c of closuresMod.values()) {
+						var contained = false
+						var o = c
+						while (o) {
+							if (o === vars) {
+								contained = true
+								break
 							}
-							if (contained) {
-							} else {
-								currClos.add(c)
-							}
+							o = o.__proto__
+						}
+						if (!contained) {
+							currClos.add(c)
 						}
 					}
-					closuresMod = currClos
 				}
-				break
+				closuresMod = currClos
+				return ret
 
 			case "ConditionalExpression":
 			case "IfStatement":
@@ -579,6 +600,10 @@ function simplify(code, fname, args) {
 					ret.ret = res.elements.map(e => e.ret)
 				}
 				break
+
+			case "ThisExpression":
+				ret.ret = getVar("this")
+				return ret
 
 			case "ThrowStatement":
 				// TODO make this message global

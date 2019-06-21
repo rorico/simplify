@@ -743,8 +743,12 @@ function simplify(code, opts) {
 						ret.ret = +arg
 					} else if (node.operator === "-") {
 						ret.ret = -arg
+					} else if (node.operator === "~") {
+						ret.ret = ~arg
 					} else if (node.operator === "typeof") {
 						ret.ret = typeof arg
+					} else if (node.operator === "delete") {
+						ret.ret = delete arg
 					} else {
 						console.log("unknown unary", node.operator)
 					}

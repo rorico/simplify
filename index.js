@@ -96,8 +96,7 @@ function simplify(code, opts) {
 				ast: ast,
 				called, called
 			}
-		},
-		astring: astring
+		}
 	}
 
 	var func = getVar(fname)

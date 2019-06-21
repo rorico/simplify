@@ -14,7 +14,7 @@ getItem().then((file) => {
 	console.log(func)
 	// return
 	// var parse = test.parse
-	var astring = a.astring
+	var astring = require("astring")
 	// var walk = test.walk
 
 

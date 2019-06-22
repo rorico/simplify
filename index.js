@@ -835,6 +835,23 @@ function simplify(code, opts) {
 				}
 				return ret
 
+			case "TaggedTemplateExpression":
+				if (node.quasi.type !== "TemplateLiteral") console.log("unexpected quasi type")
+				if (node.tag.type !== "Identifier") console.log("tag not Identifier not handled")
+				var quasis = node.quasi.quasis.map(q => q.value.cooked)
+				var expressions = node.quasi.expressions.map(e => walk(e).ret)
+				ret.ret = walk(node.tag).ret(quasis, ...expressions)
+				return ret
+			case "TemplateLiteral":
+				var quasis = node.quasis.map(q => q.value.cooked)
+				var expressions = node.expressions.map(e => walk(e).ret)
+				ret.ret = quasis[0]
+				// maybe check that expressions.length = quasis.length - 1
+				for (var i = 0 ; i < expressions.length ; i++) {
+					ret.ret += expressions[i] + quasis[i+1]
+				}
+				return ret
+
 			case "EmptyStatement":
 				break
 

@@ -396,15 +396,9 @@ function simplify(code, opts) {
 				}, [])
 
 				var obj
+				var key
 				var func
-				if (node.callee.type === "Identifier") {
-					var name = node.callee.name
-					var func = getVar(name)
-					if (!func || !isFunction(func)) {
-						console.log("var is not function", node)
-						throw "4"
-					}
-				} else if (node.callee.type === "MemberExpression") {
+				if (node.callee.type === "MemberExpression") {
 					// do it this way to maintain thisArg
 					// can bind it, but that removes/changes some properties added
 					// like name, node
@@ -419,10 +413,19 @@ function simplify(code, opts) {
 						// console is a global side effect
 						closuresMod.add(global)
 					}
-				} else if (node.callee.type === "FunctionExpression" || node.callee.type === "ArrowFunctionExpression") {
-					func = walk(node.callee).ret
 				} else {
-					console.log("unexpected callee type", node.callee.type)
+					var knownTypes = ["Identifier", "FunctionExpression", "ArrowFunctionExpression", "CallExpression"]
+					func = walk(node.callee).ret
+					if (!knownTypes.includes(node.callee.type)) {
+						// this probably works, but I don't know it / haven't tested
+						console.log("unexpected callee type", node.callee.type, node)
+						// process.exit(1)
+					}
+				}
+
+				if (!func || !isFunction(func)) {
+					console.log("var is not function", node, Object.keys(vars), vars.__proto__)
+					throw "4"
 				}
 
 				if (func.node) {

@@ -324,7 +324,7 @@ function simplify(code, opts) {
 	}
 
 	function breakOut(node) {
-		return node && (node.return || node.break)
+		return node && (node.return || node.break || node.continue)
 	}
 
 	function walk(node) {
@@ -333,6 +333,7 @@ function simplify(code, opts) {
 			delete: false,
 			return: false,
 			break: false,
+			continue: false,
 			spread: false,
 			var: null
 		}
@@ -493,7 +494,7 @@ function simplify(code, opts) {
 						cont = true
 						for (var s of c.consequent) {
 							var r = walk(s)
-							if (r.return) return r
+							if (r.return || r.continue) return r
 							if (r.break) {
 								cont = false
 								b = true
@@ -511,6 +512,12 @@ function simplify(code, opts) {
 				// todo: handle labels
 				if (node.label) console.log("labels not handled")
 				ret.break = true
+				break
+
+			case "ContinueStatement":
+				// todo: handle labels
+				if (node.label) console.log("labels not handled")
+				ret.continue = true
 				break
 
 			case "AssignmentExpression":
@@ -596,6 +603,7 @@ function simplify(code, opts) {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
+					if (r.continue) continue
 				}
 				return ret
 				break
@@ -608,6 +616,7 @@ function simplify(code, opts) {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
+					if (r.continue) continue
 				}
 				return ret
 
@@ -616,6 +625,7 @@ function simplify(code, opts) {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
+					if (r.continue) continue
 				}
 				return ret
 				break
@@ -624,6 +634,7 @@ function simplify(code, opts) {
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
+					if (r.continue) continue
 				}
 				return ret
 				break

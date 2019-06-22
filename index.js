@@ -139,7 +139,24 @@ function simplify(code, opts) {
 			vars = {}
 			vars.__proto__ = closure
 			for (var i = 0 ; i < params.length ; i++) {
-				addVar(params[i].name, arguments[i], node.params[i])
+				var p = params[i]
+				if (p.type === "Identifier") {
+					addVar(p.name, arguments[i], p)
+				} else if (p.type === "ObjectPattern") {
+					// TODO this well
+					for (var prop of p.properties) {
+						if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
+						if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
+						addVar(prop.key.name, arguments[i][prop.value.type], prop)
+					}
+				} else if (p.type === "RestElement") {
+					if (p.argument.type !== "Identifier") console.log("RestElement argument not Identifier", prop)
+					var val = Array.prototype.slice.call(arguments, i)
+					addVar(p.argument.name, val, p)
+					break
+				} else {
+					console.log("unknown param type", p)
+				}
 			}
 			addVar("arguments", arguments)
 			addVar("this", this)

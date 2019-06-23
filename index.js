@@ -1095,7 +1095,7 @@ function simplify(code, opts) {
 				ret.remove = !node.visits
 				break
 			case "VariableDeclaration":
-				ret.remove = !node.declarations.reduce((a,b) => a+!(b || 0), 0)
+				ret.remove = !node.declarations.reduce((a,b) => a+!(b.remove || 0), 0)
 				break
 			case "Program":
 				break

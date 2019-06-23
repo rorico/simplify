@@ -1091,7 +1091,6 @@ function simplify(code, opts) {
 			case "Identifier":
 				break
 			case "ReturnStatement":
-				ret.stop = true
 				ret.remove = !node.visits
 				break
 			case "VariableDeclaration":

@@ -310,6 +310,9 @@ function simplify(code, opts) {
 		var obj
 		var key
 		if (node.type === "Identifier") {
+			console.log("getObj shouldn't be Identifier anymore")
+			console.log(node)
+			process.exit(1)
 			obj = vars
 			key = node.name
 			// update in higher closure if thats where it comes from
@@ -583,10 +586,6 @@ function simplify(code, opts) {
 
 
 			case "UpdateExpression":
-				// need to update in object
-				var o = getObj(node.argument)
-				var obj = o.obj
-				var key = o.key
 				var arg = node.argument
 				var name = arg.name
 				if (arg.type === "Identifier") {
@@ -605,6 +604,10 @@ function simplify(code, opts) {
 					}
 					return ret
 				}
+				// need to update in object
+				var o = getObj(node.argument)
+				var obj = o.obj
+				var key = o.key
 				if (node.operator === "++") {
 					ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
 				} else if (node.operator === "--") {

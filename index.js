@@ -654,6 +654,7 @@ function simplify(code, opts) {
 				break
 			case "WhileStatement":
 				while (walk(node.test).ret) {
+					node.true = node.true ? node.true + 1 : 1
 					var r = walk(node.body)
 					if (r.return) return r
 					if (r.break) break
@@ -1057,6 +1058,9 @@ function simplify(code, opts) {
 			case "ForInStatement":
 				break
 			case "ForStatement":
+				break
+			case "WhileStatement":
+				ret.remove = !node.true
 				break
 			case "ExpressionStatement":
 				// removing things can result in invalid trees

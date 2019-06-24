@@ -99,24 +99,6 @@ function simplify(code, opts) {
 		}
 	}
 
-	var func = getVar(fname)
-	if (!func || !isFunction(func)) {
-		console.log("no fname " + fname)
-		return 0
-	}
-	console.log("start of func")
-	var ret = call(fname, args)
-	// return
-	// fs.writeFileSync("ast.json", JSON.stringify(ast, null, 4))
-	unused(ast)
-	// console.log(astring.generate(func))
-	console.log("return value", ret)
-
-	function check(node) {
-		return walk(node, (n) => {
-			return changed[n.name]
-		})
-	}
 
 	function call(name, args) {
 		var f = getVar(name)
@@ -125,7 +107,6 @@ function simplify(code, opts) {
 
 	function isFunction(node) {
 		return node instanceof Function
-		return (node.type === "FunctionDeclaration") || (node.type === "ArrowFunctionExpression")
 	}
 
 	function addFunction(node) {
@@ -1149,14 +1130,6 @@ function simplify(code, opts) {
 			}
 		}
 	}
-	if (true) console.log("test")
-	if (false) console.log("test2")
-	return {
-		ret: ret,
-		code: astring.generate(ast),
-		ast: ast
-	}
-	// return astring.generate(ast)
 }
 
 module.exports = simplify

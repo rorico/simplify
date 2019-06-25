@@ -1,6 +1,8 @@
 var a
 var f
+var logNum = false
 var removeNodes = false
+// logNum = true
 // removeNodes = true
 getItem().then((file) => {
 	// var test = require('simplify')
@@ -75,6 +77,17 @@ getItem().then((file) => {
 				// console.log(node, state)
 				state.write('<div class="inline ' + (node.remove ? "remove" : "") + '">')
 				old(node, state)
+				if (logNum) {
+					if (type === "CallExpression") {
+						state.write("/*" + (node.visits || 0) + "*/")
+					}
+					if (type === "FunctionExpression" || type === "ArrowFunctionExpression" || type === "FunctionDeclaration") {
+						state.write("/*" + (node.calls || 0) + "*/")
+					}
+					if (type === "VariableDeclarator") {
+						state.write("/*" + (node.used || 0) + "*/")
+					}
+				}
 				state.write('</div>')
 			}
 

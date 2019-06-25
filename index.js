@@ -2,6 +2,8 @@ var acorn = require("acorn")
 var astring = require("astring")
 var fs = require("fs")
 var lognode = require("./lognode")
+var path = require("path")
+var modules = {}
 
 function simplify(code, opts) {
 	var vars = {}
@@ -11,7 +13,6 @@ function simplify(code, opts) {
 	var calledWith = new Map()
 	var usedVars = new Set()
 	var replace = []
-	var ast = acorn.parse(code)
 	var findClosures = new Map()
 
 	if (!opts) opts = {}
@@ -19,10 +20,16 @@ function simplify(code, opts) {
 	var documentF = {}
 	var windowF = {}
 	var module = {}
+	var req = {}
+	var ast = acorn.parse(code)
 
 	initHoisted(ast)
 	walk(ast)
-	console.log("parsed through file")
+	if (opts.node && opts.filename) {
+		req.loaded = loaded = true
+		// require.cache[file].loaded = loaded = true
+	}
+	console.log("parsed through file", opts.filename)
 
 	var funcs = {}
 	for (var f in documentF) {
@@ -796,23 +803,102 @@ function simplify(code, opts) {
 			case "VariableDeclaration":
 				break
 			case "Program":
+				// should be global at this level
 				addVar("this", this)
 				if (opts.node) {
 					// these are set in node for every module
 					// exports, require, module, __filename, __dirname
-					var exports = addVar("exports", {})
-					module = addVar("module", {exports: exports})
-					// might have to do some path stuff
-					addVar("require", (...args) => {
-						console.log(args)
-						try {
-							require(...args)
-						} catch (e) {
-
+					
+					var file = opts.filename
+					var package = opts.package
+					var foldername = path.dirname(file)
+					var exports = module.exports = addVar("exports", {})
+					if (file) {
+						file = path.resolve(file)
+						// hacky
+						req = require.cache[file] = {
+							id: file,
+							filename: file,
+							exports: exports,
+							parent: opts.parent,
+							loaded: false,
+							children: [],
+							paths: [file]
 						}
-					})
-					addVar("__filename", __filename)
-					addVar("__dirname", __dirname)
+						module = {
+							set exports(x) {
+								req.exports = x
+							},
+							get exports() {
+								return req.exports
+							}
+						}
+						var moduleFolder = path.join(opts.package, "node_modules")
+
+						// these should error if file is not given
+						addVar("__filename", file)
+						addVar("__dirname", foldername)
+						var fakeRequire = function(...args) {
+							if (args.length !== 1) {
+								console.log("incorrect number of args for require", args)
+							}
+							var name = args[0]
+							// console.log(name)
+							// do this to not record any functions used on startup
+							var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './', '../node_modules']})
+							recording--
+							try {
+								if (name.startsWith(".") || name.includes('/') || name.includes('\\')) {
+									// var file = path.join(foldername, name)
+									// file = Object.keys(folder).find(f => f.startsWith(file))
+									// console.log(getVar("__dirname"), name)
+									var file = require.resolve(name, {paths: ['./node_modules/npm/node_modules', getVar("__dirname"), './', '../node_modules']})
+									if (require.cache[file]) {
+										// console.log("already loaded", file)
+										recording++
+										return require(file)
+									}
+									// console.log(file)
+
+									// modules are cached
+									// if (!modules[file]) {
+										var todo = fs.readFileSync(file)
+										opts.filename = file
+										opts.parent = req
+										var code = simplify(todo, opts)
+									// } else {
+									// 	console.log("already loaded", file)
+									// }
+
+									// this will be set by that context
+									recording++
+									return code.exports
+								} else {
+									var filename = require.resolve(name, {paths: ['./node_modules/npm/node_modules', foldername, './', '../node_modules']})
+									var ret = require(filename)
+									// if (name === "which") console.log(ret)
+									recording++
+									return ret
+								}
+							} catch (e) {
+								console.log("cannot require", ...args, e)
+								process.exit(1)
+							}
+						}
+						fakeRequire.resolve = function(request, options) {
+							if (!options) {
+								options = {paths: [foldername]}
+							} else {
+								options.path.unshift(foldername)
+							}
+							return require.resolve(request, options)
+						}
+						addVar("require", fakeRequire)
+					} else {
+						module = {exports: exports}
+					}
+					addVar("module", module)
+					// might have to do some path stuff
 					// just to not break things
 					document = {}
 					window = {}

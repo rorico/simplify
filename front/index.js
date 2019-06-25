@@ -1,17 +1,20 @@
 var a
 var f
+var removeNodes = false
+// removeNodes = true
 getItem().then((file) => {
-	var test = require('simplify')
-	// $('#left').html(file)
-	a = test(file, {node: false})
+	// var test = require('simplify')
+	// // $('#left').html(file)
+	// a = test(file, {node: false})
 
-	console.log(a)
-	// $('#left').html(Object.keys(a.funcs).join("\n"))
-	var func = a.call("$", ["#right"])
-	console.log(func.ret)
-	f = func
-	func = a.call(func.ret.css, ["left", "50"], func.ret)
-	console.log(func)
+	// console.log(a)
+	// // $('#left').html(Object.keys(a.funcs).join("\n"))
+	// var func = a.call("$", ["#right"])
+	// console.log(func.ret)
+	// f = func
+	// func = a.call(func.ret.css, ["left", "50"], func.ret)
+	// console.log(func)
+	// var ast = func.c
 	// return
 	// var parse = test.parse
 	var astring = require("astring")
@@ -140,10 +143,12 @@ getItem().then((file) => {
 			}
 		}
 	}
-	// remove(func.c)
-	removeNested(func.c)
-	var code = genAstring(func.c)
-	console.log(func.c)
+	if (removeNodes) {
+		remove(ast)
+	}
+	removeNested(ast)
+	console.log(ast)
+	var code = genAstring(ast)
 	document.getElementById("left").innerHTML = code
 	// $('#left').html(code)
 	return

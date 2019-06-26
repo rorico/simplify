@@ -1192,23 +1192,16 @@ function simplify(code, opts) {
 			case "AssignmentExpression":
 				// TODO better handle around this
 				var left = node.left
-				while (left.type === "MemberExpression") {
-					left = left.object
-				}
-				if (left.type !== "ThisExpression") {
+				if (left.type === "Identifier") {
 					ret.remove = !node.used && !node.side
 				}
 				break
 			case "UpdateExpression":
 				// TODO better handle around this
 				var arg = node.argument
-				while (arg.type === "MemberExpression") {
-					arg = arg.object
-				}
-				if (arg.type !== "ThisExpression") {
+				if (arg.type === "Identifier") {
 					ret.remove = !node.used && !node.side
 				}
-				ret.remove = !node.used && !node.side
 				break
 			case "ForInStatement":
 				break
@@ -1224,7 +1217,10 @@ function simplify(code, opts) {
 					break
 				}
 				if (node.expression.type === "CallExpression") {
-					ret.remove = !node.expression.side
+					ret.remove = node.expression.side
+				}
+				if (node.expression.type === "Literal") {
+					ret.remove = true
 				}
 				break
 			case "LogicalExpression":

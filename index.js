@@ -9,7 +9,7 @@ var called = new Set()
 var calledWith = new Map()
 var funcDefined = new Set()
 var allAsts = []
-var recording = 1
+var recording = false
 
 function simplify(code, opts) {
 	var vars = {}
@@ -127,7 +127,7 @@ function simplify(code, opts) {
 			}
 		},
 		record: (func) => {
-			recording = 1
+			recording = true
 			for (var a of allAsts) {
 				reset(a)
 			}
@@ -914,6 +914,7 @@ function simplify(code, opts) {
 								return req.exports
 							}
 						}
+						// gonna assume this is defined with filename for now
 						var moduleFolder = path.join(opts.package, "node_modules")
 
 						// these should error if file is not given
@@ -925,45 +926,32 @@ function simplify(code, opts) {
 							}
 							var name = args[0]
 							// console.log(name)
+							var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './']})
+
 							// do this to not record any functions used on startup
-							var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './', '../node_modules']})
-							recording--
+							var oldRecording = recording
+							recording = false
 							try {
 								if (name.startsWith(".") || name.includes('/') || name.includes('\\')) {
-									// var file = path.join(foldername, name)
-									// file = Object.keys(folder).find(f => f.startsWith(file))
-									// console.log(getVar("__dirname"), name)
-									var file = require.resolve(name, {paths: ['./node_modules/npm/node_modules', getVar("__dirname"), './', '../node_modules']})
 									if (require.cache[file]) {
-										// console.log("already loaded", file)
-										recording++
 										return require(file)
 									}
-									// console.log(file)
 
-									// modules are cached
-									// if (!modules[file]) {
-										var todo = fs.readFileSync(file)
-										opts.filename = file
-										opts.parent = req
-										var code = simplify(todo, opts)
-									// } else {
-									// 	console.log("already loaded", file)
-									// }
+									var todo = fs.readFileSync(file)
+									opts.filename = file
+									opts.parent = req
+									var code = simplify(todo, opts)
 
 									// this will be set by that context
-									recording++
 									return code.exports
 								} else {
-									var filename = require.resolve(name, {paths: ['./node_modules/npm/node_modules', foldername, './', '../node_modules']})
-									var ret = require(filename)
-									// if (name === "which") console.log(ret)
-									recording++
-									return ret
+									return require(file)
 								}
 							} catch (e) {
 								console.log("cannot require", ...args, e)
 								process.exit(1)
+							} finally {
+								recording = oldRecording
 							}
 						}
 						fakeRequire.resolve = function(request, options) {

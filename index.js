@@ -1,5 +1,6 @@
 var acorn = require("acorn")
 var astring = require("astring")
+var astravel = require("astravel")
 var fs = require("fs")
 var lognode = require("./lognode")
 var path = require("path")
@@ -21,7 +22,18 @@ function simplify(code, opts) {
 	var windowF = {}
 	var module = {}
 	var req = {}
-	var ast = acorn.parse(code)
+	var acornOpts = {}
+	if (opts.comments) {
+		var comments = []
+		acornOpts.onComment = comments
+		acornOpts.locations = true
+	}
+
+	var ast = acorn.parse(code, acornOpts)
+
+	if (opts.comments) {
+		astravel.attachComments(ast, comments)
+	}
 
 	initHoisted(ast)
 	walk(ast)
@@ -953,6 +965,13 @@ function simplify(code, opts) {
 					ret.ret += expressions[i] + quasis[i+1]
 				}
 				return ret
+
+
+			// these are comments
+			case "Line":
+				break
+			case "Block":
+				break
 
 			case "EmptyStatement":
 				break

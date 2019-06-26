@@ -72,11 +72,14 @@ getItem().then((file) => {
 		function over(type) {
 			var color = hashCode(type, 6)
 			var old = gen[type].bind(gen)
-			gen[type] = function(node, state) {
+			gen[type] = function(node, state, ...args) {
 				// state.write('<div class="inline ' + type + '" style="color:#' + color + '" id="' + node.nodeId + '">')
 				// console.log(node, state)
-				state.write('<div class="inline ' + (node.remove ? "remove" : "") + '">')
-				old(node, state)
+				var classes = ""
+				if (node.remove) classes += " remove"
+				if (type === "formatComments") classes += " comment"
+				state.write('<div class="inline' + classes + '">')
+				old(node, state, ...args)
 				if (logNum) {
 					if (type === "CallExpression") {
 						state.write("/*" + (node.visits || 0) + "*/")

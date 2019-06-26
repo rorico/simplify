@@ -20,7 +20,8 @@
   "dependencies": {
     "acorn": "^6.1.1",
     "arg": "^4.1.0",
-    "astring": "^1.4.0",
+    "astravel": "^0.5.0",
+    "astring": "git+https://github.com/rorico/astring.git",
     "browserify": "^16.2.3",
     "npm": "^6.9.0"
   }

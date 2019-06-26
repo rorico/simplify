@@ -19,3 +19,7 @@
 	/*text-decoration: line-through;*/
 	opacity: 0.3;
 }
+.comment {
+	opacity: 0.5;
+	font-style: italic;
+}

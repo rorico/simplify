@@ -251,6 +251,7 @@ function simplify(code, opts) {
 		if (node.calls) node.calls = 0
 		if (node.visits) node.visits = 0
 		if (node.used) node.used = 0
+		if (node.remove) node.remove = false
 
 		for (var key in node) {
 			var val = node[key]

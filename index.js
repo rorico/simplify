@@ -5,16 +5,20 @@ var fs = require("fs")
 var lognode = require("./lognode")
 var path = require("path")
 var modules = {}
+var called = new Set()
+var calledWith = new Map()
+var funcDefined = new Set()
+var allAsts = []
+var recording = 1
 
 function simplify(code, opts) {
 	var vars = {}
 	var changed = {}
 	var closuresMod = new Set()
-	var called = new Set()
-	var calledWith = new Map()
 	var usedVars = new Set()
 	var replace = []
 	var findClosures = new Map()
+	var loaded = false
 
 	if (!opts) opts = {}
 	var globals = {}
@@ -30,6 +34,7 @@ function simplify(code, opts) {
 	}
 
 	var ast = acorn.parse(code, acornOpts)
+	allAsts.push(ast)
 
 	if (opts.comments) {
 		astravel.attachComments(ast, comments)
@@ -78,7 +83,11 @@ function simplify(code, opts) {
 				}
 			}
 
-			reset(astring)
+			// reset(astring)
+			for (var a of ast) {
+				reset(a)
+			}
+
 			called = new Set()
 			calledWith = new Map()
 			usedVars = new Set()
@@ -89,9 +98,10 @@ function simplify(code, opts) {
 			} else {
 				ret = func(...args)
 			}
-			unused(ast)
+			// unused(ast)
 
-			var body = [func.node]
+			// var body = [func.node]
+			var body = []
 			for (var v of called.values()) {
 				unused(v)
 				body.unshift(v)
@@ -99,7 +109,7 @@ function simplify(code, opts) {
 			for (var v of usedVars.values()) {
 				body.unshift(v)
 			}
-			console.log(calledWith.entries())
+			// console.log(calledWith.entries())
 
 			var c = {
 				type: "Program",
@@ -107,7 +117,7 @@ function simplify(code, opts) {
 				fake: true
 			}
 
-			console.log(c)
+			// console.log(c)
 			return {
 				ret: ret,
 				c: c,
@@ -115,10 +125,56 @@ function simplify(code, opts) {
 				ast: ast,
 				called, called
 			}
+		},
+		record: (func) => {
+			recording = 1
+			for (var a of allAsts) {
+				reset(a)
+			}
+			called = new Set()
+			calledWith = new Map()
+			usedVars = new Set()
+			funcDefined = new Set()
+
+			var after = () => {
+				// unused(ast)
+
+				// var body = [func.node]
+				var body = []
+				for (var v of called.values()) {
+					if (!funcDefined.has(v)) {
+						unused(v)
+						body.unshift(v)
+					}
+				}
+				for (var v of usedVars.values()) {
+					body.unshift(v)
+				}
+				// console.log(calledWith.entries())
+
+				var c = {
+					type: "Program",
+					body: body,
+					fake: true
+				}
+
+				// console.log(c)
+				return {
+					ret: ret,
+					c: c,
+					code: astring.generate(c),
+					ast: ast,
+					called, called
+				}
+			}
+			var ret = func()
+			if (ret instanceof Promise) {
+				return ret.then(after)
+			} else {
+				return after()
+			}
 		}
 	}
-
-
 	function call(name, args) {
 		var f = getVar(name)
 		return f(...args)
@@ -132,7 +188,20 @@ function simplify(code, opts) {
 		node.calls = node.calls || 0
 		// need a seperate closure for each call
 		var closure = vars
+		// don't want to make new required modules disappear
+		if (loaded) funcDefined.add(node)
 		var func = function() {
+
+			if (recording) {
+				node.calls++
+				called.add(node)
+				if (calledWith.has(node)) {
+					calledWith.get(node).push(arguments)
+				} else {
+					calledWith.set(node, [arguments])
+				}
+			}
+
 			var params = node.params
 			var oldVars = vars
 			// TODO handle updating global variables
@@ -434,15 +503,15 @@ function simplify(code, opts) {
 				if (func.node) {
 					var n = func.node
 					node.func = func
-					called.add(n)
-					if (calledWith.has(n)) {
-						calledWith.get(n).push(args)
-					} else {
-						calledWith.set(n, [args])
-					}
-				} else {
-					// means not defined in js
-					// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
+				// 	called.add(n)
+				// 	if (calledWith.has(n)) {
+				// 		calledWith.get(n).push(args)
+				// 	} else {
+				// 		calledWith.set(n, [args])
+				// 	}
+				// } else {
+				// 	// means not defined in js
+				// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
 				}
 
 				var currClos = closuresMod

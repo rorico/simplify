@@ -56,64 +56,28 @@ function simplify(code, opts) {
 		}
 	}
 
-	return {
+	var ret = {
 		ast: ast,
 		exposed: exposed,
 		findClosures, findClosures,
-		call: (fname, args, context) => {
+		call: (fname, args) => {
 			var func
-			if (isFunction(fname)) {
-				func = fname
+			if (fname.includes(".")) {
+				// do this way to preserve this
+				var parts = fname.split(".")
+				var obj = global
+				for (var i = 0 ; i < parts.length - 1 ; i++) {
+					obj = obj[parts[i]]
+				}
+				func = (...args) => {
+					return obj[parts[parts.length - 1]](...args)
+				}
 			} else {
 				func = getVar(fname)
-				if (!func || !isFunction(func)) {
-					console.log("no fname " + fname)
-					return 0
-				}
 			}
-
-			// reset(astring)
-			for (var a of ast) {
-				reset(a)
-			}
-
-			called = new Set()
-			calledWith = new Map()
-			usedVars = new Set()
-
-			var ret
-			if (context) {
-				ret = func.call(context, ...args)
-			} else {
-				ret = func(...args)
-			}
-			// unused(ast)
-
-			// var body = [func.node]
-			var body = []
-			for (var v of called.values()) {
-				unused(v)
-				body.unshift(v)
-			}
-			for (var v of usedVars.values()) {
-				body.unshift(v)
-			}
-			// console.log(calledWith.entries())
-
-			var c = {
-				type: "Program",
-				body: body,
-				fake: true
-			}
-
-			// console.log(c)
-			return {
-				ret: ret,
-				c: c,
-				code: astring.generate(c),
-				ast: ast,
-				called, called
-			}
+			return ret.record(() => {
+				return func(...args)
+			})
 		},
 		record: (func) => {
 			recording = true
@@ -164,6 +128,8 @@ function simplify(code, opts) {
 			}
 		}
 	}
+	return ret
+
 	function call(name, args) {
 		var f = getVar(name)
 		return f(...args)

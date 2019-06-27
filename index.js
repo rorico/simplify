@@ -21,11 +21,9 @@ function simplify(code, opts) {
 	var loaded = false
 
 	if (!opts) opts = {}
-	var globals = {}
-	var documentF = {}
-	var windowF = {}
 	var module = {}
 	var req = {}
+	var exposed = {}
 	var acornOpts = {}
 	if (opts.comments) {
 		var comments = []
@@ -42,35 +40,26 @@ function simplify(code, opts) {
 
 	initHoisted(ast)
 	walk(ast)
+	console.log("parsed through file", opts.filename)
+
 	if (opts.node && opts.filename) {
 		req.loaded = loaded = true
 		// require.cache[file].loaded = loaded = true
 	}
-	console.log("parsed through file", opts.filename)
+	if (opts.node) {
+		exposed["module.exports"] = module.exports
+	}
+	for (var prop in vars) {
+		// todo better way to handle predefined variables
+		if (prop !== "this") {
+			exposed[prop] = vars[prop]
+		}
+	}
 
-	var funcs = {}
-	for (var f in documentF) {
-		funcs["document." + f] = documentF[f]
-	}
-	for (var f in windowF) {
-		funcs["window." + f] = windowF[f]
-	}
-	addModule(funcs, "module.exports", module.exports)
-	function addModule(funcs, key, obj) {
-		if (obj instanceof Function) {
-			funcs[key] = obj
-			return
-		}
-		for (var k in obj) {
-			if (obj instanceof Object) {
-				addModule(funcs, key + "." + k, obj[k])
-			}
-		}
-	}
 	return {
-		globals: globals,
+		ast: ast,
+		exposed: exposed,
 		findClosures, findClosures,
-		funcs: funcs,
 		call: (fname, args, context) => {
 			var func
 			if (isFunction(fname)) {
@@ -230,15 +219,20 @@ function simplify(code, opts) {
 			addVar("arguments", arguments)
 			addVar("this", this)
 
-			node.calls++
-			initHoisted(node.body)
-			var ret = walk(node.body)
-			// this can happen if a higher function modifies this one
-			// remove just in case
-			closuresMod.delete(vars)
-			vars = oldVars
-			return ret.ret
 
+			initHoisted(node.body)
+			try {
+				var ret = walk(node.body)
+				return ret.ret
+			} catch (e) {
+				throw e
+			} finally {
+				// do in finally in case try catches are part of code flow
+				// this can happen if a higher function modifies this one
+				// remove just in case
+				closuresMod.delete(vars)
+				vars = oldVars
+			}
 		}
 		// for access to node from function
 		func.node = node
@@ -267,11 +261,15 @@ function simplify(code, opts) {
 	}
 
 	function initHoisted(node) {
+		var funcTypes = ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
 		if (node.type === "FunctionDeclaration") {
 			addFunction(node)
 			return
 		} else if (node.type === "VariableDeclarator") {
 			addVar(node.id.name, undefined)
+		} else if (funcTypes.includes(node.type)) {
+			// don't hoist variables in nested functinos
+			return
 		}
 		for (var key in node) {
 			var val = node[key]
@@ -313,8 +311,9 @@ function simplify(code, opts) {
 	}
 	function setVar(name, val, node) {
 		if (!(name in vars)) {
-			// TOOD add a global context
-			// addVar(name, val, node, global)
+			global[name] = val
+			exposed[name] = val
+			findClosures.set(val, global)
 		}
 
 		var v = vars[name]
@@ -328,11 +327,16 @@ function simplify(code, opts) {
 		v.uses = 0
 		return val
 	}
-	function setProp(obj, name, val, node) {
+	function setProp(obj, name, val, node, varPath) {
 		obj[name] = val
 		var closure = findClosures.get(obj)
 		findClosures.set(val, closure)
 		closuresMod.add(closure)
+		if (closure === global) {
+			if (varPath[0]) {
+				exposed[varPath.join(("."))] = val
+			}
+		}
 		if (closure !== vars && node) {
 			node.side = true
 		}
@@ -344,15 +348,9 @@ function simplify(code, opts) {
 			if (!(name in global)) {
 				console.log(name, "not defined, should have errored")
 			}
-			// if (globals[name]) return globals[name]
-			// globals[name] = {}
-			// globals[name].__proto__ = global[name]
-			// console.log(globals[name], global[name])
-			// do something about this
 			var ret = global[name]
 			findClosures.set(ret, global)
 			return ret
-			// return globals[name]
 		} else {
 			var v = vars[name]
 			v.uses++
@@ -377,39 +375,26 @@ function simplify(code, opts) {
 		}
 	}
 	function getObj(node) {
-		var obj
-		var key
-		if (node.type === "Identifier") {
-			console.log("getObj shouldn't be Identifier anymore")
-			console.log(node)
-			process.exit(1)
-			obj = vars
-			key = node.name
-			// update in higher closure if thats where it comes from
-			while (obj.__proto__ && !obj.hasOwnProperty(key)) {
-				obj = obj.__proto__
-			}
-			if (obj[key]) {
-				obj = obj[key]
-				key = "val"
-			} else {
-				obj = global
-			}
-		} else if (node.type === "MemberExpression") {
-			if (!node.object || !node.property)
-				console.log("missing member object or project")
-			obj = walk(node.object).ret
-			key = node.computed ? walk(node.property).ret : node.property.name
-		} else {
-			console.log("unknown AssignmentExpression type", node)
-		}
+		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
+		if (!node.object || !node.property)
+			console.log("missing member object or property")
+
+		var res = walk(node.object)
+		var obj = res.ret
+		var key = node.computed ? walk(node.property).ret : node.property.name
+
+		var varPath = res.varPath
+		// use concat to not alter original variable
+		varPath = varPath.concat([key])
+
 		// TODO This isn't perfect, obj[key] can belong to many objects
 		if (findClosures.has(obj[key])) {
 			findClosures.set(obj[key], findClosures.get(obj))
 		}
 		return {
 			obj: obj,
-			key: key
+			key: key,
+			varPath: varPath
 		}
 	}
 
@@ -425,7 +410,7 @@ function simplify(code, opts) {
 			break: false,
 			continue: false,
 			spread: false,
-			var: null
+			varPath: []
 		}
 		var after
 		if (!node) {
@@ -644,13 +629,7 @@ function simplify(code, opts) {
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				ret.ret = setProp(o.obj, o.key, val, node)
-				if (o.obj === document) {
-					documentF[o.key] = right
-				}
-				if (o.obj === window) {
-					windowF[o.key] = right
-				}
+				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
 				return ret
 				break
 
@@ -821,7 +800,7 @@ function simplify(code, opts) {
 			case "MemberExpression":
 				var o = getObj(node)
 				ret.ret = o.obj[o.key]
-				ret.var = o.var
+				ret.var = o.varPath
 				return ret
 			case "ObjectExpression":
 				ret.ret = {}
@@ -871,7 +850,7 @@ function simplify(code, opts) {
 
 			case "Identifier":
 				ret.ret = getVar(node.name)
-				ret.var = node.name
+				ret.varPath = [node.name]
 				return ret
 
 			case "ReturnStatement":
@@ -981,6 +960,7 @@ function simplify(code, opts) {
 
 			case "ThisExpression":
 				ret.ret = getVar("this")
+				varPath = ["this"]
 				return ret
 
 			case "ThrowStatement":

@@ -126,6 +126,11 @@ getItem().then((file) => {
 					console.log(node)
 				}
 			}
+		} else if (node.type === "ReturnStatement") {
+			var arg = node.argument
+			if (arg && arg.type === "Literal" && arg.value === undefined) {
+				node.argument = null
+			}
 		}
 		for (var key in node) {
 			var val = node[key]

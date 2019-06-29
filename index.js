@@ -462,7 +462,7 @@ function simplify(code, opts) {
 				}
 
 				if (!func || !isFunction(func)) {
-					console.log("var is not function", node, Object.keys(vars), vars.__proto__)
+					console.log("var is not function", func, node)
 					throw "4"
 				}
 

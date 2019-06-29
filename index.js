@@ -18,6 +18,7 @@ function simplify(code, opts) {
 	var usedVars = new Set()
 	var replace = []
 	var findClosures = new Map()
+	var replaceCache = new Map()
 	var loaded = false
 
 	if (!opts) opts = {}
@@ -182,9 +183,17 @@ function simplify(code, opts) {
 					console.log("unknown param type", p)
 				}
 			}
-			addVar("arguments", arguments)
-			addVar("this", this)
 
+			// some ghetto way to keep track if these variables are used
+			if (!node.argsUsed) {
+				node.argsUsed = {}
+			}
+			if (!node.thisUsed) {
+				node.thisUsed = {}
+			}
+			addVar("arguments", arguments, node.argsUsed)
+			// may cause incorrect closure values
+			addVar("this", this, node.thisUsed)
 
 			initHoisted(node.body)
 			try {
@@ -286,6 +295,9 @@ function simplify(code, opts) {
 		v.val = val
 		findClosures.set(val, v.closure)
 		closuresMod.add(v.closure)
+		if (v.node) {
+			v.node.varChanged = true
+		}
 		v.node = node
 		if (v.closure !== vars && node) {
 			node.side = true
@@ -389,7 +401,9 @@ function simplify(code, opts) {
 
 		if (node.delete === undefined) node.delete = 0
 		if (node.visits === undefined) node.visits = 0
-		node.visits++
+		if (recording) {
+			node.visits++
+		}
 
 		switch (node.type) {
 			case "VariableDeclarator":
@@ -1023,32 +1037,74 @@ function simplify(code, opts) {
 		}
 		return ret
 	}
-	function replaceReturn(node, num) {
-		for (var key in node) {
-			var val = node[key]
-			if (Array.isArray(val)) {
-				for (var i = 0 ; i < val.length ; i++) {
-					var c = val[i]
-					// assuming return statement isn't in a stupid place
-					if (c.type === "ReturnStatement") {
-						if (c.visits !== num) {
-							return false
+	function replaceReturn(node) {
+		if (replaceCache.has(node)) {
+			return replaceCache.get(node)
+		}
+		var ret = {
+			ret: undefined,
+			argsUsed: node.argsUsed.used,
+			thisUsed: node.thisUsed.used,
+			singleRet: true,
+			recursive: false,
+			usable: true
+		}
+		walkReplace(node, node)
+		ret.usable = ret.singleRet && !ret.recursive
+		replaceCache.set(node, ret)
+		return ret
+		function walkReplace(node, orig) {
+			if (typeof node === "function") {
+				// console.log("arrived at function in recursion")
+				return
+			}
+			// console.log(orig, node)
+			if (node.type === "CallExpression") {
+				if (node.func === orig) {
+					// there is recursion on self
+					// doesn't actually handle all cases
+					console.log("some recursion", orig.id || orig.id.name)
+					ret.recursive = true
+					return true
+				}
+				// don't go into func call
+				// return
+			}
+			for (var key in node) {
+				var val = node[key]
+				if (Array.isArray(val)) {
+					for (var i = 0 ; i < val.length ; i++) {
+						var c = val[i]
+						// assuming return statement isn't in a stupid place
+						if (c.type === "ReturnStatement") {
+							if (!c.visits) {
+								// return not used
+								return
+							}
+							if (c.visits !== orig.calls) {
+								// this function isn't easily replacable
+								console.log("not the same", orig.calls, c.visits)
+								ret.singleRet = false
+								return true
+							}
+							// assume all returns happen in the same place
+							// remove all nodes after it
+							val.splice(i, val.length)
+							ret.ret = c.argument
+							return true
 						}
-						// assume all returns happen in the same place
-						// remove all nodes after it
-						val.splice(i, val.length)
-						console.log("Asdf", c.argument)
-						return c.argument
+						var a = walkReplace(c, orig)
+						if (a) {
+							val.splice(i + 1, val.length)
+							return a
+						}
 					}
-					var a = replaceReturn(c, num)
+				} else if (val && typeof val.type === "string") {
+					// TODO check return statement here
+					var a = walkReplace(val, orig)
 					if (a) {
 						return a
 					}
-				}
-			} else if (val && typeof val.type === "string") {
-				var a = replaceReturn(val, num)
-				if (a) {
-					return a
 				}
 			}
 		}
@@ -1072,36 +1128,112 @@ function simplify(code, opts) {
 				ret.remove = !node.calls
 				break
 			case "CallExpression":
-			console.log(node, !node.side, node.func && node.visits === node.func.node.calls)
+			// console.log(node, !node.side, node.func && node.visits === node.func.node.calls)
 				var func = node.func
-				if (!node.side && func && node.visits === func.node.calls) {
-					var retVar = replaceReturn(func.node, node.visits)
-					if (retVar) {
-						Object.assign(node, retVar)
-						console.log("replace", replace.push, func.node.body)
+				// if (func) {
+				// 	console.log(node.visits, func.node.calls)
+				// }
+				if (func && node.visits === func.node.calls) {
+					if (!node.visits) {
+						console.log("shouldn't happen", node)
+						break
+					}
+					// console.log(func)
+					// try {
+						// var funcNode = JSON.parse(JSON.stringify(func.node))
+						var funcNode = func.node
+						var ret = replaceReturn(funcNode, funcNode)
+						// console.log(funcNode.id)
+						if (!funcNode.calls) {
+							console.log(node.callee, funcNode, funcNode.params, node.arguments)
+							process.exit(1)
+						}
+						if (funcNode.body.body.length === 3 && funcNode.body.body[0].type === "ExpressionStatement") {
+							console.log("asdkflk", funcNode.body.body, ret)
+							// process.exit(1)
+						}
+					// } catch (e) {
+					// 	console.log('some error', e)
+					// 	// this means there is a circular loop
+					// 	retVar = true
+					// }
+					if (ret.usable) {
+						var retVar = ret.ret
+						var body = node.func.node.body.body
+						var old = JSON.parse(JSON.stringify(node))
+						if (retVar) {
+							Object.assign(node, retVar, {fake: true})
+						} else {
+							Object.assign(node, {
+								type: "Literal",
+								value: undefined,
+								raw: "undefined",
+								fake: true
+							})
+						}
 
 						var decs = []
 						var params = func.node.params
 						for (var i = 0 ; i < params.length ; i++) {
+							// TODO handle different types
 							var d = {
 								type: "VariableDeclarator",
 								id: params[i],
 								init: node.arguments[i],
+								used: params[i].used,
 								fake: true
 							}
 							decs.push(d)
 						}
-						var dec = {
-							type: "VariableDeclaration",
-							kind: "var",
-							declarations: decs,
-							// generated by me
+						if (ret.argsUsed) {
+							decs.push({
+								type: "VariableDeclarator",
+								id: {
+									type: "Identifier",
+									name: "arguments",
+									fake: true
+								},
+								init: {
+									type: "ArrayExpression",
+									elements: node.arguments,
+									fake: true
+								},
+								used: ret.argsUsed,
+								fake: true
+							})
+							console.log(decs)
+						}
+						if (decs.length) {
+							var dec = {
+								type: "VariableDeclaration",
+								kind: "var",
+								declarations: decs,
+								// generated by me
+								fake: true
+							}
+							body.unshift(dec)							
+						}
+						// replace.push(dec)
+						// replace.push(...node.func.node.body.body)
+						var r = {
+							type: "BlockStatement",
+							body: body,
+							old: old,
 							fake: true
 						}
+						if (node.visits === func.node.calls) {
+							// redundant for now, but might change check above
+							called.delete(func.node)
+							unused(r)
+						}
+						if (ret.argsUsed) {
+							console.log("test", r)
+							// fs.writeFileSync("front/ast.json", "var ast = " + JSON.stringify(r, null , 4))
+							// process.exit()
+						}
+						replace.push(...body)
+						// replace.push(r)
 
-						replace.push(dec)
-						replace.push(...node.func.node.body.body)
-						// node.side
 						ret.stop = true
 					}
 				}

@@ -77,6 +77,7 @@ getItem().then((file) => {
 				// console.log(node, state)
 				var classes = ""
 				if (node.remove) classes += " remove"
+				if (node.fake && type !== "Program") classes += " fake"
 				if (type === "formatComments") classes += " comment"
 
 

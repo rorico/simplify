@@ -78,7 +78,10 @@ getItem().then((file) => {
 				var classes = ""
 				if (node.remove) classes += " remove"
 				if (type === "formatComments") classes += " comment"
-				state.write('<div class="inline' + classes + '">')
+
+
+				// don't escape
+				state.write('<div class="inline' + classes + '">', null, true)
 				old(node, state, ...args)
 				if (logNum) {
 					if (type === "CallExpression") {
@@ -91,7 +94,7 @@ getItem().then((file) => {
 						state.write("/*" + (node.used || 0) + "*/")
 					}
 				}
-				state.write('</div>')
+				state.write('</div>', null, true)
 			}
 
 		}

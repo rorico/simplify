@@ -23,3 +23,8 @@
 	opacity: 0.5;
 	font-style: italic;
 }
+.fake {
+	font-weight: bold;
+	font-style: italic;
+	/*color: blue;*/
+}

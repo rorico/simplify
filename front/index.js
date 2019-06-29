@@ -101,7 +101,7 @@ getItem().then((file) => {
 	function remove(node) {
 		if (node.type === "IfStatement") {
 			if (node.consequent.remove) {
-				if (node.alternate.remove) {
+				if (!node.alternate || node.alternate.remove) {
 					// just here due to side effects
 					Object.assign(node, node.test)
 				} else {

@@ -2,26 +2,29 @@ var a
 var f
 var logNum = false
 var removeNodes = false
+// isNode = true
 // logNum = true
 // removeNodes = true
 getItem().then((file) => {
-	// var test = require('simplify')
-	// // $('#left').html(file)
-	// a = test(file, {node: false})
+	if (!isNode) {
+		var test = require('simplify')
+		a = test(file, {node: false, comments: 1})
 
-	// console.log(a)
-	// // $('#left').html(Object.keys(a.funcs).join("\n"))
-	// var func = a.call("$", ["#right"])
-	// console.log(func.ret)
-	// f = func
-	// func = a.call(func.ret.css, ["left", "50"], func.ret)
-	// console.log(func)
-	// var ast = func.c
-	// return
-	// var parse = test.parse
+		console.log(a)
+		// $('#left').html(Object.keys(a.exposed).join("\n"))
+		var func = a.call("$", ["#right"])
+		f = func
+
+		func = a.record(() => {
+			return func.ret.text("<>")
+		})
+
+		console.log(func)
+		ast = func.c
+
+	}
+
 	var astring = require("astring")
-	// var walk = test.walk
-
 
 	var base = astring.baseGenerator
 	var variable = base.VariableDeclaration

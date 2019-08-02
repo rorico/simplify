@@ -1283,7 +1283,7 @@ function simplify(code, opts) {
 					break
 				}
 				if (node.expression.type === "CallExpression") {
-					ret.remove = node.expression.side
+					ret.remove = !node.expression.side
 				}
 				if (node.expression.type === "Literal") {
 					ret.remove = true

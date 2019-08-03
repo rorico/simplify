@@ -199,14 +199,17 @@ getItem().then((file) => {
 			}
 		}
 	}
-	if (removeNodes) {
-		remove(ast)
-	}
-	removeNested(ast)
 	console.log(ast)
-	var code = genAstring(ast)
-	document.getElementById("left").innerHTML = code
-	defineParent(ast)
+	redo()
+	function redo() {
+		if (removeNodes) {
+			remove(ast)
+		}
+		var code = genAstring(ast)
+		document.getElementById("left").innerHTML = code
+		defineParent(ast)
+	}
+
 	var left = document.getElementById("left")
 	left.onclick = (e) => {
 		if (target === left) return
@@ -258,9 +261,12 @@ getItem().then((file) => {
 		} else {
 			console.log('what')
 		}
-		var code = genAstring(ast)
-		document.getElementById("left").innerHTML = code
-		defineParent(ast)
+		redo()
+	}
+	document.onkeypress = (e) => {
+		if (e.key === "g") logNum = !logNum
+		// if (e.key === "r") removeNodes = !removeNodes
+		redo()
 	}
 	// $(".replaceable").click(function(e) {
 	// 	console.log(this, e)

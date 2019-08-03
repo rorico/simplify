@@ -1,5 +1,7 @@
 var a
 var f
+var n
+var isNode = false
 var logNum = false
 var removeNodes = false
 // isNode = true
@@ -8,7 +10,7 @@ var removeNodes = false
 getItem().then((file) => {
 	if (!isNode) {
 		var test = require('simplify')
-		a = test(file, {node: false, comments: 1})
+		a = test(file, {node: false, comments: !1, replace: !1})
 
 		console.log(a)
 		// $('#left').html(Object.keys(a.exposed).join("\n"))
@@ -30,7 +32,7 @@ getItem().then((file) => {
 	var variable = base.VariableDeclaration
 	var gen = Object.assign({}, base)
 
-	var nodes = []
+	var nodes = n = []
 	var moveables = []
 	var clickables = []
 
@@ -76,19 +78,24 @@ getItem().then((file) => {
 			var color = hashCode(type, 6)
 			var old = gen[type].bind(gen)
 			gen[type] = function(node, state, ...args) {
-				// state.write('<div class="inline ' + type + '" style="color:#' + color + '" id="' + node.nodeId + '">')
-				// console.log(node, state)
+				if (node.nodeId === undefined) {
+					node.nodeId = nodes.length
+					nodes.push(node)
+				}
+				node.indentLevel = state.indentLevel
 				var classes = ""
 				if (node.remove) classes += " remove"
 				if (node.fake && type !== "Program") classes += " fake"
+				if (node.replaceable || node.replacement) classes += " replaceable"
 				if (type === "formatComments") classes += " comment"
 
+				if (node.overLvl) classes += " overLvl" + node.overLvl
 
 				// don't escape
-				state.write('<div class="inline' + classes + '">', null, true)
+				state.write('<div class="inline' + classes + '" id="' + node.nodeId + '">', null, true)
 				old(node, state, ...args)
 				if (logNum) {
-					if (type === "CallExpression") {
+					if (type === "CallExpression" || type === "ReturnStatement") {
 						state.write("/*" + (node.visits || 0) + "*/")
 					}
 					if (type === "FunctionExpression" || type === "ArrowFunctionExpression" || type === "FunctionDeclaration") {
@@ -96,6 +103,9 @@ getItem().then((file) => {
 					}
 					if (type === "VariableDeclarator") {
 						state.write("/*" + (node.used || 0) + "*/")
+					}
+					if (node.old) {
+						state.write("//" + genAstring(node.old).replace(/\n/g,""), null, true)
 					}
 				}
 				state.write('</div>', null, true)
@@ -154,6 +164,24 @@ getItem().then((file) => {
 		}
 	}
 
+	var parents = []
+	function defineParent(node) {
+		for (var key in node) {
+			if (key === 'replacement') continue
+			var val = node[key]
+			if (Array.isArray(val)) {
+				for (var i = 0 ; i < val.length ; i++) {
+					var c = val[i]
+					parents[c.nodeId] = [node.nodeId, key, i]
+					defineParent(c)
+				}
+			} else if (val && typeof val.type === "string") {
+				parents[val.nodeId] = [node.nodeId, key]
+				defineParent(val)
+			}
+		}
+	}
+
 	// for css, don't want nested removed
 	function removeNested(node, removed) {
 		if (removed) {
@@ -178,6 +206,87 @@ getItem().then((file) => {
 	console.log(ast)
 	var code = genAstring(ast)
 	document.getElementById("left").innerHTML = code
+	defineParent(ast)
+	var left = document.getElementById("left")
+	left.onclick = (e) => {
+		if (target === left) return
+		var target = e.target
+		console.log(e)
+		while (target && !target.classList.contains("replaceable")) {
+			console.log(target)
+			target = target.parentElement
+		}
+		if (!target) return
+		var node = nodes[target.id]
+		var parentObj = parents[target.id]
+		// console.log(parentObj, target ,target.id, parents)
+		var parent = nodes[parentObj[0]]
+
+		// var parent = $this.parent()
+		// var parentNode = nodes[parent[0].id]
+
+		// while (parentNode.type !== "BlockStatement") {
+		// 	if (parentNode.type === "IfStatement") {
+						
+		// 	}
+		// 	break
+		// }
+		// for (var i = 0 ; i < parentNode.length ; i++) {
+		// 	if (parentNode) {
+
+		// 	}
+		// }
+
+		// console.log(node, $this, $this.attr("id"), this.id)
+
+
+		var replacement
+		if (node.replacement) {
+			replacement = node.replacement
+		} else {
+			var ret = a.replaceCall(node)
+			replacement = ret.body
+			replacement.body.push(ret.retVar)
+			console.log(replacement, ret)
+		}
+		console.log(replacement)
+		replacement.replacement = node
+		if (parentObj.length === 3) {
+			parent[parentObj[1]][parentObj[2]] = replacement
+		} else if (parentObj.length === 2) {
+			parent[parentObj[1]] = replacement
+		} else {
+			console.log('what')
+		}
+		var code = genAstring(ast)
+		document.getElementById("left").innerHTML = code
+		defineParent(ast)
+	}
+	// $(".replaceable").click(function(e) {
+	// 	console.log(this, e)
+	// 	var $this = $(this)
+	// 	var node = nodes[this.id]
+	// 	var parent = $this.parent()
+	// 	var parentNode = nodes[parent[0].id]
+
+	// 	while (parentNode.type !== "BlockStatement") {
+	// 		if (parentNode.type === "IfStatement") {
+						
+	// 		}
+	// 		break
+	// 	}
+	// 	for (var i = 0 ; i < parentNode.length ; i++) {
+	// 		if (parentNode) {
+
+	// 		}
+	// 	}
+
+	// 	console.log(node, $this, $this.attr("id"), this.id)
+	// 	a.replaceCall(node)
+	// 	// $this.html(genAstring(node, node.indentLevel))
+	// var code = genAstring(ast)
+	// document.getElementById("left").innerHTML = code
+	// })
 	// $('#left').html(code)
 	return
 
@@ -335,14 +444,16 @@ getItem().then((file) => {
 	// 	.join('\n')
 	// )
 
-	function genAstring(ast) {
-		return astring.generate(ast, {generator: gen, comments: true})
+	function genAstring(ast, indentLevel) {
+		return astring.generate(ast, {generator: gen, comments: true, startingIndentLevel: indentLevel || 0})
 	}
 })
 
 function getItem() {
-	var key = 'jquery'
+	var key = 'npm'
+	var url = 'https://raw.githubusercontent.com/npm/cli/latest/lib/npm.js'
 	// var url = 'https://raw.githubusercontent.com/substack/node-falafel/master/index.js'
+	var key = 'jquery'
 	var url = 'https://code.jquery.com/jquery-3.4.1.js'
 	if (!localStorage.getItem(key)) {
 		return $.ajax(url).then((j) => {

@@ -430,6 +430,7 @@ function simplify(code, opts) {
 					}
 				}, [])
 
+				var callType = "normal"
 				var obj
 				var key
 				var func

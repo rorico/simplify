@@ -2,18 +2,47 @@ var acorn = require("acorn")
 var astring = require("astring")
 var astravel = require("astravel")
 var fs = require("fs")
-var lognode = require("./lognode")
 var path = require("path")
+import * as ts from "typescript"
+import tsSyntax from "./tsSyntax"
+import lognode from "./lognode"
 var modules = {}
 var called = new Set()
 var calledWith = new Map()
 var funcDefined = new Set()
 var allAsts = []
 var recording = false
+ts.createtextwriter
+type track = ts.Node & {
+    delete?: number,
+    visits?: number,
+    calls?: number,
+    argsUsed?: any,
+    thisUsed?: any,
+    true?: number,
+    node?: ts.Node,
+	func?: Function,
+	side?: boolean,
+	used?: number,
+	varUsed?: boolean,
+	varChanged?: boolean,
+	remove?: boolean,
+	callType?: string,
+	nodeType?: string,
+	getString?: string,
+    // todo node as only one of the functions
+}
+type vars = {
+	uses: number,
+	val: any,
+	closure: any,
+	node?: ts.Node,
+	init: ts.Node
+}
 
 function simplify(code, opts) {
-	var vars = {}
-	var changed = {}
+	var vars: Record<string, vars> = {}
+	var changed: any = {}
 	var closuresMod = new Set()
 	var usedVars = new Set()
 	var replace = []
@@ -22,25 +51,31 @@ function simplify(code, opts) {
 	var loaded = false
 
 	if (!opts) opts = {}
-	var module = {}
-	var req = {}
-	var exposed = {}
-	var acornOpts = {}
+	var module: any = {}
+	var req: any = {}
+	var exposed: any = {}
+	var acornOpts: any = {}
 	if (opts.comments) {
 		var comments = []
 		acornOpts.onComment = comments
 		acornOpts.locations = true
 	}
 
-	var ast = acorn.parse(code, acornOpts)
-	allAsts.push(ast)
+	let sourceFile = ts.createSourceFile(
+		'test',
+		code,
+		ts.ScriptTarget.ES2018,
+		false
+	)
+	// var ast = acorn.parse(code, acornOpts)
+	// allAsts.push(ast)
 
-	if (opts.comments) {
-		astravel.attachComments(ast, comments)
-	}
+	// if (opts.comments) {
+	// 	astravel.attachComments(ast, comments)
+	// }
 
-	initHoisted(ast)
-	walk(ast)
+	initHoisted(sourceFile)
+	walk(sourceFile)
 	console.log("parsed through file", opts.filename)
 
 	if (opts.node && opts.filename) {
@@ -56,12 +91,13 @@ function simplify(code, opts) {
 			exposed[prop] = vars[prop]
 		}
 	}
-
+	
 	var ret = {
-		ast: ast,
+		ast: sourceFile,
 		exposed: exposed,
 		findClosures: findClosures,
 		replaceCall: replaceCall,
+		tsSyntax,
 		call: (fname, args) => {
 			var func
 			if (fname.includes(".")) {
@@ -94,9 +130,12 @@ function simplify(code, opts) {
 			var after = () => {
 				recording = false
 				var body = []
+				console.log(called)
 				for (var v of called.values()) {
+					console.log(v)
 					if (!funcDefined.has(v)) {
-						unused(v)
+						// todo add this back
+						// unused(v)
 						body.unshift(v)
 					}
 				}
@@ -104,18 +143,20 @@ function simplify(code, opts) {
 					body.unshift(v)
 				}
 
-				var c = {
-					type: "Program",
-					body: body.reverse(),
-					fake: true
-				}
+				// var c = {
+				// 	type: "Program",
+				// 	body: body.reverse(),
+				// 	fake: true
+				// }
+				console.log(body)
+				let c = ts.createBlock(body.reverse(), true)
 
 				return {
 					ret: ret,
-					c: c,
-					code: astring.generate(c),
-					ast: ast,
-					called, called
+					c,
+					// code: astring.generate(c),
+					// ast: ast,
+					called
 				}
 			}
 			var ret = func()
@@ -137,16 +178,16 @@ function simplify(code, opts) {
 		return node instanceof Function
 	}
 
-	function addFunction(node) {
-		node.calls = node.calls || 0
+	function addFunction(node: ts.FunctionDeclaration | ts.FunctionExpression | ts.ArrowFunction) {
+        let track = node as track
+		track.calls = track.calls || 0
 		// need a seperate closure for each call
 		var closure = vars
 		// don't want to make new required modules disappear
 		if (loaded) funcDefined.add(node)
 		var func = function() {
-
 			if (recording) {
-				node.calls++
+				track.calls++
 				called.add(node)
 				if (calledWith.has(node)) {
 					calledWith.get(node).push(arguments)
@@ -155,48 +196,62 @@ function simplify(code, opts) {
 				}
 			}
 
-			var params = node.params
+            var params = node.parameters
+            
 			var oldVars = vars
 			// TODO handle updating global variables
-			vars = {}
+            vars = {}
+            // @ts-ignore
 			vars.__proto__ = closure
 			for (var i = 0 ; i < params.length ; i++) {
-				var p = params[i]
-				if (p.type === "Identifier") {
-					addVar(p.name, arguments[i], p)
-				} else if (p.type === "ObjectPattern") {
+                var p = params[i]
+                // let typed
+                if (p.questionToken || p.type || p.initializer) {
+                    console.log("some part of param is not handled yet", p)
+                }
+				if (ts.isIdentifier(p.name)) {
+                    let val
+                    if (p.dotDotDotToken) {
+                        val = Array.prototype.slice.call(arguments, i)
+                    } else {
+                        val = arguments[i]
+                    }
+					addVar(p.name.escapedText as string, arguments[i], p)
+				} else if (ts.isObjectBindingPattern(p.name)) {
+                    if (p.dotDotDotToken) console.log('weird ... on objectbinding on argument', node)
 					// TODO this well
-					for (var prop of p.properties) {
-						if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
-						if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
-						addVar(prop.key.name, arguments[i][prop.value.type], prop)
+					for (let prop of p.name.elements) {
+                        // TODO recursive
+						if (!ts.isIdentifier(prop.name)) {
+                            console.log("ObjectPattern key not Identifier", prop)
+                            continue
+                        }
+                        let name = prop.name.escapedText as string
+						addVar(name, arguments[i][name], prop)
 					}
-				} else if (p.type === "RestElement") {
-					if (p.argument.type !== "Identifier") console.log("RestElement argument not Identifier", prop)
-					var val = Array.prototype.slice.call(arguments, i)
-					addVar(p.argument.name, val, p)
-					break
 				} else {
 					console.log("unknown param type", p)
 				}
 			}
 
 			// some ghetto way to keep track if these variables are used
-			if (!node.argsUsed) {
-				node.argsUsed = {}
+			if (!track.argsUsed) {
+				track.argsUsed = {}
 			}
-			if (!node.thisUsed) {
-				node.thisUsed = {}
+			if (!track.thisUsed) {
+				track.thisUsed = {}
 			}
-			addVar("arguments", arguments, node.argsUsed)
+			addVar("arguments", arguments, track.argsUsed)
 			// may cause incorrect closure values
-			addVar("this", this, node.thisUsed)
+			addVar("this", this, track.thisUsed)
 
 			initHoisted(node.body)
 			try {
 				var ret = walk(node.body)
+				// console.log(ret, node)
 				return ret.ret
 			} catch (e) {
+				console.log('caught here', e)
 				throw e
 			} finally {
 				// do in finally in case try catches are part of code flow
@@ -207,55 +262,36 @@ function simplify(code, opts) {
 			}
 		}
 		// for access to node from function
-		func.node = node
-		if (node.id) {
-			addVar(node.id.name, func, node)
+		track.node = node
+		if (node.name) {
+			addVar(node.name.escapedText as string, func, node)
 		}
 		return func
 	}
-	function reset(node) {
+	function reset(node: track) {
 		if (node.calls) node.calls = 0
 		if (node.visits) node.visits = 0
 		if (node.used) node.used = 0
 		if (node.remove) node.remove = false
-
-		for (var key in node) {
-			var val = node[key]
-			if (Array.isArray(val)) {
-				for (var i = 0 ; i < val.length ; i++) {
-					var c = val[i]
-					var res = reset(c)
-				}
-			} else if (val && typeof val.type === "string") {
-				var res = reset(val)
-			}
-		}
+		node.forEachChild(reset)
 	}
 
-	function initHoisted(node) {
-		var funcTypes = ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
-		if (node.type === "FunctionDeclaration") {
+	function initHoisted(node: ts.Node) {
+		var funcTypes = [ts.SyntaxKind.FunctionDeclaration, ts.SyntaxKind.FunctionExpression, ts.SyntaxKind.ArrowFunction]
+		if (ts.isFunctionDeclaration(node)) {
 			addFunction(node)
 			return
-		} else if (node.type === "VariableDeclarator") {
-			addVar(node.id.name, undefined)
-		} else if (funcTypes.includes(node.type)) {
+		} else if (ts.isVariableDeclaration(node)) {
+			if (ts.isIdentifier(node.name)) {
+				addVar(node.name.escapedText as string, undefined)
+			}
+		} else if (funcTypes.includes(node.kind)) {
 			// don't hoist variables in nested functinos
 			return
 		}
-		for (var key in node) {
-			var val = node[key]
-			if (Array.isArray(val)) {
-				for (var i = 0 ; i < val.length ; i++) {
-					var c = val[i]
-					var res = initHoisted(c)
-				}
-			} else if (val && typeof val.type === "string") {
-				var res = initHoisted(val)
-			}
-		}
+		node.forEachChild(initHoisted)
 	}
-	function addVar(name, val, node) {
+	function addVar(name: string, val?: any, node?: ts.Node) {
 		// if (vars.hasOwnProperty(name)) {
 		// 	// already set in this closure
 		// 	var v = vars[name]
@@ -277,11 +313,11 @@ function simplify(code, opts) {
 		}
 		findClosures.set(val, closure)
 		if (closure !== vars && node) {
-			node.side = true
+			(node as track).side = true
 		}
 		return val
 	}
-	function setVar(name, val, node) {
+	function setVar(name: string, val: any, node: ts.Node) {
 		if (!(name in vars)) {
 			global[name] = val
 			exposed[name] = val
@@ -293,16 +329,16 @@ function simplify(code, opts) {
 		findClosures.set(val, v.closure)
 		closuresMod.add(v.closure)
 		if (v.node) {
-			v.node.varChanged = true
+			(v.node as track).varChanged = true
 		}
 		v.node = node
 		if (v.closure !== vars && node) {
-			node.side = true
+			(node as track).side = true
 		}
 		v.uses = 0
 		return val
 	}
-	function setProp(obj, name, val, node, varPath) {
+	function setProp(obj: Record<string, any>, name: string, val: any, node: ts.Node, varPath: string[]) {
 		obj[name] = val
 		var closure = findClosures.get(obj)
 		findClosures.set(val, closure)
@@ -313,12 +349,12 @@ function simplify(code, opts) {
 			}
 		}
 		if (closure !== vars && node) {
-			node.side = true
+			(node as track).side = true
 		}
 		return val
 	}
 
-	function getVar(name) {
+	function getVar(name: string) {
 		if (vars[name] === undefined) {
 			if (!(name in global)) {
 				console.log(name, "not defined, should have errored")
@@ -330,11 +366,13 @@ function simplify(code, opts) {
 			var v = vars[name]
 			v.uses++
 			if (v.uses === 1 && v.node) {
-				v.node.used = v.node.used ? v.node.used + 1 : 1
+				let track = v.node as track
+				track.used = track.used ? track.used + 1 : 1
 			}
 			if (v.uses === 1 && v.init) {
 				// todo if uncount is ever used
-				v.init.varUsed = true
+				let track = v.init as track
+				track.varUsed = true
 			}
 			if (v.node && !vars.hasOwnProperty(name)) {
 				usedVars.add(v.node)
@@ -346,17 +384,13 @@ function simplify(code, opts) {
 		var v = vars[name]
 		v.uses--
 		if (v.uses === 0 && v.node) {
-			v.node.used--
+			(v.node as track).used--
 		}
 	}
-	function getObj(node) {
-		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
-		if (!node.object || !node.property)
-			console.log("missing member object or property")
-
-		var res = walk(node.object)
+	function getObj(node: ts.PropertyAccessExpression | ts.ElementAccessExpression) {
+		var res = walk(node.expression)
 		var obj = res.ret
-		var key = node.computed ? walk(node.property).ret : node.property.name
+		var key = ts.isPropertyAccessExpression(node) ? node.name.escapedText as string : walk(node.argumentExpression).ret
 
 		var varPath = res.varPath
 		// use concat to not alter original variable
@@ -373,12 +407,25 @@ function simplify(code, opts) {
 		}
 	}
 
-	function breakOut(node) {
+	interface IWalkRet {
+		ret: any,
+		delete: boolean,
+		return: boolean,
+		break: boolean,
+		continue: boolean,
+		spread: boolean,
+		varPath: string[]
+	}
+
+	function breakOut(node: IWalkRet) {
 		return node && (node.return || node.break || node.continue)
 	}
 
-	function walk(node) {
-		var ret = {
+	
+	
+	function walk(node: ts.Node): IWalkRet {
+		// console.log(node)
+		var ret: IWalkRet = {
 			ret: undefined,
 			delete: false,
 			return: false,
@@ -387,641 +434,666 @@ function simplify(code, opts) {
 			spread: false,
 			varPath: []
 		}
-		var after
 		if (!node) {
 			console.log("unexpected null node")
 			throw new Error("e")
 			return ret
 		}
-		if (lognode[node.type])
-			console.log(node.type, node)
+		if (lognode[node.kind])
+			console.log(tsSyntax[node.kind], node)
 
-		if (node.delete === undefined) node.delete = 0
-		if (node.visits === undefined) node.visits = 0
-		if (recording) {
-			node.visits++
+		let track = node as track
+		if (!track.getString) {
+			Object.defineProperty(track, 'getString', {
+				get: function() {
+					return code.substring(this.pos, this.end)
+				}
+			})
 		}
-
-		switch (node.type) {
-			case "VariableDeclarator":
-				after = (res) => {
-					addVar(node.id.name, node.init ? res.init.ret : undefined, node)
-				}
-				break
-
-			// these are different, but mostly the same for now
-			case "FunctionDeclaration":
-				// these should be hoisted already
-				return ret
-			case "FunctionExpression":
-			case "ArrowFunctionExpression":
-				ret.ret = addFunction(node)
-				return ret
-
-			case "NewExpression":
-			case "CallExpression":
-				var args = node.arguments.reduce((a, arg) => {
-					arg = walk(arg)
-					if (arg.spread) {
-						return a.concat(arg.ret)
-					} else {
-						a.push(arg.ret)
-						return a
-					}
-				}, [])
-
-				var callType = "normal"
-				var obj
-				var key
-				var func
-				if (node.callee.type === "MemberExpression") {
-					// do it this way to maintain thisArg
-					// can bind it, but that removes/changes some properties added
-					// like name, node
-					var o = getObj(node.callee)
-					obj = o.obj
-					key = o.key
-					// don't use this as a function
-					func = obj[key]
-					if (obj[key] === console.log) {
-						// to seperate logs from code
-						args.unshift("from program")
-						// console is a global side effect
-						closuresMod.add(global)
-					}
-
-					var specialCalls = ['call', 'apply']
-					if (typeof obj === "function" && specialCalls.includes(key)) {
-						func = obj
-						callType = key
-					}
-					// todo something about bind
+		track.nodeType = tsSyntax[node.kind]
+		if (track.delete === undefined) track.delete = 0
+		if (track.visits === undefined) track.visits = 0
+		if (recording) {
+			track.visits++
+		}
+		let lazy = false
+        // would like to do a giant switch statement, but typescript autochecking isn't good enough
+		if (ts.isVariableStatement(node)) {
+			lazy = true
+		} else if (ts.isVariableDeclarationList(node)) {
+			lazy = true
+		} else if (ts.isVariableDeclaration(node)) {
+			if (ts.isIdentifier(node.name)) {
+				addVar(node.name.escapedText as string, node.initializer && walk(node.initializer).ret, node)
+			} else {
+				console.log("variable declaration is not identifier", node.name.kind)
+			}
+		// these are different, but mostly the same for now
+		} else if (ts.isFunctionDeclaration(node)) {
+			// these should be hoisted already
+			// lazy = true
+		} else if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+			ret.ret = addFunction(node)
+		} else if (ts.isCallExpression(node) || ts.isNewExpression(node)) {
+			var args = node.arguments.reduce((a, arg) => {
+				let ret = walk(arg)
+				if (ret.spread) {
+					return a.concat(ret.ret)
 				} else {
-					var knownTypes = ["Identifier", "FunctionExpression", "ArrowFunctionExpression", "CallExpression"]
-					func = walk(node.callee).ret
-					if (!knownTypes.includes(node.callee.type)) {
-						// this probably works, but I don't know it / haven't tested
-						console.log("unexpected callee type", node.callee.type, node)
-						// process.exit(1)
-					}
+					a.push(ret.ret)
+					return a
+				}
+			}, [])
+
+			var callType = "normal"
+			var obj
+			var key
+			var func
+			if (ts.isPropertyAccessExpression(node.expression) || ts.isElementAccessExpression(node.expression)) {
+				// do it this way to maintain thisArg
+				// can bind it, but that removes/changes some properties added
+				// like name, node
+				var o = getObj(node.expression)
+				obj = o.obj
+				key = o.key
+				// don't use this as a function
+				func = obj[key]
+				if (obj[key] === console.log) {
+					// to seperate logs from code
+					args.unshift("from program")
+					// console is a global side effect
+					closuresMod.add(global)
 				}
 
-				if (!func || !isFunction(func)) {
-					console.log("var is not function", func, node)
-					throw "4"
+				var specialCalls = ['call', 'apply']
+				if (typeof obj === "function" && specialCalls.includes(key)) {
+					func = obj
+					callType = key
 				}
+				// todo something about bind
+			} else {
+				func = walk(node.expression).ret
+				// var knownTypes = ["Identifier", "FunctionExpression", "ArrowFunctionExpression", "CallExpression"]
+				// if (!knownTypes.includes(node.expression.type)) {
+				// 	// this probably works, but I don't know it / haven't tested
+				// 	console.log("unexpected callee type", node.expression.type, node)
+				// 	// process.exit(1)
+				// }
+			}
 
-				if (func.node) {
-					var n = func.node
-					node.func = func
-					node.callType = callType
-				// 	called.add(n)
-				// 	if (calledWith.has(n)) {
-				// 		calledWith.get(n).push(args)
-				// 	} else {
-				// 		calledWith.set(n, [args])
-				// 	}
-				// } else {
-				// 	// means not defined in js
-				// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
-				}
+			if (!func || !isFunction(func)) {
+				console.log("var is not function", func, node)
+				throw "4"
+			}
 
-				var currClos = closuresMod
-				closuresMod = new Set()
+			if (func.node) {
+				var n = func.node
+				track.func = func
+				track.callType = callType
+			// 	called.add(n)
+			// 	if (calledWith.has(n)) {
+			// 		calledWith.get(n).push(args)
+			// 	} else {
+			// 		calledWith.set(n, [args])
+			// 	}
+			// } else {
+			// 	// means not defined in js
+			// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
+			}
+
+			var currClos = closuresMod
+			closuresMod = new Set()
 
 
-				var isNew = node.type === "NewExpression"
-				if (node.callee.type === "MemberExpression") {
-					if (isNew) {
-						ret.ret = new obj[key](...args)
-					} else {
-						ret.ret = obj[key](...args)
-					}
+			var isNew = ts.isNewExpression(node)
+			if (obj) {
+				if (isNew) {
+					ret.ret = new obj[key](...args)
 				} else {
-					if (isNew) {
-						ret.ret = new func(...args)
-					} else {
-						ret.ret = func(...args)
+					ret.ret = obj[key](...args)
+				}
+			} else {
+				if (isNew) {
+					ret.ret = new func(...args)
+				} else {
+					ret.ret = func(...args)
+				}
+			}
+
+			// TODO clean up findClosures
+			if (ret.ret && !findClosures.has(ret.ret)) {
+				findClosures.set(ret.ret, findClosures.get(func))
+			}
+
+			if (closuresMod.size) {
+				track.side = true
+				for (var c of closuresMod.values()) {
+					var contained = false
+					let co: any = c
+					while (co) {
+						if (co === vars) {
+							contained = true
+							break
+						}
+						// @ts-ignore
+						co = co.__proto__
+					}
+					if (!contained) {
+						currClos.add(c)
 					}
 				}
-
-				// TODO clean up findClosures
-				if (ret.ret && !findClosures.has(ret.ret)) {
-					findClosures.set(ret.ret, findClosures.get(func))
-				}
-
-				if (closuresMod.size) {
-					node.side = true
-					for (var c of closuresMod.values()) {
-						var contained = false
-						var o = c
-						while (o) {
-							if (o === vars) {
-								contained = true
-								break
-							}
-							o = o.__proto__
-						}
-						if (!contained) {
-							currClos.add(c)
-						}
-					}
-				}
-				closuresMod = currClos
-				return ret
-
-			case "ConditionalExpression":
-			case "IfStatement":
-				var test = walk(node.test)
-				if (test.ret) {
-					node.true = node.true ? node.true + 1 : 1
-					if (!node.consequent) {
-						console.log("missing if consequent")
-					}
-					var r = walk(node.consequent)
-					if (breakOut(r)) return r
-					ret.ret = r.ret
-				} else if (node.alternate) {
-					var r = walk(node.alternate)
-					if (breakOut(r)) return r
-					ret.ret = r.ret
-				}
-				return ret
-
-			case "SwitchStatement":
-				var d = walk(node.discriminant).ret
-				var b = false
-				var cont = false
-				for (var c of node.cases) {
-					// default has no test
-					if (cont || !c.test || walk(c.test).ret === d) {
-						cont = true
-						for (var s of c.consequent) {
-							var r = walk(s)
-							if (r.return || r.continue) return r
-							if (r.break) {
-								cont = false
-								b = true
-								break
-							}
-						}
-						if (b) {
+			}
+			closuresMod = currClos
+		} else if (ts.isConditionalExpression(node) || ts.isIfStatement(node)) {
+			let cond, then, els
+			if (ts.isConditionalExpression(node)) {
+				cond = node.condition
+				then = node.whenTrue
+				els = node.whenFalse
+			} else {
+				cond = node.expression
+				then = node.thenStatement
+				els = node.elseStatement
+			}
+			var test = walk(cond)
+			if (test.ret) {
+				track.true = track.true ? track.true + 1 : 1
+				var r = walk(then)
+				if (breakOut(r)) return r
+				ret.ret = r.ret
+			} else if (els) {
+				var r = walk(els)
+				if (breakOut(r)) return r
+				ret.ret = r.ret
+			}
+		} else if (ts.isSwitchStatement(node)) {
+			var d = walk(node.expression).ret
+			var b = false
+			var cont = false
+			for (var clause of node.caseBlock.clauses) {
+				if (cont || !ts.isCaseClause(clause) || walk(clause.expression).ret === d) {
+					cont = true
+					for (var s of clause.statements) {
+						var r = walk(s)
+						if (r.return || r.continue) return r
+						if (r.break) {
+							cont = false
+							b = true
 							break
 						}
 					}
+					if (b) {
+						break
+					}
 				}
-				return ret
-
-			case "BreakStatement":
-				// todo: handle labels
-				if (node.label) console.log("labels not handled")
-				ret.break = true
-				break
-
-			case "ContinueStatement":
-				// todo: handle labels
-				if (node.label) console.log("labels not handled")
-				ret.continue = true
-				break
-
-			case "AssignmentExpression":
-				var name = node.left.name
-				changed[name] = true
+			}
+		} else if (ts.isBreakStatement(node)) {
+			// todo: handle labels
+			if (node.label) console.log("labels not handled")
+			ret.break = true
+		} else if (ts.isContinueStatement(node)) {
+			// todo: handle labels
+			if (node.label) console.log("labels not handled")
+			ret.continue = true
+		} else if (ts.isBinaryExpression(node)) {
+			let assigns = [ts.SyntaxKind.EqualsToken, ts.SyntaxKind.PlusEqualsToken, ts.SyntaxKind.MinusEqualsToken]
+			if (assigns.includes(node.operatorToken.kind)) {
 				var right = walk(node.right).ret
-				if (node.left.type === "Identifier") {
-					var val
-					if (node.operator === "=") {
+				if (ts.isIdentifier(node.left)) {
+					let name = node.left.escapedText as string
+					let val
+					if (node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
 						val = right
-					} else if (node.operator === "+=") {
+					} else if (node.operatorToken.kind === ts.SyntaxKind.PlusEqualsToken) {
 						val = getVar(name) + right
-					} else if (node.operator === "-=") {
+					} else if (node.operatorToken.kind === ts.SyntaxKind.MinusEqualsToken) {
 						val = getVar(name) - right
 					} else {
 						console.log("unexpected assignment operator")
 					}
 
 					ret.ret = setVar(name, val, node)
-					return ret
-				}
-				// TODO refactor this
-				var o = getObj(node.left)
-				var val
-				if (node.operator === "=") {
-					val = right
-				} else if (node.operator === "+=") {
-					val = o.obj[o.key] + right
-				} else if (node.operator === "-=") {
-					val = o.obj[o.key] - right
+					
+				} else if (ts.isPropertyAccessExpression(node.left) || ts.isElementAccessExpression(node.left)) {
+					var o = getObj(node.left)
+					var val
+					if (node.operatorToken.kind === ts.SyntaxKind.EqualsToken) {
+						val = right
+					} else if (node.operatorToken.kind === ts.SyntaxKind.PlusEqualsToken) {
+						val = o.obj[o.key] + right
+					} else if (node.operatorToken.kind === ts.SyntaxKind.MinusEqualsToken) {
+						val = o.obj[o.key] - right
+					} else {
+						console.log("unexpected assignment operator")
+					}
+					ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
 				} else {
-					console.log("unexpected assignment operator")
+					console.log('unknown assignment left type', node.left)
 				}
-				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
-				return ret
-				break
-
-
-			case "UpdateExpression":
-				var arg = node.argument
-				var name = arg.name
-				if (arg.type === "Identifier") {
+			} else {
+				let left = walk(node.left).ret
+				// do it this way as sometimes won't have to walk right
+				switch (node.operatorToken.kind) {
+					case ts.SyntaxKind.EqualsEqualsEqualsToken:
+						ret.ret = left === walk(node.right).ret
+						break
+					case ts.SyntaxKind.ExclamationEqualsEqualsToken:
+						ret.ret = left !== walk(node.right).ret
+						break
+					case ts.SyntaxKind.EqualsEqualsToken:
+						ret.ret = left == walk(node.right).ret
+						break
+					case ts.SyntaxKind.ExclamationEqualsToken:
+						ret.ret = left != walk(node.right).ret
+						break
+					case ts.SyntaxKind.BarBarToken:
+						ret.ret = left || walk(node.right).ret
+						break
+					case ts.SyntaxKind.AmpersandAmpersandToken:
+						ret.ret = left && walk(node.right).ret
+						break
+					case ts.SyntaxKind.BarToken:
+						ret.ret = left | walk(node.right).ret
+						break
+					case ts.SyntaxKind.AmpersandToken:
+						ret.ret = left & walk(node.right).ret
+						break
+					case ts.SyntaxKind.GreaterThanToken:
+						ret.ret = left > walk(node.right).ret
+						break
+					case ts.SyntaxKind.GreaterThanEqualsToken:
+						ret.ret = left >= walk(node.right).ret
+						break
+					case ts.SyntaxKind.LessThanToken:
+						ret.ret = left < walk(node.right).ret
+						break
+					case ts.SyntaxKind.LessThanEqualsToken:
+						ret.ret = left <= walk(node.right).ret
+						break
+					case ts.SyntaxKind.PlusToken:
+						ret.ret = left + walk(node.right).ret
+						break
+					case ts.SyntaxKind.MinusToken:
+						ret.ret = left - walk(node.right).ret
+						break
+					case ts.SyntaxKind.AsteriskToken:
+						ret.ret = left * walk(node.right).ret
+						break
+					case ts.SyntaxKind.SlashToken:
+						ret.ret = left / walk(node.right).ret
+						break
+					case ts.SyntaxKind.PercentToken:
+						ret.ret = left % walk(node.right).ret
+						break
+					case ts.SyntaxKind.InKeyword:
+						ret.ret = left in walk(node.right).ret
+						break
+					case ts.SyntaxKind.InstanceOfKeyword:
+						let right = walk(node.right).ret
+						ret.ret = left instanceof right
+						break
+					default:
+						console.log("unexpected binary", node.operatorToken)
+				}
+			}
+		// } else if (ts.isPostfixUnaryExpression(node)) {
+		// } else if (ts.isPrefixUnaryExpression(node)) {
+			
+		} else if (ts.isPostfixUnaryExpression(node) || ts.isPrefixUnaryExpression(node)) {
+			var arg = node.operand
+			let change = [ts.SyntaxKind.PlusPlusToken, ts.SyntaxKind.MinusMinusToken]
+			if (change.includes(node.operator)) {
+				let prefix = ts.isPrefixUnaryExpression(node)
+				if (ts.isIdentifier(arg)) {
+					var name = arg.escapedText as string
 					var val = getVar(name)
 					ret.ret = val
-					if (node.operator === "++") {
+					if (node.operator === ts.SyntaxKind.PlusPlusToken) {
 						val++
-					} else if (node.operator === "--") {
+					} else if (node.operator === ts.SyntaxKind.MinusMinusToken) {
 						val--
 					} else {
 						console.log("unknown update operator", node)
 					}
 					var res = setVar(name, val, node)
-					if (node.prefix) {
+					if (prefix) {
 						ret.ret = res
 					}
 					return ret
-				}
-				// need to update in object
-				var o = getObj(node.argument)
-				var obj = o.obj
-				var key = o.key
-				if (node.operator === "++") {
-					ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
-				} else if (node.operator === "--") {
-					ret.ret = (node.prefix ? --obj[key] : obj[key]--)
-				} else {
-					console.log("unknown update operator", node)
-				}
-				return ret
-				break
-			case "ForInStatement":
-				// assume only 1 var for for in
-				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
-				var right = walk(node.right).ret
-				for (var i in right) {
-					addVar(varname, i)
-					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
-				}
-				return ret
-				break
-			case "ForOfStatement":
-				// assume only 1 var for for of
-				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
-				var right = walk(node.right).ret
-				for (var i of right) {
-					addVar(varname, i)
-					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
-				}
-				return ret
-
-			case "ForStatement":
-				for (node.init ? walk(node.init) : "" ; node.test ? walk(node.test).ret : true ; node.update ? walk(node.update) : "") {
-					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
-				}
-				return ret
-				break
-			case "WhileStatement":
-				while (walk(node.test).ret) {
-					node.true = node.true ? node.true + 1 : 1
-					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
-				}
-				return ret
-				break
-
-
-			case "ExpressionStatement":
-				break
-
-			case "LogicalExpression":
-				switch (node.operator) {
-					case "||":
-						ret.ret = walk(node.left).ret || walk(node.right).ret
-						break
-					case "&&":
-						ret.ret = walk(node.left).ret && walk(node.right).ret
-						break
-				}
-				return ret
-
-			// TODO: seperate these
-			case "BinaryExpression":
-				after = (res) => {
-					var right = res.right.ret
-					var left = res.left.ret
-					switch (node.operator) {
-						case "===":
-							ret.ret = left === right
-							break
-						case "!==":
-							ret.ret = left !== right
-							break
-						case "==":
-							ret.ret = left == right
-							break
-						case "!=":
-							ret.ret = left != right
-							break
-						case "||":
-							ret.ret = left || right
-							break
-						case "&&":
-							ret.ret = left && right
-							break
-						case "|":
-							ret.ret = left | right
-							break
-						case "&":
-							ret.ret = left & right
-							break
-						case ">":
-							ret.ret = left > right
-							break
-						case ">=":
-							ret.ret = left >= right
-							break
-						case "<":
-							ret.ret = left < right
-							break
-						case "<=":
-							ret.ret = left <= right
-							break
-						case "+":
-							ret.ret = left + right
-							break
-						case "-":
-							ret.ret = left - right
-							break
-						case "*":
-							ret.ret = left * right
-							break
-						case "/":
-							ret.ret = left / right
-							break
-						case "%":
-							ret.ret = left % right
-							break
-						case "in":
-							ret.ret = left in right
-							break
-						case "instanceof":
-							ret.ret = left instanceof right
-							break
-						default:
-							console.log("unexpected binary", node.operator)
+				} else if (ts.isPropertyAccessExpression(arg) || ts.isElementAccessExpression(arg)) {
+					var o = getObj(arg)
+					var obj = o.obj
+					var key = o.key
+					if (node.operator === ts.SyntaxKind.PlusPlusToken) {
+						ret.ret = (prefix ? ++obj[key] : obj[key]++)
+					} else if (node.operator === ts.SyntaxKind.MinusMinusToken) {
+						ret.ret = (prefix ? --obj[key] : obj[key]--)
+					} else {
+						console.log("unknown update operator", node)
 					}
+				} else {
+					console.log("unknown arg type")
 				}
-				break
-			case "BlockStatement":
-				break
-			case "MemberExpression":
-				var o = getObj(node)
-				ret.ret = o.obj[o.key]
-				ret.var = o.varPath
+			} else if (node.operator === ts.SyntaxKind.PlusToken) {
+				ret.ret = +walk(arg).ret
+			} else if (node.operator === ts.SyntaxKind.MinusToken) {
+				ret.ret = -walk(arg).ret
+			} else if (node.operator === ts.SyntaxKind.TildeToken) {
+				ret.ret = ~walk(arg).ret
+			} else if (node.operator === ts.SyntaxKind.ExclamationToken) {
+				ret.ret = !walk(arg).ret
+			} else {
+				console.log("unknown unary expression", node)
+			}
+		} else if (ts.isForInStatement(node)) {
+			// assume only 1 var for for in
+			let varname
+			if (ts.isIdentifier(node.initializer)) {
+				varname = node.initializer.escapedText as string
+			} else if (ts.isVariableDeclarationList(node.initializer) && ts.isIdentifier(node.initializer.declarations[0].name)) {
+				varname = node.initializer.declarations[0].name.escapedText as string
+			} else {
+				console.log("unknown for initializer", node.initializer, node)
 				return ret
-			case "ObjectExpression":
-				ret.ret = {}
-				for (var prop of node.properties) {
-					// the other is literal
-					var name = prop.key.type === "Identifier" ? prop.key.name : prop.key.value
-					ret.ret[name] = walk(prop.value).ret
-				}
+			}
+			var right = walk(node.expression).ret
+			for (var i in right) {
+				addVar(varname, i)
+				var r = walk(node.statement)
+				if (r.return) return r
+				if (r.break) break
+				if (r.continue) continue
+			}
+		} else if (ts.isForOfStatement(node)) {
+			// assume only 1 var for for in
+			if (!ts.isVariableDeclarationList(node.initializer) || !ts.isIdentifier(node.initializer.declarations[0].name)) {
+				console.log("unknown for initializer")
 				return ret
-			case "UnaryExpression":
-				// typeof is special in that it can handle variables never defined
-				if (node.operator === "typeof" && node.argument && node.argument.type === "Identifier" && !(node.argument.name in vars || node.argument.name in global)) {
-					ret.ret = "undefined"
+			}
+			var varname = node.initializer.declarations[0].name.escapedText as string
+			var right = walk(node.expression).ret
+			for (let ri of right) {
+				addVar(varname, ri)
+				var r = walk(node.statement)
+				if (r.return) return r
+				if (r.break) break
+				if (r.continue) continue
+			}
+		} else if (ts.isForStatement(node)) {
+			for (node.initializer ? walk(node.initializer) : "" ; node.condition ? walk(node.condition).ret : true ; node.incrementor ? walk(node.incrementor) : "") {
+				var r = walk(node.statement)
+				if (r.return) return r
+				if (r.break) break
+				if (r.continue) continue
+			}
+		} else if (ts.isWhileStatement(node)) {
+			while (walk(node.expression).ret) {
+				track.true = track.true ? track.true + 1 : 1
+				var r = walk(node.statement)
+				if (r.return) return r
+				if (r.break) break
+				if (r.continue) continue
+			}
+		} else if (ts.isExpressionStatement(node)) {
+			// noop
+			lazy = true
+		// } else if (ts.isLogicalExpression(node)) {
+		// 	switch (node.operator) {
+		// 		case "||":
+		// 			ret.ret = walk(node.left).ret || walk(node.right).ret
+		// 			break
+		// 		case "&&":
+		// 			ret.ret = walk(node.left).ret && walk(node.right).ret
+		// 			break
+		// 	}
+		// 	return ret
+
+		// TODO: seperate these
+		} else if (ts.isBlock(node)) {
+			lazy = true
+		} else if (ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) {
+			var o = getObj(node)
+			ret.ret = o.obj[o.key]
+			ret.varPath = o.varPath
+			return ret
+		} else if (ts.isObjectLiteralExpression(node)) {
+			ret.ret = {}
+			for (var prop of node.properties) {
+				// the other is literal
+				if (!ts.isPropertyAssignment(prop)) {
+					console.log('unhandled objectliteral prop', prop)
 					return ret
 				}
-				after = (res) => {
-					if (!node.prefix) console.log("unary not prefixed")
-					arg = res.argument.ret
-					if (node.operator === "!") {
-						ret.ret = !arg
-					} else if (node.operator === "+") {
-						ret.ret = +arg
-					} else if (node.operator === "-") {
-						ret.ret = -arg
-					} else if (node.operator === "~") {
-						ret.ret = ~arg
-					} else if (node.operator === "typeof") {
-						ret.ret = typeof arg
-					} else if (node.operator === "delete") {
-						ret.ret = delete arg
-					} else {
-						console.log("unknown unary", node.operator)
+				let name
+				if (ts.isIdentifier(prop.name)) {
+					// todo 
+					name = prop.name.escapedText as string
+				} else if (ts.isComputedPropertyName(prop.name) || ts.isStringLiteral(prop.name) || ts.isNumericLiteral(prop.name)) {
+					name = walk(prop.name).ret
+				} else {
+					console.log('unhandled property name type', prop)
+					name = walk(prop.name).ret
+				}
+				if (!prop.initializer) console.log("unhandled property with not initializer", prop)
+				ret.ret[name] = walk(prop.initializer).ret
+			}
+			return ret
+		} else if (ts.isDeleteExpression(node)) {
+			// i'm pretty sure this doesn't have a return type
+			// also i'm too lazy to do this now
+			console.log('lazy to do delete properly')
+			lazy = true
+		} else if (ts.isTypeOfExpression(node)) {
+			// typeof is special in that it can handle variables never defined
+			if (ts.isIdentifier(node.expression)) {
+				let name = node.expression.escapedText as string
+				if (!(name in vars || name in global)) {
+					ret.ret = undefined
+					return ret
+				}
+			}
+			ret.ret = typeof walk(node.expression).ret
+		} else if (ts.isSpreadElement(node)) {
+			ret.spread = true
+			ret.ret = walk(node.expression).ret
+		} else if (ts.isStringLiteral(node)) {
+			ret.ret = node.text
+		} else if (ts.isNumericLiteral(node)) {
+			ret.ret = +node.text
+		} else if (ts.isRegularExpressionLiteral(node)) {
+			// todo maybe test this
+			ret.ret = new RegExp(node.text)
+		} else if (node.kind === ts.SyntaxKind.TrueKeyword) {
+			ret.ret = true
+		} else if (node.kind === ts.SyntaxKind.FalseKeyword) {
+			ret.ret = false
+		} else if (node.kind === ts.SyntaxKind.NullKeyword) {
+			ret.ret = null
+		} else if (node.kind === ts.SyntaxKind.UndefinedKeyword) {
+			ret.ret = undefined
+		} else if (ts.isIdentifier(node)) {
+			let name = node.escapedText as string
+			ret.ret = getVar(name)
+			ret.varPath = [name]
+		} else if (ts.isReturnStatement(node)) {
+			ret.return = true
+			if (node.expression) {
+				ret.ret = walk(node.expression).ret
+			}
+		} else if (ts.isVariableDeclaration(node)) {
+			lazy = true
+		} else if (ts.isSourceFile(node)) {
+			lazy = true
+			// should be global at this level
+			addVar("this", this)
+			if (opts.node) {
+				// these are set in node for every module
+				// exports, require, module, __filename, __dirname
+				
+				var file = opts.filename
+				var foldername = path.dirname(file)
+				var exports = module.exports = addVar("exports", {})
+				if (file) {
+					file = path.resolve(file)
+					// hacky
+					req = require.cache[file] = {
+						id: file,
+						filename: file,
+						exports: exports,
+						parent: opts.parent,
+						loaded: false,
+						children: [],
+						paths: [file]
 					}
-				}
-				break
-
-			case "SpreadElement":
-				after = (res) => {
-					ret.spread = true
-					ret.ret = res.argument.ret
-				}
-				break
-
-			case "Literal":
-				ret.ret = node.value
-				return ret
-
-			case "Identifier":
-				ret.ret = getVar(node.name)
-				ret.varPath = [node.name]
-				return ret
-
-			case "ReturnStatement":
-				after = (res) => {
-					ret.return = true
-					ret.ret = (res.argument || {}).ret
-				}
-				break
-
-			case "VariableDeclaration":
-				break
-			case "Program":
-				// should be global at this level
-				addVar("this", this)
-				if (opts.node) {
-					// these are set in node for every module
-					// exports, require, module, __filename, __dirname
-					
-					var file = opts.filename
-					var package = opts.package
-					var foldername = path.dirname(file)
-					var exports = module.exports = addVar("exports", {})
-					if (file) {
-						file = path.resolve(file)
-						// hacky
-						req = require.cache[file] = {
-							id: file,
-							filename: file,
-							exports: exports,
-							parent: opts.parent,
-							loaded: false,
-							children: [],
-							paths: [file]
+					module = {
+						set exports(x) {
+							req.exports = x
+						},
+						get exports() {
+							return req.exports
 						}
-						module = {
-							set exports(x) {
-								req.exports = x
-							},
-							get exports() {
-								return req.exports
-							}
+					}
+					// gonna assume this is defined with filename for now
+					var moduleFolder = path.join(opts.package, "node_modules")
+
+					// these should error if file is not given
+					addVar("__filename", file)
+					addVar("__dirname", foldername)
+					var fakeRequire = function(...args) {
+						if (args.length !== 1) {
+							console.log("incorrect number of args for require", args)
 						}
-						// gonna assume this is defined with filename for now
-						var moduleFolder = path.join(opts.package, "node_modules")
+						var name = args[0]
+						// console.log(name)
+						var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './']})
 
-						// these should error if file is not given
-						addVar("__filename", file)
-						addVar("__dirname", foldername)
-						var fakeRequire = function(...args) {
-							if (args.length !== 1) {
-								console.log("incorrect number of args for require", args)
-							}
-							var name = args[0]
-							// console.log(name)
-							var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './']})
-
-							// do this to not record any functions used on startup
-							var oldRecording = recording
-							recording = false
-							try {
-								if (name.startsWith(".") || name.includes('/') || name.includes('\\')) {
-									if (require.cache[file]) {
-										return require(file)
-									}
-
-									var todo = fs.readFileSync(file)
-									opts.filename = file
-									opts.parent = req
-									var code = simplify(todo, opts)
-
-									// this will be set by that context
-									return code.exports
-								} else {
+						// do this to not record any functions used on startup
+						var oldRecording = recording
+						recording = false
+						try {
+							if (name.startsWith(".") || name.includes('/') || name.includes('\\')) {
+								if (require.cache[file]) {
 									return require(file)
 								}
-							} catch (e) {
-								console.log("cannot require", ...args, e)
-								process.exit(1)
-							} finally {
-								recording = oldRecording
-							}
-						}
-						fakeRequire.resolve = function(request, options) {
-							if (!options) {
-								options = {paths: [foldername]}
+
+								var todo = fs.readFileSync(file)
+								opts.filename = file
+								opts.parent = req
+								var code = simplify(todo, opts)
+
+								// this will be set by that context
+								return require(file)
 							} else {
-								options.path.unshift(foldername)
+								return require(file)
 							}
-							return require.resolve(request, options)
+						} catch (e) {
+							console.log("cannot require", ...args, e)
+							process.exit(1)
+						} finally {
+							recording = oldRecording
 						}
-						addVar("require", fakeRequire)
-					} else {
-						module = {exports: exports}
 					}
-					addVar("module", module)
-					// might have to do some path stuff
-					// just to not break things
-					document = {}
-					window = {}
-				}
-				break
-			case "ArrayExpression":
-				after = (res) => {
-					ret.ret = res.elements.map(e => e.ret)
-				}
-				break
-
-			case "ThisExpression":
-				ret.ret = getVar("this")
-				varPath = ["this"]
-				return ret
-
-			case "ThrowStatement":
-				// TODO make this message global
-				// throw Error("thrown error from program " + walk(node.argument).ret)
-				throw walk(node.argument).ret
-
-			case "TryStatement":
-				try {
-					var r = walk(node.block)
-					if (breakOut(r)) return r
-				} catch (e) {
-					if (node.handler) {
-						addVar(node.handler.param.name, e)
-						var r = walk(node.handler.body)
-						if (breakOut(r)) return r
+					// @ts-ignore
+					fakeRequire.resolve = function(request, options) {
+						if (!options) {
+							options = {paths: [foldername]}
+						} else {
+							options.path.unshift(foldername)
+						}
+						return require.resolve(request, options)
 					}
-				} finally {
-					if (node.finalizer) {
-						var r = walk(node.finalizer)
-						if (breakOut(r)) return r
-					}
+					addVar("require", fakeRequire)
+				} else {
+					module = {exports: exports}
 				}
-				return ret
-
-			case "TaggedTemplateExpression":
-				if (node.quasi.type !== "TemplateLiteral") console.log("unexpected quasi type")
-				if (node.tag.type !== "Identifier") console.log("tag not Identifier not handled")
-				var quasis = node.quasi.quasis.map(q => q.value.cooked)
-				var expressions = node.quasi.expressions.map(e => walk(e).ret)
-				ret.ret = walk(node.tag).ret(quasis, ...expressions)
-				return ret
-			case "TemplateLiteral":
-				var quasis = node.quasis.map(q => q.value.cooked)
-				var expressions = node.expressions.map(e => walk(e).ret)
-				ret.ret = quasis[0]
-				// maybe check that expressions.length = quasis.length - 1
-				for (var i = 0 ; i < expressions.length ; i++) {
-					ret.ret += expressions[i] + quasis[i+1]
-				}
-				return ret
-
-
-			// these are comments
-			case "Line":
-				break
-			case "Block":
-				break
-
-			case "EmptyStatement":
-				break
-
-			default:
-				console.log("unexpected node type", node)
-				break
-		}
-		var res = {}
-		for (var key in node) {
-			var val = node[key]
-			if (Array.isArray(val)) {
-				res[key] = [];
-				for (var i = 0 ; i < val.length ; i++) {
-					var c = val[i]
-					var r = walk(c)
-					if (breakOut(r)) {
-						return r 
-					}
-					res[key][i] = r
-				}
-			} else if (val && typeof val.type === "string") {
-				var r = res[key] = walk(val)
-				if (breakOut(r)) return r
+				addVar("module", module)
+				// might have to do some path stuff
+				// just to not break things
+				// @ts-ignore
+				document = {}
+				// @ts-ignore
+				window = {}
 			}
+		} else if (ts.isArrayLiteralExpression(node)) {
+			ret.ret = node.elements.map(e => walk(e).ret)
+		} else if (node.kind === ts.SyntaxKind.ThisKeyword) {
+			// ts doesn't have a isThisExpression, weird
+			ret.ret = getVar("this")
+			ret.varPath = ["this"]
+		} else if (ts.isThrowStatement(node)) {
+			// TODO make this message global
+			// throw Error("thrown error from program " + walk(node.argument).ret)
+			throw walk(node.expression).ret
+		} else if (ts.isTryStatement(node)) {
+			try {
+				var r = walk(node.tryBlock)
+				if (breakOut(r)) return r
+			} catch (e) {
+				console.log("error caught", e)
+				if (node.catchClause) {
+					if (!ts.isIdentifier(node.catchClause.variableDeclaration.name)) {
+						console.log("unhandled catch type")
+						return ret
+					}
+					addVar(node.catchClause.variableDeclaration.name.escapedText as string, e)
+					var r = walk(node.catchClause.block)
+					if (breakOut(r)) return r
+				}
+			} finally {
+				if (node.finallyBlock) {
+					var r = walk(node.finallyBlock)
+					if (breakOut(r)) return r
+				}
+			}
+
+		// } else if (ts.isTaggedTemplateExpression(node)) {
+		// 	if (node.quasi.type !== "TemplateLiteral") console.log("unexpected quasi type")
+		// 	if (node.tag.type !== "Identifier") console.log("tag not Identifier not handled")
+		// 	var quasis = node.quasi.quasis.map(q => q.value.cooked)
+		// 	var expressions = node.quasi.expressions.map(e => walk(e).ret)
+		// 	ret.ret = walk(node.tag).ret(quasis, ...expressions)
+		// 	return ret
+		// } else if (ts.isTemplateLiteral(node)) {
+		// 	var quasis = node.quasis.map(q => q.value.cooked)
+		// 	var expressions = node.expressions.map(e => walk(e).ret)
+		// 	ret.ret = quasis[0]
+		// 	// maybe check that expressions.length = quasis.length - 1
+		// 	for (var i = 0 ; i < expressions.length ; i++) {
+		// 		ret.ret += expressions[i] + quasis[i+1]
+		// 	}
+		// 	return ret
+
+
+		// these are comments
+		// } else if (ts.isLine(node)) {
+		// 	break
+		} else if (ts.isEmptyStatement(node)) {
+			lazy = true
+		} else if (node.kind === ts.SyntaxKind.EndOfFileToken) {
+			lazy = true
+		} else if (ts.isParenthesizedExpression(node)) {
+			ret.ret = walk(node.expression).ret
+		} else {
+			console.log("unknown node type", node.kind, tsSyntax[node.kind], node)
+			lazy = true
 		}
-		if (after) after(res)
+		if (lazy) {
+			
+			// console.log('also this happened')
+			node.forEachChild(node => {
+				let res = walk(node)
+				if (breakOut(res)) {
+					ret.ret = res.ret
+				}
+			}, nodes => nodes.find(n => {
+				let res = walk(n)
+				if (breakOut(res)) {
+					ret = res
+					return true
+				}
+			}))
+		}
+		// console.log(ret, node)
 		return ret
 	}
 	function addSide(node) {
@@ -1047,7 +1119,7 @@ function simplify(code, opts) {
 		var func = node.func
 		if (!func) return
 		var funcNode = func.node
-		var rep = replaceReturn(funcNode, funcNode)
+		var rep = replaceReturn(funcNode)
 		console.log(rep)
 		if (rep.usable) {
 			var retVar = rep.ret
@@ -1100,7 +1172,7 @@ function simplify(code, opts) {
 						elements: args,
 						fake: true
 					},
-					used: ret.argsUsed,
+					used: rep.argsUsed,
 					fake: true
 				})
 			}
@@ -1254,14 +1326,14 @@ function simplify(code, opts) {
 			case "AssignmentExpression":
 				// TODO better handle around this
 				var left = node.left
-				if (left.type === "Identifier") {
+				if (ts.isIdentifier(left)) {
 					ret.remove = !node.used && !node.side
 				}
 				break
 			case "UpdateExpression":
 				// TODO better handle around this
 				var arg = node.argument
-				if (arg.type === "Identifier") {
+				if (ts.isIdentifier(arg)) {
 					ret.remove = !node.used && !node.side
 				}
 				break

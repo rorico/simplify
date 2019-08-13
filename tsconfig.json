@@ -1,0 +1,17 @@
+ {
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2018",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "rootDir": "./src",
+        "outDir": "./dist",
+    },
+    "compileOnSave": true,
+    "exclude": [
+        "src/test/*",
+        "src/index.bak.ts"
+    ]
+}

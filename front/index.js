@@ -1,6 +1,9 @@
 var a
 var f
 var n
+var t
+var ts
+var p
 var isNode = false
 var logNum = false
 var removeNodes = false
@@ -11,6 +14,7 @@ getItem().then((file) => {
 	if (!isNode) {
 		var test = require('simplify')
 		a = test(file, {node: false, comments: !1, replace: !1})
+		t = a.tsSyntax
 
 		console.log(a)
 		// $('#left').html(Object.keys(a.exposed).join("\n"))
@@ -26,93 +30,64 @@ getItem().then((file) => {
 
 	}
 
-	var astring = require("astring")
+	ts = require("typescript")
 
-	var base = astring.baseGenerator
-	var variable = base.VariableDeclaration
-	var gen = Object.assign({}, base)
+	var printer = ts.createPrinter({
+		newLine: ts.NewLineKind.LineFeed,
+	}, {
+		onEmitNode: (hint, node, emitCallback) => {
+			console.log(node)
+			// set up or track state prior to emitting the node...
+			emitCallback(hint, node);
+			// restore state after emitting the node...
+		}
+	});
+	var basePrint = printer.printNode.bind(printer)
+	function print(ast) {
+		return printer.printNode(ts.EmitHint.Unspecified, ast, a.ast)
+	}
+	p = print
 
 	var nodes = n = []
 	var moveables = []
 	var clickables = []
-
-	function old_overwrite(type, pre, suf, check) {
-		var old = gen[type].bind(gen)
-		gen[type] = (node, state) => {
-
-			console.log(this,node, state)
-			if (!check || check(node)) {
-				state.write(pre)
-				var ret = old(node, state)
-				state.write(suf)
-			} else {
-				var ret = old(node, state)
-			}
-			return ret
+	
+	printer.printNode = (hint, node, sourceFile) => {
+		console.log(node)
+		var str = ""
+		var type = node.kind
+		var color = hashCode(type, 6)
+		if (node.nodeId === undefined) {
+			node.nodeId = nodes.length
+			nodes.push(node)
 		}
-	}
+		var classes = ""
+		if (node.remove) classes += " remove"
+		if (node.fake && type !== "Program") classes += " fake"
+		if (node.replaceable || node.replacement) classes += " replaceable"
+		if (type === "formatComments") classes += " comment"
 
-	function overwrite(type, cls, style, check) {
-		var old = gen[type].bind(gen)
-		gen[type] = (node, state) => {
-			if (node.nodeId === undefined) {
-				node.nodeId = nodes.length
-				nodes.push(node)
+		if (node.overLvl) classes += " overLvl" + node.overLvl
+
+		// don't escape
+		str += '<div class="inline' + classes + '" id="' + node.nodeId + '">', null, true
+		str += basePrint(hint, node, sourceFile)
+		if (logNum) {
+			if (type === "CallExpression" || type === "ReturnStatement") {
+				str += "/*" + (node.visits || 0) + "*/"
 			}
-			// console.log(this,node, state)
-			if (!check || check(node)) {
-				state.write(pre)
-				var ret = old(node, state)
-				state.write(suf)
-			} else {
-				var ret = old(node, state)
+			if (type === "FunctionExpression" || type === "ArrowFunctionExpression" || type === "FunctionDeclaration") {
+				str += "/*" + (node.calls || 0) + "*/"
 			}
-			return ret
+			if (type === "VariableDeclarator") {
+				str += "/*" + (node.used || 0) + "*/"
+			}
+			if (node.old) {
+				str += "//" + genAstring(node.old).replace(/\n/g,""), null, true
+			}
 		}
-	}
-
-	for (var type in base) {
-		if (typeof gen[type] !== 'function') continue
-		over(type)
-		function over(type) {
-			var color = hashCode(type, 6)
-			var old = gen[type].bind(gen)
-			gen[type] = function(node, state, ...args) {
-				if (node.nodeId === undefined) {
-					node.nodeId = nodes.length
-					nodes.push(node)
-				}
-				node.indentLevel = state.indentLevel
-				var classes = ""
-				if (node.remove) classes += " remove"
-				if (node.fake && type !== "Program") classes += " fake"
-				if (node.replaceable || node.replacement) classes += " replaceable"
-				if (type === "formatComments") classes += " comment"
-
-				if (node.overLvl) classes += " overLvl" + node.overLvl
-
-				// don't escape
-				state.write('<div class="inline' + classes + '" id="' + node.nodeId + '">', null, true)
-				old(node, state, ...args)
-				if (logNum) {
-					if (type === "CallExpression" || type === "ReturnStatement") {
-						state.write("/*" + (node.visits || 0) + "*/")
-					}
-					if (type === "FunctionExpression" || type === "ArrowFunctionExpression" || type === "FunctionDeclaration") {
-						state.write("/*" + (node.calls || 0) + "*/")
-					}
-					if (type === "VariableDeclarator") {
-						state.write("/*" + (node.used || 0) + "*/")
-					}
-					if (node.old) {
-						state.write("//" + genAstring(node.old).replace(/\n/g,""), null, true)
-					}
-				}
-				state.write('</div>', null, true)
-			}
-
-		}
-
+		str += '</div>', null, true
+		return str
 	}
 
 	function remove(node) {
@@ -205,9 +180,10 @@ getItem().then((file) => {
 		if (removeNodes) {
 			remove(ast)
 		}
-		var code = genAstring(ast)
+		var code = print(ast)
+		// var code = genAstring(ast)
 		document.getElementById("left").innerHTML = code
-		defineParent(ast)
+		// defineParent(ast)
 	}
 
 	var left = document.getElementById("left")

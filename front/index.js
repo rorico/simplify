@@ -4,6 +4,7 @@ var n
 var isNode = false
 var logNum = false
 var removeNodes = false
+var replaceMode = true
 // isNode = true
 // logNum = true
 // removeNodes = true
@@ -86,7 +87,8 @@ getItem().then((file) => {
 				var classes = ""
 				if (node.remove) classes += " remove"
 				if (node.fake && type !== "Program") classes += " fake"
-				if (node.replaceable || node.replacement) classes += " replaceable"
+				if (replaceMode && node.replaceable && !node.isReplaced) classes += " replaceable"
+				if (!replaceMode && node.replacement && node.isReplaced) classes += " replaceable"
 				if (type === "formatComments") classes += " comment"
 
 				if (node.overLvl) classes += " overLvl" + node.overLvl
@@ -254,6 +256,7 @@ getItem().then((file) => {
 		}
 		console.log(replacement)
 		replacement.replacement = node
+		replacement.isReplaced = !node.isReplaced
 		if (parentObj.length === 3) {
 			parent[parentObj[1]][parentObj[2]] = replacement
 		} else if (parentObj.length === 2) {
@@ -265,6 +268,9 @@ getItem().then((file) => {
 	}
 	document.onkeypress = (e) => {
 		if (e.key === "g") logNum = !logNum
+		if (e.key === "r") {
+			replaceMode = !replaceMode
+		}
 		// if (e.key === "r") removeNodes = !removeNodes
 		redo()
 	}

@@ -1,3 +1,4 @@
 node_modules
 front/out.js
 front/ast.json
+dist

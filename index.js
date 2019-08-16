@@ -115,7 +115,7 @@ function simplify(code, opts) {
 					c: c,
 					code: astring.generate(c),
 					ast: ast,
-					called, called
+					called: called
 				}
 			}
 			var ret = func()
@@ -1047,7 +1047,7 @@ function simplify(code, opts) {
 		var func = node.func
 		if (!func) return
 		var funcNode = func.node
-		var rep = replaceReturn(funcNode, funcNode)
+		var rep = replaceReturn(funcNode)
 		console.log(rep)
 		if (rep.usable) {
 			var retVar = rep.ret
@@ -1100,7 +1100,7 @@ function simplify(code, opts) {
 						elements: args,
 						fake: true
 					},
-					used: ret.argsUsed,
+					used: rep.argsUsed,
 					fake: true
 				})
 			}

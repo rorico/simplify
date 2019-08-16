@@ -3,6 +3,7 @@ var astring = require("astring")
 var astravel = require("astravel")
 var fs = require("fs")
 var lognode = require("./lognode")
+var ignoreGlobal = require("./ignoreGlobal")
 var path = require("path")
 var modules = {}
 var called = new Set()

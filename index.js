@@ -271,57 +271,88 @@ function simplify(code, opts) {
 		// 	}
 		// }
 		var closure
-		closure = vars
-		if (val !== null && typeof val === "object" && findClosures.has(val)) {
-			closure = findClosures.get(val)
+		closure = new Set([vars])
+		// if (val !== null && typeof val === "object" && findClosures.has(val)) {
+		if (findClosures.has(val)) {
+			closure = findClosures.get(val).add(vars)
 		}
+		findClosures.set(val, closure)
 		vars[name] = {
 			uses: 0,
 			val: val,
-			closure: closure,
+			// closure: closure,
+			vars: vars,
 			node: node,
 			init: node
 		}
-		findClosures.set(val, closure)
-		if (closure !== vars && node) {
-			node.side = true
-		}
+		// findClosures.set(val, closure)
+		// todo fix
+		// if (closure !== vars && node) {
+		// 	node.side = true
+		// }
 		return val
 	}
 	function setVar(name, val, node) {
+		if (!findClosures.has(val)) {
+			findClosures.set(val, new Set())
+		}
+		var valC = findClosures.get(val)
 		if (!(name in vars)) {
 			global[name] = val
 			exposed[name] = val
-			findClosures.set(val, global)
+			// todo similar logic as below to remove closure
+			valC.add(global)
+			findClosures.set(val, valC)
+			closuresMod.add(global)
+			return
 		}
 
 		var v = vars[name]
+		// if referenced multiple times in a closure, this isn't true
+		// findClosures.get(v.val).delete(v.vars)
+
 		v.val = val
-		findClosures.set(val, v.closure)
-		closuresMod.add(v.closure)
+		// shouldn't need to update val's closure
+		valC.forEach(c => closuresMod.add(c))
+		valC.add(vars)
 		if (v.node) {
 			v.node.varChanged = true
 		}
 		v.node = node
-		if (v.closure !== vars && node) {
-			node.side = true
-		}
+		// todo fix
+		// if (v.closure !== vars && node) {
+		// 	node.side = true
+		// }
 		v.uses = 0
 		return val
 	}
 	function setProp(obj, name, val, node, varPath) {
 		obj[name] = val
-		var closure = findClosures.get(obj)
-		findClosures.set(val, closure)
-		closuresMod.add(closure)
-		if (closure === global) {
+		// var closure = findClosures.get(obj)
+		// findClosures.set(val, closure)
+
+		if (!findClosures.has(obj)) {
+			findClosures.set(obj, new Set([vars]))
+		}
+		var objC = findClosures.get(obj)
+		var valC = findClosures.get(val) || new Set()
+		valC.forEach(c => objC.add(c))
+		// var combined = objC.add(...valC)
+		// shouldn't need to update obj's closure
+		findClosures.set(val, objC)
+
+		objC.forEach(c => closuresMod.add(c))
+		// closuresMod.add(combined)
+
+		if (objC.has(global)) {
 			if (varPath[0]) {
 				exposed[varPath.join(("."))] = val
 			}
 		}
-		if (closure !== vars && node) {
-			node.side = true
-		}
+		// todo fix
+		// if (closure !== vars && node) {
+		// 	node.side = true
+		// }
 		return val
 	}
 
@@ -331,7 +362,14 @@ function simplify(code, opts) {
 				console.log(name, "not defined, should have errored")
 			}
 			var ret = global[name]
-			findClosures.set(ret, global)
+			// console.log('global var', name)
+			if (name === 'document' || ret === document) {
+				console.log('jnkfdjgkldsj'. name)
+			}
+			if (!findClosures.has(ret)) {
+				findClosures.set(ret, new Set([]))
+			}
+			findClosures.get(ret).add(global)
 			return ret
 		} else {
 			var v = vars[name]
@@ -370,8 +408,14 @@ function simplify(code, opts) {
 		varPath = varPath.concat([key])
 
 		// TODO This isn't perfect, obj[key] can belong to many objects
-		if (findClosures.has(obj[key])) {
-			findClosures.set(obj[key], findClosures.get(obj))
+		if (!findClosures.has(obj[key])) {
+			if (!findClosures.has(obj)) {
+				console.log('nadkfj', node)
+				findClosures.set(obj[key], new Set([vars]))
+			} else {
+				findClosures.set(obj[key], findClosures.get(obj))
+				if (obj === global) console.log("dsf",node, findClosures.get(obj[key]).has(global), findClosures.get(global).has(global))
+			}
 		}
 		return {
 			obj: obj,
@@ -477,7 +521,16 @@ function simplify(code, opts) {
 					console.log("var is not function", func, node)
 					throw "4"
 				}
+				// todo investigate when findClosures.has(func) is sometimes false
+				if (findClosures.has(func) && findClosures.get(func).has(global) && node.type !== "NewExpression" && !func.node) {
+					if (obj && Object.keys(ignoreGlobal).map(i => global[i]).includes(obj)) {
 
+					} else {
+
+						console.log("global", node)
+					}
+					// todo remove newexpression
+				}
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId
@@ -513,8 +566,16 @@ function simplify(code, opts) {
 				}
 
 				// TODO clean up findClosures
-				if (ret.ret && !findClosures.has(ret.ret)) {
-					findClosures.set(ret.ret, findClosures.get(func))
+				// todo redo this
+				if (ret.ret) {
+
+					if (findClosures.has(ret.ret)) {
+						findClosures.get(ret.ret).add(vars)
+					} else {
+						findClosures.set(ret.ret, new Set([vars]))
+					}
+					// var retC = findClosures.get(ret.ret)
+					// findClosures.get(func).forEach(c => retC.add(c))
 				}
 
 				if (closuresMod.size) {

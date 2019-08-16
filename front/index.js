@@ -79,10 +79,7 @@ getItem().then((file) => {
 			var color = hashCode(type, 6)
 			var old = gen[type].bind(gen)
 			gen[type] = function(node, state, ...args) {
-				if (node.nodeId === undefined) {
-					node.nodeId = nodes.length
-					nodes.push(node)
-				}
+				nodes[node.nodeId] = node
 				node.indentLevel = state.indentLevel
 				var classes = ""
 				if (node.remove) classes += " remove"

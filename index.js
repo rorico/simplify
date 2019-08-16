@@ -10,6 +10,7 @@ var calledWith = new Map()
 var funcDefined = new Set()
 var allAsts = []
 var recording = false
+var nodes = []
 
 function simplify(code, opts) {
 	var vars = {}
@@ -218,6 +219,8 @@ function simplify(code, opts) {
 		if (node.visits) node.visits = 0
 		if (node.used) node.used = 0
 		if (node.remove) node.remove = false
+		if (node.true) node.true = 0
+		// TODO move this all to a metadata obj or something so its easier to reset
 
 		for (var key in node) {
 			var val = node[key]
@@ -233,6 +236,10 @@ function simplify(code, opts) {
 	}
 
 	function initHoisted(node) {
+		if (!node.nodeId) {
+			node.nodeId = nodes.length
+			nodes.push(node)
+		}
 		var funcTypes = ["FunctionDeclaration", "FunctionExpression", "ArrowFunctionExpression"]
 		if (node.type === "FunctionDeclaration") {
 			addFunction(node)
@@ -473,7 +480,7 @@ function simplify(code, opts) {
 
 				if (func.node) {
 					var n = func.node
-					node.func = func
+					node.funcId = n.nodeId
 					node.callType = callType
 				// 	called.add(n)
 				// 	if (calledWith.has(n)) {
@@ -1044,14 +1051,12 @@ function simplify(code, opts) {
 		return ret
 	}
 	function replaceCall(node) {
-		var func = node.func
-		if (!func) return
-		var funcNode = func.node
+		var funcNode = nodes[node.funcId]
 		var rep = replaceReturn(funcNode)
 		console.log(rep)
 		if (rep.usable) {
 			var retVar = rep.ret
-			var body = node.func.node.body.body
+			var body = funcNode.body.body
 			var old = JSON.parse(JSON.stringify(node))
 			// if (retVar) {
 			// 	Object.assign(node, retVar, {fake: true})
@@ -1075,7 +1080,7 @@ function simplify(code, opts) {
 				console.log("unsupported", node.callType, node)
 				return
 			}
-			var params = func.node.params
+			var params = funcNode.params
 			for (var i = 0 ; i < params.length ; i++) {
 				// TODO handle different types
 				var d = {
@@ -1120,9 +1125,9 @@ function simplify(code, opts) {
 				old: old,
 				fake: true
 			}
-			if (node.visits === func.node.calls) {
+			if (node.visits === funcNode.calls) {
 				// redundant for now, but might change check above
-				called.delete(func.node)
+				called.delete(funcNode)
 				unused(r)
 			}
 			return {retVar: retVar, body: r}
@@ -1219,11 +1224,8 @@ function simplify(code, opts) {
 				ret.remove = !node.calls
 				break
 			case "CallExpression":
-				var func = node.func
-				// if (node.callType === "call")
-				if (func)
-				console.log(node.callType)
-				if (func && node.visits === func.node.calls) {
+				var funcNode = nodes[node.funcId]
+				if (funcNode && node.visits === funcNode.calls) {
 					node.replaceable = true
 					if (opts.replace) {
 						var res = replaceCall(node)

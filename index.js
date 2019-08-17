@@ -21,6 +21,7 @@ function simplify(code, opts) {
 	var replace = []
 	var findClosures = new Map()
 	var replaceCache = new Map()
+	var asString = new Map()
 	var loaded = false
 
 	if (!opts) opts = {}

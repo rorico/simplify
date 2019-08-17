@@ -130,6 +130,25 @@ function simplify(code, opts) {
 	}
 	return ret
 
+	// todo recursive safeguard
+	function toString(obj) {
+		return check(obj) || JSON.stringify(obj, (key, value) => {
+			return check(value) || value
+		})
+	}
+	function check(value) {
+		// don't do special for primatives
+		if (typeof value === "object" && value) {
+			if (asString.has(value)) {
+				return asString.get(value)
+			}
+		} else if (typeof value === "function") {
+			return 'function()'
+		} else if (value === undefined) {
+			return 'undefined'
+		}
+	}
+
 	function call(name, args) {
 		var f = getVar(name)
 		return f(...args)
@@ -367,6 +386,7 @@ function simplify(code, opts) {
 			if (name === 'document' || ret === document) {
 				console.log('jnkfdjgkldsj'. name)
 			}
+			asString.set(ret, name)
 			if (!findClosures.has(ret)) {
 				findClosures.set(ret, new Set([]))
 			}
@@ -522,16 +542,6 @@ function simplify(code, opts) {
 					console.log("var is not function", func, node)
 					throw "4"
 				}
-				// todo investigate when findClosures.has(func) is sometimes false
-				if (findClosures.has(func) && findClosures.get(func).has(global) && node.type !== "NewExpression" && !func.node) {
-					if (obj && Object.keys(ignoreGlobal).map(i => global[i]).includes(obj)) {
-
-					} else {
-
-						console.log("global", node)
-					}
-					// todo remove newexpression
-				}
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId
@@ -564,6 +574,25 @@ function simplify(code, opts) {
 					} else {
 						ret.ret = func(...args)
 					}
+				}
+
+				if (!func.node) {
+					var callStr = asString.get(func)
+					if (obj) {
+						callStr = toString(obj) + '.' + key
+					}
+					var argsStr = args.map(a => toString(a)).join(',')
+					asString.set(ret.ret, callStr + '(' + argsStr + ')')
+				}
+				// todo investigate when findClosures.has(func) is sometimes false
+				if (findClosures.has(func) && findClosures.get(func).has(global) && node.type !== "NewExpression" && !func.node) {
+					if (obj && Object.keys(ignoreGlobal).map(i => global[i]).includes(obj)) {
+
+					} else {
+
+						console.log("global", node, asString.get(ret.ret), args)
+					}
+					// todo remove newexpression
 				}
 
 				// TODO clean up findClosures
@@ -683,6 +712,9 @@ function simplify(code, opts) {
 					val = o.obj[o.key] - right
 				} else {
 					console.log("unexpected assignment operator")
+				}
+				if (asString.has(o.obj) && typeof o.key === 'string') {
+					console.log("assigned", toString(o.obj) + '.' + o.key + ' ' + node.operator + ' ' + toString(right))
 				}
 				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
 				return ret
@@ -856,6 +888,10 @@ function simplify(code, opts) {
 				var o = getObj(node)
 				ret.ret = o.obj[o.key]
 				ret.var = o.varPath
+				if (asString.has(o.obj) && typeof o.key === 'string') {
+					// todo something about symbols
+					asString.set(ret.ret, asString.get(o.obj) + '.' + o.key)
+				}
 				return ret
 			case "ObjectExpression":
 				ret.ret = {}

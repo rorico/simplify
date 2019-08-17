@@ -148,6 +148,16 @@ function simplify(code, opts) {
 			return 'undefined'
 		}
 	}
+	function setString(obj, str) {
+		if (obj && (typeof obj === "object" || typeof obj === "function")) {
+			asString.set(obj, str)
+		} else {
+			console.log(obj, typeof obj)
+		}
+	}
+	function hasString(obj) {
+		return asString.has(obj)
+	}
 
 	function call(name, args) {
 		var f = getVar(name)
@@ -386,7 +396,7 @@ function simplify(code, opts) {
 			if (name === 'document' || ret === document) {
 				console.log('jnkfdjgkldsj'. name)
 			}
-			asString.set(ret, name)
+			setString(ret, name)
 			if (!findClosures.has(ret)) {
 				findClosures.set(ret, new Set([]))
 			}
@@ -438,10 +448,26 @@ function simplify(code, opts) {
 				if (obj === global) console.log("dsf",node, findClosures.get(obj[key]).has(global), findClosures.get(global).has(global))
 			}
 		}
+		var str = hasString(obj[key]) ? toString(obj[key]) : ''
+		if (hasString(obj) && !str) {
+			str = toString(obj)
+			if (typeof key === 'symbol') {
+				str += '[' + key.toString() + ']'
+			} else {
+				// maybe in future do a check for valid character names
+				// https://stackoverflow.com/a/9337047
+				if (key.toString().includes('.')) {
+					str += '["' + key + '"]'
+				} else {
+					str += '.' + key
+				}
+			}
+		}
 		return {
 			obj: obj,
 			key: key,
-			varPath: varPath
+			varPath: varPath,
+			str: str
 		}
 	}
 
@@ -506,6 +532,7 @@ function simplify(code, opts) {
 				var obj
 				var key
 				var func
+				var str
 				if (node.callee.type === "MemberExpression") {
 					// do it this way to maintain thisArg
 					// can bind it, but that removes/changes some properties added
@@ -513,6 +540,7 @@ function simplify(code, opts) {
 					var o = getObj(node.callee)
 					obj = o.obj
 					key = o.key
+					str = o.str
 					// don't use this as a function
 					func = obj[key]
 					if (obj[key] === console.log) {
@@ -575,25 +603,19 @@ function simplify(code, opts) {
 						ret.ret = func(...args)
 					}
 				}
-
 				if (!func.node) {
-					var callStr = asString.get(func)
-					if (obj) {
-						callStr = toString(obj) + '.' + key
+					if (!str) {
+						str = toString(func)
 					}
 					var argsStr = args.map(a => toString(a)).join(',')
-					asString.set(ret.ret, callStr + '(' + argsStr + ')')
-				}
-				// todo investigate when findClosures.has(func) is sometimes false
-				if (findClosures.has(func) && findClosures.get(func).has(global) && node.type !== "NewExpression" && !func.node) {
-					if (obj && Object.keys(ignoreGlobal).map(i => global[i]).includes(obj)) {
-
-					} else {
-
-						console.log("global", node, asString.get(ret.ret), args)
+					str += '(' + argsStr + ')'
+					setString(ret.ret, str)
+					// todo investigate when findClosures.has(func) is sometimes false
+					if (!ignoreGlobal[str.split('.')[0]] && findClosures.has(func) && findClosures.get(func).has(global)) {
+						console.log("global", node, str, args)
 					}
-					// todo remove newexpression
 				}
+
 
 				// TODO clean up findClosures
 				// todo redo this
@@ -713,8 +735,8 @@ function simplify(code, opts) {
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				if (asString.has(o.obj) && typeof o.key === 'string') {
-					console.log("assigned", toString(o.obj) + '.' + o.key + ' ' + node.operator + ' ' + toString(right))
+				if (o.str) {
+					console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
 				}
 				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
 				return ret
@@ -751,6 +773,7 @@ function simplify(code, opts) {
 				} else {
 					console.log("unknown update operator", node)
 				}
+				// todo update global
 				return ret
 				break
 			case "ForInStatement":
@@ -888,9 +911,8 @@ function simplify(code, opts) {
 				var o = getObj(node)
 				ret.ret = o.obj[o.key]
 				ret.var = o.varPath
-				if (asString.has(o.obj) && typeof o.key === 'string') {
-					// todo something about symbols
-					asString.set(ret.ret, asString.get(o.obj) + '.' + o.key)
+				if (o.str) {
+					setString(ret.ret, o.str)
 				}
 				return ret
 			case "ObjectExpression":

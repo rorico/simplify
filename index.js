@@ -133,18 +133,23 @@ function simplify(code, opts) {
 
 	// todo recursive safeguard
 	function toString(obj) {
+		// todo some limit on size
+		// todo prototypes
 		return check(obj) || JSON.stringify(obj, (key, value) => {
 			return check(value) || value
 		})
 	}
 	function check(value) {
 		// don't do special for primatives
-		if (typeof value === "object" && value) {
-			if (asString.has(value)) {
-				return asString.get(value)
-			}
+		if (asString.has(value)) {
+			return asString.get(value)
 		} else if (typeof value === "function") {
-			return 'function()'
+			if (!value.node) {
+				console.log('what now', value)
+				return 'function'
+			} else {
+				return code.substring(value.node.start, value.node.body.start) + '{}'
+			}
 		} else if (value === undefined) {
 			return 'undefined'
 		}
@@ -152,8 +157,6 @@ function simplify(code, opts) {
 	function setString(obj, str) {
 		if (obj && (typeof obj === "object" || typeof obj === "function")) {
 			asString.set(obj, str)
-		} else {
-			console.log(obj, typeof obj)
 		}
 	}
 	function hasString(obj) {
@@ -442,11 +445,9 @@ function simplify(code, opts) {
 		// TODO This isn't perfect, obj[key] can belong to many objects
 		if (!findClosures.has(obj[key])) {
 			if (!findClosures.has(obj)) {
-				console.log('nadkfj', node)
 				findClosures.set(obj[key], new Set([vars]))
 			} else {
 				findClosures.set(obj[key], findClosures.get(obj))
-				if (obj === global) console.log("dsf",node, findClosures.get(obj[key]).has(global), findClosures.get(global).has(global))
 			}
 		}
 		var str = hasString(obj[key]) ? toString(obj[key]) : ''
@@ -612,8 +613,14 @@ function simplify(code, opts) {
 					str += '(' + argsStr + ')'
 					setString(ret.ret, str)
 					// todo investigate when findClosures.has(func) is sometimes false
-					if (!ignoreGlobal[str.split('.')[0]] && findClosures.has(func) && findClosures.get(func).has(global)) {
-						console.log("global", node, str, args)
+					if (recording || true) {
+						if (!ignoreGlobal[str.split('.')[0]] && findClosures.has(func) && findClosures.get(func).has(global)) {
+							if (!isNew) {
+								console.log(str)
+							}
+							// console.log("global", node, str, args)
+						}
+
 					}
 				}
 
@@ -625,7 +632,9 @@ function simplify(code, opts) {
 					if (findClosures.has(ret.ret)) {
 						findClosures.get(ret.ret).add(vars)
 					} else {
-						findClosures.set(ret.ret, new Set([vars]))
+						// if its not set to anything at this point, it means a global function made it
+						// right?
+						findClosures.set(ret.ret, new Set([vars, global]))
 					}
 					// var retC = findClosures.get(ret.ret)
 					// findClosures.get(func).forEach(c => retC.add(c))
@@ -736,7 +745,7 @@ function simplify(code, opts) {
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				if (o.str) {
+				if (o.str && recording) {
 					console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
 				}
 				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
@@ -971,6 +980,10 @@ function simplify(code, opts) {
 				after = (res) => {
 					ret.return = true
 					ret.ret = (res.argument || {}).ret
+					// just so other things are easier
+					if (!findClosures.has(ret.ret)) {
+						findClosures.set(ret.ret, new Set([vars]))
+					}
 				}
 				break
 

@@ -22,6 +22,7 @@ function simplify(code, opts) {
 	var findClosures = new Map()
 	var replaceCache = new Map()
 	var asString = new Map()
+	var under = new Map()
 	var loaded = false
 
 	if (!opts) opts = {}
@@ -155,14 +156,115 @@ function simplify(code, opts) {
 		}
 	}
 	function setString(obj, str) {
-		if (obj && (typeof obj === "object" || typeof obj === "function")) {
+		if (notPrimitive(obj)) {
 			asString.set(obj, str)
 		}
 	}
 	function hasString(obj) {
 		return asString.has(obj)
 	}
+	function notPrimitive(obj) {
+		return obj && (typeof obj === "object" || typeof obj === "function")
+	}
 
+	function addClosure(obj, closure, name) {
+		if (notPrimitive(obj)) {
+			if (!findClosures.has(obj)) {
+				findClosures.set(obj, new Map())
+			}
+			var closures = findClosures.get(obj)
+			if (!closures.has(closure)) {
+				closures.set(closure, {})
+			}
+			var vars = closures.get(closure)
+			if (!vars[name]) {
+				vars[name] = true
+			}
+		}
+	}
+	
+	function removeClosure(obj, closure, name) {
+		if (notPrimitive(obj)) {
+			if (!findClosures.has(obj)) {
+				// console.log('uh what')
+				return
+			}
+			var closures = findClosures.get(obj)
+			if (!closures.has(closure)) {
+				console.log('uh what')
+				return
+			}
+			var vars = closures.get(obj)
+			if (!vars[name]) {
+				console.log('uh what')
+				return
+			}
+			// todo cleanup
+			vars[name] = false
+		}
+	}
+	function setClosure(obj, closure) {
+		if (notPrimitive(obj)) {
+			findClosures.set(obj, closure)
+		}
+	}
+	function closuresAffected(obj) {
+		// do this to handle circular objects
+		var handled = new Set()
+		return check(obj)
+		function check(obj) {
+			var ret = new Set()
+			if (handled.has(obj)) {
+				return ret
+			}
+			handled.add(obj)
+			if (hasClosure(obj)) {
+				getClosure(obj).forEach((_, c) => {
+					ret.add(c)
+					if (window.testing) console.log(c)
+				})
+			}
+			if (under.has(obj)) {
+				under.get(obj).forEach(o => {
+					check(o).forEach(c => {
+						ret.add(c)
+					})
+				})
+			}
+			return ret
+		}
+	}
+	
+	function getClosure(obj) {
+		if (hasClosure(obj)) {
+			return findClosures.get(obj)
+		} else {
+			return new Set([vars])
+		}
+	}
+
+	function hasClosure(obj) {
+		return findClosures.has(obj)
+	}
+
+	function addUnder(obj, parent) {
+		if (notPrimitive(obj)) {
+			if (!under.has(obj)) {
+				under.set(obj, new Set())
+			}
+			var closures = under.get(obj)
+			closures.add(parent)
+		}
+	}
+	function removeUnder(obj, parent) {
+		if (under.has(obj)) {
+			var closures = under.get(obj)
+			closures.delete(parent)
+			if (!closures.size) {
+				under.delete(obj)
+			}
+		}
+	}
 	function call(name, args) {
 		var f = getVar(name)
 		return f(...args)
@@ -304,13 +406,7 @@ function simplify(code, opts) {
 		// 		v.used = v.uses > 0
 		// 	}
 		// }
-		var closure
-		closure = new Set([vars])
-		// if (val !== null && typeof val === "object" && findClosures.has(val)) {
-		if (findClosures.has(val)) {
-			closure = findClosures.get(val).add(vars)
-		}
-		findClosures.set(val, closure)
+		addClosure(val, vars, name)
 		vars[name] = {
 			uses: 0,
 			val: val,
@@ -319,7 +415,7 @@ function simplify(code, opts) {
 			node: node,
 			init: node
 		}
-		// findClosures.set(val, closure)
+		// addClosure(val, closure)
 		// todo fix
 		// if (closure !== vars && node) {
 		// 	node.side = true
@@ -327,28 +423,21 @@ function simplify(code, opts) {
 		return val
 	}
 	function setVar(name, val, node) {
-		if (!findClosures.has(val)) {
-			findClosures.set(val, new Set())
-		}
-		var valC = findClosures.get(val)
 		if (!(name in vars)) {
 			global[name] = val
 			exposed[name] = val
 			// todo similar logic as below to remove closure
 			valC.add(global)
-			findClosures.set(val, valC)
+			addClosure(val, global, name)
 			closuresMod.add(global)
 			return
 		}
 
 		var v = vars[name]
-		// if referenced multiple times in a closure, this isn't true
-		// findClosures.get(v.val).delete(v.vars)
+		removeClosure(v, vars, name)
+		addClosure(val, vars, name)
 
 		v.val = val
-		// shouldn't need to update val's closure
-		valC.forEach(c => closuresMod.add(c))
-		valC.add(vars)
 		if (v.node) {
 			v.node.varChanged = true
 		}
@@ -361,24 +450,15 @@ function simplify(code, opts) {
 		return val
 	}
 	function setProp(obj, name, val, node, varPath) {
-		obj[name] = val
-		// var closure = findClosures.get(obj)
-		// findClosures.set(val, closure)
-
-		if (!findClosures.has(obj)) {
-			findClosures.set(obj, new Set([vars]))
+		if (obj[name]) {
+			removeUnder(obj[name], obj)
 		}
-		var objC = findClosures.get(obj)
-		var valC = findClosures.get(val) || new Set()
-		valC.forEach(c => objC.add(c))
-		// var combined = objC.add(...valC)
-		// shouldn't need to update obj's closure
-		findClosures.set(val, objC)
+		obj[name] = val
+		addUnder(val, obj)
+		var mod = closuresAffected(obj)
+		mod.forEach(c => closuresMod.add(c))
 
-		objC.forEach(c => closuresMod.add(c))
-		// closuresMod.add(combined)
-
-		if (objC.has(global)) {
+		if (mod.has(global)) {
 			if (varPath[0]) {
 				exposed[varPath.join(("."))] = val
 			}
@@ -401,10 +481,7 @@ function simplify(code, opts) {
 				console.log('jnkfdjgkldsj'. name)
 			}
 			setString(ret, name)
-			if (!findClosures.has(ret)) {
-				findClosures.set(ret, new Set([]))
-			}
-			findClosures.get(ret).add(global)
+			addClosure(ret, global, name)
 			return ret
 		} else {
 			var v = vars[name]
@@ -442,14 +519,7 @@ function simplify(code, opts) {
 		// use concat to not alter original variable
 		varPath = varPath.concat([key])
 
-		// TODO This isn't perfect, obj[key] can belong to many objects
-		if (!findClosures.has(obj[key])) {
-			if (!findClosures.has(obj)) {
-				findClosures.set(obj[key], new Set([vars]))
-			} else {
-				findClosures.set(obj[key], findClosures.get(obj))
-			}
-		}
+		addUnder(obj[key], obj)
 		var str = hasString(obj[key]) ? toString(obj[key]) : ''
 		if (hasString(obj) && !str) {
 			str = toString(obj)
@@ -605,39 +675,30 @@ function simplify(code, opts) {
 						ret.ret = func(...args)
 					}
 				}
-				if (!func.node) {
+				// also filter things like ' '.substring and [].join
+				if (!func.node && !(obj && !closuresAffected(obj).has(global))) {
 					if (!str) {
 						str = toString(func)
 					}
 					var argsStr = args.map(a => toString(a)).join(',')
 					str += '(' + argsStr + ')'
 					setString(ret.ret, str)
-					// todo investigate when findClosures.has(func) is sometimes false
-					if (recording || true) {
-						if (!ignoreGlobal[str.split('.')[0]] && findClosures.has(func) && findClosures.get(func).has(global)) {
+					if (recording) {
+						if (!ignoreGlobal[str.split('.')[0]] && closuresAffected(func).has(global)) {
 							if (!isNew) {
 								console.log(str)
+								console.log(node, closuresAffected(func))
 							}
 							// console.log("global", node, str, args)
 						}
 
 					}
 				}
-
-
-				// TODO clean up findClosures
-				// todo redo this
+				// todo, not like this
 				if (ret.ret) {
-
-					if (findClosures.has(ret.ret)) {
-						findClosures.get(ret.ret).add(vars)
-					} else {
-						// if its not set to anything at this point, it means a global function made it
-						// right?
-						findClosures.set(ret.ret, new Set([vars, global]))
+					if (!hasClosure(ret.ret)) {
+						addClosure(ret.ret, global, 'dfnkldsfjgnsdklfjgn')
 					}
-					// var retC = findClosures.get(ret.ret)
-					// findClosures.get(func).forEach(c => retC.add(c))
 				}
 
 				if (closuresMod.size) {
@@ -980,9 +1041,11 @@ function simplify(code, opts) {
 				after = (res) => {
 					ret.return = true
 					ret.ret = (res.argument || {}).ret
-					// just so other things are easier
-					if (!findClosures.has(ret.ret)) {
-						findClosures.set(ret.ret, new Set([vars]))
+					// just so i know if something is returned from a defined function, its has some sort of closure
+					// todo don't do this
+					// way too hacky and doesn't work
+					if (!hasClosure(ret.ret)) {
+						addClosure(ret.ret, vars, 'jakdslaksdflasdfj')
 					}
 				}
 				break

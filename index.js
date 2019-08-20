@@ -806,10 +806,13 @@ function simplify(code, opts) {
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				if (o.str && recording) {
-					console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
-				}
 				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
+				if (o.str) {
+					if (recording) {
+						console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
+					}
+					setString(ret.ret, o.str)
+				}
 				return ret
 				break
 

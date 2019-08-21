@@ -132,13 +132,47 @@ function simplify(code, opts) {
 	}
 	return ret
 
-	// todo recursive safeguard
 	function toString(obj) {
 		// todo some limit on size
 		// todo prototypes
-		return check(obj) || JSON.stringify(obj, (key, value) => {
-			return check(value) || value
-		})
+		// do this to handle circular objects
+		var handled = new Set()
+		return rec(obj)
+		function rec(obj) {
+			if (handled.has(obj)) {
+				return '[circular structure]'
+			}
+			handled.add(obj)
+			var ret
+			if (asString.has(obj)) {
+				ret = asString.get(obj)
+			} else if (typeof obj === "function") {
+				if (!obj.node) {
+					// console.log('what now', obj)
+					ret = 'function'
+				} else {
+					ret = 'function'
+					if (obj.node.id) {
+						ret += ' ' + obj.node.id.name
+					}
+					ret += '(' + obj.node.params.map(p => p.name).join(', ') + ') {}'
+				}
+			} else if (Array.isArray(obj)) {
+				ret = '[' + obj.map(rec).join(', ') +']'
+			} else if (obj && typeof obj === 'object') {
+				ret = '{' + Object.keys(obj).map(k => {
+					return k + ': ' + (Object.getOwnPropertyDescriptor(obj, k).get ? 'getter' : rec(obj[k]))
+				}).join(', ') + '}'
+			} else if (typeof obj === 'symbol') {
+				ret = obj.toString()
+			} else if (typeof obj === 'string') {
+				ret = '"' + obj + '"'
+			} else {
+				ret = '' + obj
+			}
+			handled.delete(obj)
+			return ret
+		}
 	}
 	function check(value) {
 		// don't do special for primatives

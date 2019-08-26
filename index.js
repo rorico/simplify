@@ -233,13 +233,13 @@ function simplify(code, opts) {
 				console.log('uh what')
 				return
 			}
-			// todo cleanup
-			vars[name] = false
-		}
-	}
-	function setClosure(obj, closure) {
-		if (notPrimitive(obj)) {
-			findClosures.set(obj, closure)
+			delete vars[name]
+			if (!Object.keys(vars).length) {
+				closures.delete(obj)
+				if (!closures.size) {
+					findClosures.delete(obj)
+				}
+			}
 		}
 	}
 	function closuresAffected(obj) {

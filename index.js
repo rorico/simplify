@@ -314,7 +314,7 @@ function simplify(code, opts) {
 		var closure = vars
 		// don't want to make new required modules disappear
 		if (loaded) funcDefined.add(node)
-		var func = function() {
+		var inner = function() {
 
 			if (recording) {
 				node.calls++
@@ -366,7 +366,8 @@ function simplify(code, opts) {
 			initHoisted(node.body)
 			try {
 				var ret = walk(node.body)
-				return ret.ret
+				ret.return = false
+				return ret
 			} catch (e) {
 				throw e
 			} finally {
@@ -377,8 +378,12 @@ function simplify(code, opts) {
 				vars = oldVars
 			}
 		}
+		var func = function(...args) {
+			return inner.call(this, ...args).ret
+		}
 		// for access to node from function
 		func.node = node
+		func.inner = inner
 		if (node.id) {
 			addVar(node.id.name, func, node)
 		}
@@ -696,17 +701,31 @@ function simplify(code, opts) {
 
 
 				var isNew = node.type === "NewExpression"
-				if (node.callee.type === "MemberExpression") {
+				if (func.inner) {
+					var inner = func.inner
+					// overwriting ret might not be what i want
 					if (isNew) {
-						ret.ret = new obj[key](...args)
+						ret = new inner(...args)
 					} else {
-						ret.ret = obj[key](...args)
+						if (node.callee.type === "MemberExpression") {
+							ret = inner.call(obj, ...args)
+						} else {
+							ret = inner(...args)
+						}
 					}
 				} else {
-					if (isNew) {
-						ret.ret = new func(...args)
+					if (node.callee.type === "MemberExpression") {
+						if (isNew) {
+							ret.ret = new obj[key](...args)
+						} else {
+							ret.ret = obj[key](...args)
+						}
 					} else {
-						ret.ret = func(...args)
+						if (isNew) {
+							ret.ret = new func(...args)
+						} else {
+							ret.ret = func(...args)
+						}
 					}
 				}
 				// also filter things like ' '.substring and [].join

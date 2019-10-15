@@ -559,10 +559,12 @@ function simplify(code, opts) {
 			str = toString(obj)
 			if (typeof key === 'symbol') {
 				str += '[' + key.toString() + ']'
+			} else if (Array.isArray(obj) && typeof key === 'number') {
+				str += '[' + key + ']'
 			} else {
 				// maybe in future do a check for valid character names
 				// https://stackoverflow.com/a/9337047
-				if (key.toString().includes('.')) {
+				if (typeof key !== 'string' || key.includes('.')) {
 					str += '["' + key + '"]'
 				} else {
 					str += '.' + key

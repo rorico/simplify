@@ -1,0 +1,3 @@
+class simplifyError extends Error {
+    
+}

@@ -5,6 +5,7 @@ var fs = require("fs")
 var lognode = require("./lognode")
 var ignoreGlobal = require("./ignoreGlobal")
 var path = require("path")
+var simplifyError = require("./simplifyError")
 var modules = {}
 var called = new Set()
 var calledWith = new Map()
@@ -665,7 +666,10 @@ function simplify(code, opts) {
 					}
 				}
 				
-				if (func === console.log) {
+				if (typeof func !== 'function') {
+					console.log("var is not function", func, node)
+					throw new simplifyError("not a function")
+				} else if (func === console.log) {
 					// to seperate logs from code
 					args.unshift("from program")
 					// console is a global side effect
@@ -675,10 +679,6 @@ function simplify(code, opts) {
 				}
 
 
-				if (!func || !isFunction(func)) {
-					console.log("var is not function", func, node)
-					throw "4"
-				}
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId

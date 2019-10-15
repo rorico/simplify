@@ -636,9 +636,8 @@ function simplify(code, opts) {
 					}
 				}, [])
 
+				var thisArg = window
 				var callType = "normal"
-				var obj
-				var key
 				var func
 				var str
 				if (node.callee.type === "MemberExpression") {
@@ -646,23 +645,15 @@ function simplify(code, opts) {
 					// can bind it, but that removes/changes some properties added
 					// like name, node
 					var o = getObj(node.callee)
-					obj = o.obj
-					key = o.key
-					str = o.str
-					// don't use this as a function
-					func = obj[key]
-					if (obj[key] === console.log) {
-						// to seperate logs from code
-						args.unshift("from program")
-						// console is a global side effect
-						closuresMod.add(global)
-					}
+					
+					thisArg = obj = o.obj
+					func = o.obj[o.key]
 
-					var specialCalls = ['call', 'apply']
-					if (typeof obj === "function" && specialCalls.includes(key)) {
-						func = obj
-						callType = key
-					}
+					// var specialCalls = ['call', 'apply']
+					// if (typeof obj === "function" && specialCalls.includes(key)) {
+					// 	func = obj
+					// 	callType = key
+					// }
 					// todo something about bind
 				} else {
 					var knownTypes = ["Identifier", "FunctionExpression", "ArrowFunctionExpression", "CallExpression"]
@@ -673,6 +664,16 @@ function simplify(code, opts) {
 						// process.exit(1)
 					}
 				}
+				
+				if (func === console.log) {
+					// to seperate logs from code
+					args.unshift("from program")
+					// console is a global side effect
+					closuresMod.add(global)
+				} else if (func === process.exit) {
+					console.log("exiting program")
+				}
+
 
 				if (!func || !isFunction(func)) {
 					console.log("var is not function", func, node)
@@ -698,21 +699,13 @@ function simplify(code, opts) {
 
 
 				var isNew = node.type === "NewExpression"
-				if (node.callee.type === "MemberExpression") {
-					if (isNew) {
-						ret.ret = new obj[key](...args)
-					} else {
-						ret.ret = obj[key](...args)
-					}
+				if (isNew) {
+					ret.ret = new func(...args)
 				} else {
-					if (isNew) {
-						ret.ret = new func(...args)
-					} else {
-						ret.ret = func(...args)
-					}
+					ret.ret = func.apply(thisArg, args)
 				}
 				// also filter things like ' '.substring and [].join
-				if (!func.node && !(obj && !closuresAffected(obj).has(global))) {
+				if (!func.node && !(thisArg && !closuresAffected(thisArg).has(global)) && !isNew && func !== Object.defineProperty) {
 					if (!str) {
 						str = toString(func)
 					}

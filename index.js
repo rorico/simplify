@@ -1140,21 +1140,14 @@ function simplify(code, opts) {
 							var oldRecording = recording
 							recording = false
 							try {
-								if (name.startsWith(".") || name.includes('/') || name.includes('\\')) {
-									if (require.cache[file]) {
-										return require(file)
-									}
-
+								if ((name.startsWith(".") || name.includes('/') || name.includes('\\')) && !require.cache[file]) {
 									var todo = fs.readFileSync(file)
 									opts.filename = file
 									opts.parent = req
-									var code = simplify(todo, opts)
-
-									// this will be set by that context
-									return code.exports
-								} else {
-									return require(file)
+									simplify(todo, opts)
 								}
+								var ret = require(file)
+								return ret
 							} catch (e) {
 								console.log("cannot require", ...args, e)
 								process.exit(1)

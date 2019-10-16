@@ -383,6 +383,9 @@ function simplify(code, opts) {
 		if (node.id) {
 			addVar(node.id.name, func, node)
 		}
+		if (node.type === 'ArrowFunctionExpression') {
+			func.arrowThis = getVar('this')
+		}
 		return func
 	}
 	function reset(node) {
@@ -418,7 +421,7 @@ function simplify(code, opts) {
 		} else if (node.type === "VariableDeclarator") {
 			addVar(node.id.name, undefined)
 		} else if (funcTypes.includes(node.type)) {
-			// don't hoist variables in nested functinos
+			// don't hoist variables in nested functions
 			return
 		}
 		for (var key in node) {
@@ -676,6 +679,10 @@ function simplify(code, opts) {
 					closuresMod.add(global)
 				} else if (func === process.exit) {
 					console.log("exiting program")
+				}
+
+				if (func.arrowThis) {
+					thisArg = func.arrowThis
 				}
 
 

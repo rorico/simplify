@@ -1025,14 +1025,6 @@ function simplify(code, opts) {
 					setString(ret.ret, o.str)
 				}
 				return ret
-			case "ObjectExpression":
-				ret.ret = {}
-				for (var prop of node.properties) {
-					// the other is literal
-					var name = prop.key.type === "Identifier" ? prop.key.name : prop.key.value
-					ret.ret[name] = walk(prop.value).ret
-				}
-				return ret
 			case "UnaryExpression":
 				// typeof is special in that it can handle variables never defined
 				if (node.operator === "typeof" && node.argument && node.argument.type === "Identifier" && !(node.argument.name in vars || node.argument.name in global)) {
@@ -1174,6 +1166,14 @@ function simplify(code, opts) {
 					window = {}
 				}
 				break
+			case "ObjectExpression":
+				ret.ret = {}
+				for (var prop of node.properties) {
+					// the other is literal
+					var name = prop.key.type === "Identifier" ? prop.key.name : prop.key.value
+					ret.ret[name] = walk(prop.value).ret
+				}
+				return ret
 			case "ArrayExpression":
 				after = (res) => {
 					ret.ret = res.elements.map(e => e.ret)

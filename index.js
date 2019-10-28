@@ -1233,6 +1233,41 @@ function simplify(code, opts) {
 				}
 				return ret
 
+			case "ClassDeclaration":
+			case "ClassExpression":
+				var constructor = addFunction(acorn.parse('function placeholder() {}').body[0])
+				var proto = {}
+				var props = {}
+				for (var method of node.body.body) {
+					if (method.kind === 'constructor') {
+						constructor = addFunction(method.value)
+					} else if (method.kind === 'method') {
+						var key = method.computed ? walk(method.key).ret : method.key.name
+						proto[key] = addFunction(method.value)
+					} else if (['get', 'set'].includes(method.kind)) {
+						var key = method.computed ? walk(method.key).ret : method.key.name
+						if (!props[key]) props[key] = {}
+						props[key][method.kind] = addFunction(method.value)
+					} else {
+						// getters and setters
+						console.log('unsupported method type', method.kind, method)
+					}
+					if (method.static) {
+						console.log('unsupported method properties', method)
+					}
+				}
+				Object.assign(constructor.prototype, proto)
+				Object.defineProperties(constructor.prototype, props)
+				if (node.superClass) {
+					// don't support super yet
+					constructor.__proto__ = walk(node.superClass).ret
+				}
+				if (node.id) {
+					addVar(node.id.name, constructor, node)
+				}
+				ret.ret = constructor
+				return ret
+			
 			case "SequenceExpression":
 				for (var ex of node.expressions) {
 					ret = walk(ex)

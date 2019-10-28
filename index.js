@@ -1134,7 +1134,13 @@ function simplify(code, opts) {
 							}
 							var name = args[0]
 							// console.log(name)
-							var file = require.resolve(name, {paths: [moduleFolder, getVar("__dirname"), './']})
+							var paths = [moduleFolder, "./"]
+
+							// for some reason with this added, 'umask' gets local file, not node_modules version
+							if (name.startsWith(".") || name.startsWith('node_modules')) {
+								paths.unshift(getVar("__dirname"))
+							}
+							var file = require.resolve(name, {paths: paths})
 
 							// do this to not record any functions used on startup
 							var oldRecording = recording

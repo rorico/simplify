@@ -538,7 +538,8 @@ function simplify(code, opts) {
 				// todo if uncount is ever used
 				v.init.varUsed = true
 			}
-			if (v.node && !vars.hasOwnProperty(name)) {
+			// use Object.hasOwnProperty as hasOwnProperty can actually be a variable name
+			if (v.node && !Object.hasOwnProperty.call(vars, name)) {
 				usedVars.add(v.node)
 			}
 			return v.val

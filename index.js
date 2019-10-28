@@ -27,6 +27,8 @@ function simplify(code, opts) {
 	var under = new Map()
 	var loaded = false
 
+	var filename = opts.filename
+
 	if (!opts) opts = {}
 	var module = {}
 	var req = {}
@@ -47,7 +49,7 @@ function simplify(code, opts) {
 
 	initHoisted(ast)
 	walk(ast)
-	console.log("parsed through file", opts.filename)
+	console.log("parsed through file", filename)
 
 	if (opts.node && opts.filename) {
 		req.loaded = loaded = true

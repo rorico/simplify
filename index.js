@@ -316,6 +316,10 @@ function simplify(code, opts) {
 		// don't want to make new required modules disappear
 		if (loaded) funcDefined.add(node)
 		var func = function() {
+			if (node.generator || node.async) {
+				console.log('unssuported call', node)
+				process.exit()
+			}
 
 			if (recording) {
 				node.calls++
@@ -385,6 +389,9 @@ function simplify(code, opts) {
 		}
 		if (node.type === 'ArrowFunctionExpression') {
 			func.arrowThis = getVar('this')
+		}
+		if (node.generator || node.async) {
+			console.log('unsupported function properties', node, filename)
 		}
 		return func
 	}

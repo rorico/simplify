@@ -929,6 +929,16 @@ function simplify(code, opts) {
 				}
 				return ret
 				break
+			case "DoWhileStatement":
+				do {
+					node.true = node.true ? node.true + 1 : 1
+					var r = walk(node.body)
+					if (r.return) return r
+					if (r.break) break
+					if (r.continue) continue
+				} while (walk(node.test).ret)
+				return ret
+
 			case "WhileStatement":
 				while (walk(node.test).ret) {
 					node.true = node.true ? node.true + 1 : 1
@@ -1029,6 +1039,7 @@ function simplify(code, opts) {
 				var o = getObj(node)
 				ret.ret = o.obj[o.key]
 				ret.var = o.varPath
+				ret.str = o.str
 				if (o.str) {
 					setString(ret.ret, o.str)
 				}

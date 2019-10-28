@@ -6,6 +6,7 @@ var lognode = require("./lognode")
 var ignoreGlobal = require("./ignoreGlobal")
 var path = require("path")
 var simplifyError = require("./simplifyError")
+var functionName = Symbol('name')
 var modules = {}
 var called = new Set()
 var calledWith = new Map()
@@ -385,7 +386,9 @@ function simplify(code, opts) {
 		// for access to node from function
 		func.node = node
 		if (node.id) {
-			addVar(node.id.name, func, node)
+			var name = node.id.name
+			addVar(name, func, node, name)
+			func[functionName] = name
 		}
 		if (node.type === 'ArrowFunctionExpression') {
 			func.arrowThis = getVar('this')
@@ -565,6 +568,9 @@ function simplify(code, opts) {
 		// use concat to not alter original variable
 		varPath = varPath.concat([key])
 
+		if (key === 'name' && obj[functionName]) {
+			key = functionName
+		}
 		addUnder(obj[key], obj)
 		var str = hasString(obj[key]) ? toString(obj[key]) : ''
 		if (hasString(obj) && !str) {

@@ -1233,6 +1233,11 @@ function simplify(code, opts) {
 				}
 				return ret
 
+			case "SequenceExpression":
+				for (var ex of node.expressions) {
+					ret = walk(ex)
+				}
+				return ret
 
 			// these are comments
 			case "Line":

@@ -1077,6 +1077,9 @@ function simplify(code, opts) {
 						case "%":
 							ret.ret = left % right
 							break
+						case ">>>":
+							ret.ret = left >>> right
+							break
 						case "in":
 							ret.ret = left in right
 							break

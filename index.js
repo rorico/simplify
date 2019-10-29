@@ -1361,7 +1361,8 @@ function simplify(code, opts) {
 				break
 
 			default:
-				console.log("unexpected node type", node)
+				console.log("unexpected node type", node, filename)
+				process.exit()
 				break
 		}
 		var res = {}

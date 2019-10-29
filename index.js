@@ -1123,6 +1123,8 @@ function simplify(code, opts) {
 						ret.ret = typeof arg
 					} else if (node.operator === "delete") {
 						ret.ret = delete arg
+					} else if (node.operator === "void") {
+						ret.ret = void arg
 					} else {
 						console.log("unknown unary", node.operator)
 					}

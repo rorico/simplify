@@ -613,6 +613,33 @@ function simplify(code, opts) {
 		return node && (node.return || node.break || node.continue)
 	}
 
+	function breaks(r, label) {
+		var ret = {
+			return: false,
+			break: false,
+			continue: false
+		}
+		
+		if (r.return) {
+			ret.return = true
+		} else if (r.break) {
+			if (typeof r.break === 'string') {
+				if (r.break !== label) {
+					ret.return = true
+				}
+			}
+			ret.break = true
+		} else if (r.continue) {
+			if (typeof r.continue === 'string') {
+				if (r.continue !== label) {
+					ret.return = true
+				}
+			}
+			ret.continue = true
+		}
+		return ret
+	}
+
 	function walk(node) {
 		var ret = {
 			ret: undefined,
@@ -811,8 +838,9 @@ function simplify(code, opts) {
 						cont = true
 						for (var s of c.consequent) {
 							var r = walk(s)
-							if (r.return || r.continue) return r
-							if (r.break) {
+							var b = breaks(r, node.label)
+							if (b.return || b.continue) return r
+							if (b.break) {
 								cont = false
 								b = true
 								break
@@ -825,17 +853,21 @@ function simplify(code, opts) {
 				}
 				return ret
 
+			case "LabeledStatement":
+				if (node.label.type !== 'Identifier') {
+					console.log('unexpected label type', node.label.type, node)
+				}
+				node.body.label = node.label.name
+				walk(node.body)
+				return ret
+	
 			case "BreakStatement":
-				// todo: handle labels
-				if (node.label) console.log("labels not handled")
-				ret.break = true
-				break
+				ret.break = node.label ? node.label.name : true
+				return ret
 
 			case "ContinueStatement":
-				// todo: handle labels
-				if (node.label) console.log("labels not handled")
-				ret.continue = true
-				break
+				ret.continue = node.label ? node.label.name : true
+				return ret
 
 			case "AssignmentExpression":
 				var name = node.left.name
@@ -919,9 +951,10 @@ function simplify(code, opts) {
 				for (var i in right) {
 					addVar(varname, i)
 					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
+					var b = breaks(r)
+					if (b.return) return r
+					if (b.break) break
+					if (b.continue) continue
 				}
 				return ret
 				break
@@ -932,18 +965,20 @@ function simplify(code, opts) {
 				for (var i of right) {
 					addVar(varname, i)
 					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
+					var b = breaks(r)
+					if (b.return) return r
+					if (b.break) break
+					if (b.continue) continue
 				}
 				return ret
 
 			case "ForStatement":
 				for (node.init ? walk(node.init) : "" ; node.test ? walk(node.test).ret : true ; node.update ? walk(node.update) : "") {
 					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
+					var b = breaks(r)
+					if (b.return) return r
+					if (b.break) break
+					if (b.continue) continue
 				}
 				return ret
 				break
@@ -951,9 +986,10 @@ function simplify(code, opts) {
 				do {
 					node.true = node.true ? node.true + 1 : 1
 					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
+					var b = breaks(r)
+					if (b.return) return r
+					if (b.break) break
+					if (b.continue) continue
 				} while (walk(node.test).ret)
 				return ret
 
@@ -961,9 +997,10 @@ function simplify(code, opts) {
 				while (walk(node.test).ret) {
 					node.true = node.true ? node.true + 1 : 1
 					var r = walk(node.body)
-					if (r.return) return r
-					if (r.break) break
-					if (r.continue) continue
+					var b = breaks(r)
+					if (b.return) return r
+					if (b.break) break
+					if (b.continue) continue
 				}
 				return ret
 				break

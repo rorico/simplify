@@ -521,6 +521,10 @@ function simplify(code, opts) {
 	}
 
 	function getVar(name) {
+		return getV(name).val
+	}
+
+	function getV(name) {
 		if (vars[name] === undefined) {
 			if (!(name in global)) {
 				console.log(name, "not defined, should have errored")
@@ -532,7 +536,12 @@ function simplify(code, opts) {
 			}
 			setString(ret, name)
 			addClosure(ret, global, name)
-			return ret
+			return {
+				// incorrect
+				uses: 1,
+				val: ret,
+				vars: global,
+			}
 		} else {
 			var v = vars[name]
 			v.uses++
@@ -547,9 +556,10 @@ function simplify(code, opts) {
 			if (v.node && !Object.hasOwnProperty.call(vars, name)) {
 				usedVars.add(v.node)
 			}
-			return v.val
+			return v
 		}
 	}
+
 	function uncount(name) {
 		var v = vars[name]
 		v.uses--

@@ -14,6 +14,9 @@ var funcDefined = new Set()
 var allAsts = []
 var recording = false
 var nodes = []
+var findClosures = new Map()
+var asString = new Map()
+var under = new Map()
 
 function simplify(code, opts) {
 	var vars = {}
@@ -21,10 +24,7 @@ function simplify(code, opts) {
 	var closuresMod = new Set()
 	var usedVars = new Set()
 	var replace = []
-	var findClosures = new Map()
 	var replaceCache = new Map()
-	var asString = new Map()
-	var under = new Map()
 	var loaded = false
 
 	var filename = opts.filename

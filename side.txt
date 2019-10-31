@@ -1,0 +1,16 @@
+things that affect closures, if all functions are defined
+
+obj[key] = something
+delete obj[key]
+Array.prototype.push
+Array.prototype.unshift
+Array.prototype.shift
+Array.prototype.pop
+Array.prototype.sort
+Array.prototype.splice
+Array.prototype.reverse
+
+Object.assign
+Object.defineProperty
+Object.defineProperties
+Object.freeze

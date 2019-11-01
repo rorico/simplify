@@ -413,6 +413,7 @@ function simplify(code, opts) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
+					if (!c) continue
 					var res = reset(c)
 				}
 			} else if (val && typeof val.type === "string") {
@@ -441,6 +442,7 @@ function simplify(code, opts) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
+					if (!c) continue
 					var res = initHoisted(c)
 				}
 			} else if (val && typeof val.type === "string") {
@@ -1261,7 +1263,8 @@ function simplify(code, opts) {
 				return ret
 			case "ArrayExpression":
 				after = (res) => {
-					ret.ret = res.elements.map(e => e.ret)
+					ret.ret = res.elements.map(e => e && e.ret)
+					setUnderString(ret.ret, res.elements.map(e => e && e.str))
 				}
 				break
 
@@ -1372,6 +1375,7 @@ function simplify(code, opts) {
 				res[key] = [];
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
+					if (!c) continue
 					var r = walk(c)
 					if (breakOut(r)) {
 						return r 
@@ -1397,6 +1401,7 @@ function simplify(code, opts) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
+					if (!c) continue
 					ret.push(...addSide(c))
 				}
 			} else if (val && typeof val.type === "string") {
@@ -1526,6 +1531,7 @@ function simplify(code, opts) {
 				if (Array.isArray(val)) {
 					for (var i = 0 ; i < val.length ; i++) {
 						var c = val[i]
+						if (!c) continue
 						// assuming return statement isn't in a stupid place
 						if (c.type === "ReturnStatement") {
 							if (!c.visits) {
@@ -1698,6 +1704,7 @@ function simplify(code, opts) {
 			if (Array.isArray(val)) {
 				for (var i = 0 ; i < val.length ; i++) {
 					var c = val[i]
+					if (!c) continue
 					if (checkOrRecurse(c)) {
 						c.remove = true
 						// val.splice(i, 1)

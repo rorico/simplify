@@ -569,6 +569,13 @@ function simplify(code, opts) {
 			v.node.used--
 		}
 	}
+	function getKey(node) {
+		if (node.computed || node.key.type === 'Literal') {
+			return walk(node.key).ret
+		} else {
+			return node.key.name
+		}
+	}
 	function getObj(node) {
 		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
 		if (!node.object || !node.property)
@@ -1256,9 +1263,9 @@ function simplify(code, opts) {
 			case "ObjectExpression":
 				ret.ret = {}
 				for (var prop of node.properties) {
-					// the other is literal
-					var name = prop.key.type === "Identifier" ? prop.key.name : prop.key.value
-					ret.ret[name] = walk(prop.value).ret
+					var key = getKey(prop)
+					var val = walk(prop.value)
+					ret.ret[key] = val.ret
 				}
 				return ret
 			case "ArrayExpression":
@@ -1322,10 +1329,10 @@ function simplify(code, opts) {
 					if (method.kind === 'constructor') {
 						constructor = addFunction(method.value)
 					} else if (method.kind === 'method') {
-						var key = method.computed ? walk(method.key).ret : method.key.name
+						var key = getKey(method)
 						proto[key] = addFunction(method.value)
 					} else if (['get', 'set'].includes(method.kind)) {
-						var key = method.computed ? walk(method.key).ret : method.key.name
+						var key = getKey(method)
 						if (!props[key]) props[key] = {}
 						props[key][method.kind] = addFunction(method.value)
 					} else {

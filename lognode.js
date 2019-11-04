@@ -24,7 +24,7 @@ module.exports = {
 	// "Identifier": true,
 	// "ReturnStatement": true,
 	// "VariableDeclaration": true,
-	"Program": true,
+	// "Program": true,
 	// "ArrayExpression": true,
 	// "ThrowStatement": true,
 	// "": true

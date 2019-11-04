@@ -17,6 +17,8 @@ var nodes = []
 var findClosures = new Map()
 var asString = new Map()
 var under = new Map()
+var underString = new Map()
+
 
 function simplify(code, opts) {
 	var vars = {}
@@ -149,6 +151,7 @@ function simplify(code, opts) {
 			handled.add(obj)
 			var ret
 			if (asString.has(obj)) {
+				// todo handle primitive with strs
 				ret = asString.get(obj)
 			} else if (typeof obj === "function") {
 				if (!obj.node) {
@@ -194,7 +197,7 @@ function simplify(code, opts) {
 		}
 	}
 	function setString(obj, str) {
-		if (notPrimitive(obj)) {
+		if (notPrimitive(obj) && !hasString(obj) && str) {
 			asString.set(obj, str)
 		}
 	}
@@ -203,6 +206,20 @@ function simplify(code, opts) {
 	}
 	function notPrimitive(obj) {
 		return obj && (typeof obj === "object" || typeof obj === "function")
+	}
+	function composeIfExists(...list) {
+		var use = false
+		var ret = list.reduce(e => {
+			if (typeof e === 'string') {
+				return e
+			} else if (e.str) {
+				use = true
+				return e.str
+			} else {
+				return toString(e.val || e.ret)
+			}
+		}, '')
+		return use ? ret : undefined
 	}
 
 	function addClosure(obj, closure, name) {
@@ -284,6 +301,44 @@ function simplify(code, opts) {
 	function hasClosure(obj) {
 		return findClosures.has(obj)
 	}
+	
+	function addUnderString(obj, key, str) {
+		if (str) {
+			if (!underString.has(obj)) {
+				underString.set(obj, Array.isArray(obj) ? [] : {})
+			}
+			var strings = underString.get(obj)
+			strings[key] = str
+		}
+	}
+	function setUnderString(obj, strObj) {
+		underString.set(obj, strObj)
+	}
+	function getUnderStringObj(obj) {
+		if (!underString.has(obj)) {
+			underString.set(obj, Array.isArray(obj) ? [] : {})
+		}
+		return underString.get(obj)
+	}
+	function removeUnderString(obj, key) {
+		if (underString.has(obj)) {
+			var strings = underString.get(obj)
+			delete strings[key]
+			if (!Object.keys(strings).length) {
+				underString.delete(obj)
+			}
+		}
+	}
+	function getUnderString(obj, key) {
+		if (hasString(obj[key])) {
+			return toString(obj[key])
+		}
+		if (!notPrimitive(obj[key])) {
+			if (underString.has(obj)) {
+				return underString.get(obj)[key]
+			}
+		}
+	}
 
 	function addUnder(obj, parent) {
 		if (notPrimitive(obj)) {
@@ -335,20 +390,44 @@ function simplify(code, opts) {
 			}
 
 			var params = node.params
+			// this will get passed in
+			var argStrs = func.argStrs || []
+			// clear it to ensure that when getting it is only exactly after its called
+			func.argStrs = undefined
 			var oldVars = vars
 			// TODO handle updating global variables
 			vars = {}
 			vars.__proto__ = closure
 			for (var i = 0 ; i < params.length ; i++) {
 				var p = params[i]
+				var arg = arguments[i]
 				if (p.type === "Identifier") {
-					addVar(p.name, arguments[i], p)
+					var str = argStrs[i]
+					if (!str && !hasClosure(arguments[i])) {
+
+						// todo, better way to get info about arguments from global call
+						// todo on callbacks with multiple calls seperate them
+						if (!func.callStr) {
+							// console.log('callback called without attaching to a global function', arguments[i], node.loc, filename)
+							// console.log('callback called without attaching to a global function', node.loc.start, filename)
+							// process.exit()
+							str = node.id ? node.id.name : 'some_function_with_external_call'
+						} else {
+							str = func.callStr
+						}
+						str += '.' + p.name
+						argStrs[i] = str
+						addClosure(arguments[i], global, 'preihtios')
+						setString(arguments[i], str)
+					}
+					addVar(p.name, arguments[i], p, str)
 				} else if (p.type === "ObjectPattern") {
 					// TODO this well
 					for (var prop of p.properties) {
 						if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
 						if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
 						addVar(prop.key.name, arguments[i][prop.value.type], prop)
+						// todo add owners
 					}
 				} else if (p.type === "RestElement") {
 					if (p.argument.type !== "Identifier") console.log("RestElement argument not Identifier", prop)
@@ -367,13 +446,25 @@ function simplify(code, opts) {
 			if (!node.thisUsed) {
 				node.thisUsed = {}
 			}
+			// don't want to set arguments to a str
 			addVar("arguments", arguments, node.argsUsed)
+			// might want to set this as an array
+			for (var i in arguments) {
+				addUnderString(arguments, i, argStrs[i])
+			}
 			// may cause incorrect closure values
 			addVar("this", this, node.thisUsed)
+			if (!hasClosure(this)) {
+				// todo, better way to get info about arguments from global call
+				addClosure(this, global, 'treiuu')
+				setString(this, 'this')
+			}
 
 			initHoisted(node.body)
 			try {
 				var ret = walk(node.body)
+				// only used to pass to callExpression which should be immediately after
+				func.ret = ret
 				return ret.ret
 			} catch (e) {
 				throw e
@@ -393,6 +484,7 @@ function simplify(code, opts) {
 			func[functionName] = name
 		}
 		if (node.type === 'ArrowFunctionExpression') {
+			// todo add str
 			func.arrowThis = getVar('this')
 		}
 		if (node.generator || node.async) {
@@ -451,35 +543,34 @@ function simplify(code, opts) {
 		}
 	}
 
-	function assign(node, val, init) {
+	function assign(node, val, init, str) {
 		if (node.type === "Identifier") {
 			if (init) {
-				addVar(node.name, val, node)
+				addVar(node.name, val, node, str)
 			} else {
-				setVar(node.name, val, node)
+				setVar(node.name, val, node, str)
 			}
 		} else if (node.type === "ObjectPattern") {
 			// TODO this well
 			for (var prop of node.properties) {
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
 				var key = getKey(prop)
-				var p = getProp(val, key)
-				assign(prop, p.val, init)
+				var p = getProp(val, key, str)
+				assign(prop, p.val, init, p.str)
 			}
 		} else if (node.type === "ArrayPattern") {
 			// TODO this well
 			for (var i in node.elements) {
 				var prop = node.elements[i]
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
-				var p = getPropWithKey(val, i)
-				assign(prop, p.val, init)
+				var p = getPropWithKey(val, i, str)
+				assign(prop, p.val, init, p.str)
 			}
 		} else {
 			console.log("unknown param type", node)
 		}
-
 	}
-	function addVar(name, val, node) {
+	function addVar(name, val, node, str) {
 		// if (vars.hasOwnProperty(name)) {
 		// 	// already set in this closure
 		// 	var v = vars[name]
@@ -494,7 +585,8 @@ function simplify(code, opts) {
 			// closure: closure,
 			vars: vars,
 			node: node,
-			init: node
+			init: node,
+			str: str,
 		}
 		// addClosure(val, closure)
 		// todo fix
@@ -503,7 +595,7 @@ function simplify(code, opts) {
 		// }
 		return val
 	}
-	function setVar(name, val, node) {
+	function setVar(name, val, node, str) {
 		if (!(name in vars)) {
 			global[name] = val
 			exposed[name] = val
@@ -522,6 +614,7 @@ function simplify(code, opts) {
 		if (v.node) {
 			v.node.varChanged = true
 		}
+		v.str = str
 		v.node = node
 		// todo fix
 		// if (v.closure !== vars && node) {
@@ -530,12 +623,16 @@ function simplify(code, opts) {
 		v.uses = 0
 		return val
 	}
-	function setProp(obj, name, val, node, varPath) {
+	function setProp(obj, name, val, node, varPath, str) {
 		if (obj[name]) {
 			removeUnder(obj[name], obj)
 		}
 		obj[name] = val
 		addUnder(val, obj)
+		if (str) {
+			addUnderString(obj, name, str)
+			setString(obj[name], str)
+		}
 		var mod = closuresAffected(obj)
 		mod.forEach(c => closuresMod.add(c))
 
@@ -572,6 +669,7 @@ function simplify(code, opts) {
 				uses: 1,
 				val: ret,
 				vars: global,
+				str: name
 			}
 		} else {
 			var v = vars[name]
@@ -606,25 +704,28 @@ function simplify(code, opts) {
 		}
 	}
 	function getObj(node) {
+		return getObjRet(getObjKey(node))
+	}
+	function getObjKey(node) {
 		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
 		if (!node.object || !node.property)
 			console.log("missing member object or property")
 
 		var res = walk(node.object)
 		var obj = res.ret
+		var objStr = res.str
 		var key = node.computed ? walk(node.property).ret : node.property.name
-
-		var varPath = res.varPath
-		// use concat to not alter original variable
-		varPath = varPath.concat([key])
-
+		return getWithKey(obj, key, objStr)
+	}
+	function getPropWithKey(obj, node, objStr) {
+		return getObjRet(getWithKeyVal(obj, node, objStr))
+	}
+	function getWithKey(obj, key, objStr) {
 		if (key === 'name' && obj[functionName]) {
 			key = functionName
 		}
-		addUnder(obj[key], obj)
-		var str = hasString(obj[key]) ? toString(obj[key]) : ''
-		if (hasString(obj) && !str) {
-			str = toString(obj)
+		var str = objStr || hasString(obj) ? toString(obj) : ''
+		if (str) {
 			if (typeof key === 'symbol') {
 				str += '[' + key.toString() + ']'
 			} else if (Array.isArray(obj) && typeof key === 'number') {
@@ -642,8 +743,22 @@ function simplify(code, opts) {
 		return {
 			obj: obj,
 			key: key,
-			varPath: varPath,
-			str: str
+			// varPath: varPath,
+			varPath: [],
+			str: str,
+			objStr: objStr
+		}
+	}
+	function getObjRet(ret) {
+		var { obj, key } = ret
+		var val = obj[key]
+		addUnder(val, obj)
+		var str = getUnderString(obj, key) || ret.str
+
+		return {
+			...ret,
+			str: str,
+			val: val
 		}
 	}
 
@@ -686,7 +801,8 @@ function simplify(code, opts) {
 			break: false,
 			continue: false,
 			spread: false,
-			varPath: []
+			varPath: [],
+			str: ''
 		}
 		var after
 		if (!node) {
@@ -705,10 +821,20 @@ function simplify(code, opts) {
 
 		switch (node.type) {
 			case "VariableDeclarator":
-				after = (res) => {
-					addVar(node.id.name, node.init ? res.init.ret : undefined, node)
+				var init = node.init && walk(node.init)
+				if (node.id.type === 'Identifier') {
+					addVar(node.id.name, init && init.ret, node, init && init.str)
+				} else if (node.id.type === 'ObjectPattern') {
+					for (var prop of node.id.properties) {
+						if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
+						if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
+						addVar(prop.key.name, init && init.ret, prop, init && init.str)
+					}
+				} else {
+					// array pattern
+					console.log('unexpected VariableDeclarator type', node.id.type, node)
 				}
-				break
+				return ret
 
 			// these are different, but mostly the same for now
 			case "FunctionDeclaration":
@@ -721,17 +847,36 @@ function simplify(code, opts) {
 
 			case "NewExpression":
 			case "CallExpression":
-				var args = node.arguments.reduce((a, arg) => {
+				
+				// var argsInfo = node.arguments.reduce((a, arg) => {
+				// 	arg = walk(arg)
+				// 	if (arg.spread) {
+				// 		return [a[0].concat(arg.ret), a[1].concat(arg.str)]
+				// 	} else {
+				// 		a[0].push(arg.ret)
+				// 		a[1].push(arg.str)
+				// 		return a
+				// 	}
+				// }, [[], []])
+				// var args = argsInfo[0]
+				// var argStrs = argsInfo[1]
+
+				var argsInfo = node.arguments.reduce((a, arg) => {
 					arg = walk(arg)
 					if (arg.spread) {
-						return a.concat(arg.ret)
+						return a.concat(arg)
 					} else {
-						a.push(arg.ret)
+						a.push(arg)
 						return a
 					}
 				}, [])
+				
+				var args = argsInfo.map(a => a.ret)
+				var argStrs = argsInfo.map(a => a.str)
 
 				var thisArg = window
+				//shouldn't need this as this is never primitive
+				var thisStr // don't have str for window since its not primitive
 				var callType = "normal"
 				var func
 				var str
@@ -742,7 +887,9 @@ function simplify(code, opts) {
 					var o = getObj(node.callee)
 					
 					thisArg = obj = o.obj
-					func = o.obj[o.key]
+					thisStr = o.objStr
+					func = o.val
+					str = o.str
 
 					// var specialCalls = ['call', 'apply']
 					// if (typeof obj === "function" && specialCalls.includes(key)) {
@@ -776,6 +923,52 @@ function simplify(code, opts) {
 					thisArg = func.arrowThis
 				}
 
+				//pass some data into the function, expect it to be consumed immediately and removed
+				if (func === Function.prototype.call) {
+					func = thisArg
+					thisArg = args[0]
+					thisStr = argStrs[0]
+					args = args.slice(1)
+					if (!Array.isArray(args)) {
+						console.log('anskdfljasndfljn', args)
+					}
+					argStrs = argStrs.slice(1)
+				} else if (func === Function.prototype.apply) {
+					func = thisArg
+					thisArg = args[0]
+					thisStr = argStrs[0]
+					args = args[1] || []
+					argStrs = getUnderStringObj(args[1] || [])
+					if (!Array.isArray(args)) {
+						// array-like, ex arguments
+						args = Array.from(args)
+						setUnderString(args, argStrs)
+					}
+				} else if (func === Function.prototype.bind) {
+					func = function(...args) {
+						var f = this
+						var argStrs = func.argStrs
+						var thisArg = args[0]
+						var thisStr = argStrs[0]
+						argStrs = argStrs.slice(1)
+						var moreArgs = args.slice(1)
+						var ret = function(...args) {
+							// console.log('binded call', thisArg, thisStr, argStrs.concat(ret.argStrs), moreArgs.concat(args))
+							f.thisStr = thisStr
+							f.argStrs = argStrs.concat(ret.argStrs)
+							return f.apply(thisArg, moreArgs.concat(args))
+						}
+						return ret
+					}
+					// technically can pass a primative for this, but no one does that
+					// it is also casted into an object
+					// console.warn('Function.prototype.bind used, not completely supported')
+					// to get this to work, likely need to write custom wrapper
+					// need to handle extra args too
+				}
+				func.argStrs = argStrs
+				func.thisStr = thisStr
+
 
 				if (func.node) {
 					var n = func.node
@@ -797,19 +990,15 @@ function simplify(code, opts) {
 
 
 				var isNew = node.type === "NewExpression"
-				if (isNew) {
-					ret.ret = new func(...args)
-				} else {
-					ret.ret = func.apply(thisArg, args)
-				}
+
+				var callStr
 				// also filter things like ' '.substring and [].join
 				if (!func.node && !(thisArg && !closuresAffected(thisArg).has(global)) && !isNew && func !== Object.defineProperty) {
 					if (!str) {
 						str = toString(func)
 					}
-					var argsStr = args.map(a => toString(a)).join(',')
+					var argsStr = argsInfo.map(a => a.str || toString(a.ret)).join(', ')
 					str += '(' + argsStr + ')'
-					setString(ret.ret, str)
 					if (recording) {
 						if (!ignoreGlobal[str.split('.')[0]] && closuresAffected(func).has(global)) {
 							if (!isNew) {
@@ -820,14 +1009,29 @@ function simplify(code, opts) {
 						}
 
 					}
-				}
-				// todo, not like this
-				if (ret.ret) {
-					if (!hasClosure(ret.ret)) {
-						addClosure(ret.ret, global, 'dfnkldsfjgnsdklfjgn')
-					}
+					callStr = str
+					// give some context for callbacks
+					args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
 				}
 
+				if (isNew) {
+					ret.ret = new func(...args)
+				} else {
+					ret.ret = func.apply(thisArg, args)
+				}
+
+				
+				if (callStr) {
+					
+					setString(ret.ret, callStr)
+				}
+				// todo, not like this
+				if (func.ret) {
+					// don't copy entire object cause other places assume reference is kept
+					// also because using new doesn't actually set it
+					ret.str = func.ret.str
+					// ret.return = false
+				}
 				if (closuresMod.size) {
 					node.side = true
 					for (var c of closuresMod.values()) {
@@ -906,35 +1110,51 @@ function simplify(code, opts) {
 			case "AssignmentExpression":
 				var name = node.left.name
 				changed[name] = true
-				var right = walk(node.right).ret
+				var right = walk(node.right)
+				var rightVal = right.ret
+				var rightStr = right.str
 				if (node.left.type === "Identifier") {
 					var val
+					var str
 					if (node.operator === "=") {
-						val = right
+						val = rightVal
+						str = rightStr
 					} else if (node.operator === "+=") {
-						val = getVar(name) + right
+						var left = getV(name)
+						val = left.val + rightVal
+						str = composeIfExists(left, ' + ', + right)
 					} else if (node.operator === "-=") {
-						val = getVar(name) - right
+						var left = getV(name)
+						val = left.val - rightVal
+						str = composeIfExists(left, ' - ', + right)
 					} else {
 						console.log("unexpected assignment operator")
 					}
 
-					ret.ret = setVar(name, val, node)
+					ret.ret = setVar(name, val, node, str)
+					ret.str = str
 					return ret
 				}
 				// TODO refactor this
-				var o = getObj(node.left)
+				var o = getObjKey(node.left)
 				var val
+				var str
 				if (node.operator === "=") {
-					val = right
+					val = rightVal
+					str = rightStr
 				} else if (node.operator === "+=") {
-					val = o.obj[o.key] + right
+					var left = getObjRet(o)
+					val = o.val + rightVal
+					str = composeIfExists(left, ' + ', + right)
 				} else if (node.operator === "-=") {
-					val = o.obj[o.key] - right
+					var left = getObjRet(o)
+					val = o.val - rightVal
+					str = composeIfExists(left, ' + ', + right)
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				ret.ret = setProp(o.obj, o.key, val, node, o.varPath)
+				ret.ret = setProp(o.obj, o.key, val, node, o.varPath, str)
+				ret.str = str
 				if (o.str) {
 					if (recording) {
 						console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
@@ -1140,6 +1360,16 @@ function simplify(code, opts) {
 						default:
 							console.log("unexpected binary", node.operator)
 					}
+					var leftS = res.left.str
+					var rightS = res.right.str
+					if (leftS || rightS) {
+						leftS = leftS || toString(left)
+						rightS = rightS || toString(right)
+						if (!leftS) {
+							console.log(left, leftS)
+						}
+						ret.str = leftS + ' ' + node.operator + ' ' + rightS
+					}
 				}
 				break
 			case "BlockStatement":
@@ -1179,6 +1409,9 @@ function simplify(code, opts) {
 					} else {
 						console.log("unknown unary", node.operator)
 					}
+					if (res.argument.str) {
+						ret.str = node.operator + (node.operator.length > 1 ? ' ' : '')  + res.argument.str
+					}
 				}
 				break
 
@@ -1186,6 +1419,7 @@ function simplify(code, opts) {
 				after = (res) => {
 					ret.spread = true
 					ret.ret = res.argument.ret
+					ret.str = res.argument.str
 				}
 				break
 
@@ -1194,14 +1428,17 @@ function simplify(code, opts) {
 				return ret
 
 			case "Identifier":
-				ret.ret = getVar(node.name)
+				var v = getV(node.name)
+				ret.ret = v.val
 				ret.varPath = [node.name]
+				ret.str = v.str
 				return ret
 
 			case "ReturnStatement":
 				after = (res) => {
 					ret.return = true
 					ret.ret = (res.argument || {}).ret
+					ret.str = (res.argument || {}).str
 					// just so i know if something is returned from a defined function, its has some sort of closure
 					// todo don't do this
 					// way too hacky and doesn't work
@@ -1215,7 +1452,7 @@ function simplify(code, opts) {
 				break
 			case "Program":
 				// should be global at this level
-				addVar("this", this)
+				addVar("this", this, undefined, 'window')
 				if (opts.node) {
 					// these are set in node for every module
 					// exports, require, module, __filename, __dirname
@@ -1304,11 +1541,14 @@ function simplify(code, opts) {
 				break
 			case "ObjectExpression":
 				ret.ret = {}
+				var strings = {}
 				for (var prop of node.properties) {
 					var key = getKey(prop)
 					var val = walk(prop.value)
 					ret.ret[key] = val.ret
+					strings[key] = val.str
 				}
+				setUnderString(ret.ret, strings)
 				return ret
 			case "ArrayExpression":
 				after = (res) => {
@@ -1318,7 +1558,9 @@ function simplify(code, opts) {
 				break
 
 			case "ThisExpression":
-				ret.ret = getVar("this")
+				var v = getV('this')
+				ret.ret = v.val
+				ret.str = v.str
 				varPath = ["this"]
 				return ret
 
@@ -1392,7 +1634,7 @@ function simplify(code, opts) {
 					constructor.__proto__ = walk(node.superClass).ret
 				}
 				if (node.id) {
-					addVar(node.id.name, constructor, node)
+					addVar(node.id.name, constructor, node, node.id.name)
 				}
 				ret.ret = constructor
 				return ret

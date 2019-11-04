@@ -856,13 +856,9 @@ function simplify(code, opts) {
 					if (!node.consequent) {
 						console.log("missing if consequent")
 					}
-					var r = walk(node.consequent)
-					if (breakOut(r)) return r
-					ret.ret = r.ret
+					return walk(node.consequent)
 				} else if (node.alternate) {
-					var r = walk(node.alternate)
-					if (breakOut(r)) return r
-					ret.ret = r.ret
+					return walk(node.alternate)
 				}
 				return ret
 

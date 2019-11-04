@@ -450,6 +450,35 @@ function simplify(code, opts) {
 			}
 		}
 	}
+
+	function assign(node, val, init) {
+		if (node.type === "Identifier") {
+			if (init) {
+				addVar(node.name, val, node)
+			} else {
+				setVar(node.name, val, node)
+			}
+		} else if (node.type === "ObjectPattern") {
+			// TODO this well
+			for (var prop of node.properties) {
+				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
+				var key = getKey(prop)
+				var p = getProp(val, key)
+				assign(prop, p.val, init)
+			}
+		} else if (node.type === "ArrayPattern") {
+			// TODO this well
+			for (var i in node.elements) {
+				var prop = node.elements[i]
+				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
+				var p = getPropWithKey(val, i)
+				assign(prop, p.val, init)
+			}
+		} else {
+			console.log("unknown param type", node)
+		}
+
+	}
 	function addVar(name, val, node) {
 		// if (vars.hasOwnProperty(name)) {
 		// 	// already set in this closure
@@ -955,10 +984,18 @@ function simplify(code, opts) {
 				break
 			case "ForInStatement":
 				// assume only 1 var for for in
-				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+				// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+				if (node.left.type === 'VariableDeclaration') {
+					var left = node.left.declarations[0].id
+					var init = true
+				} else {
+					var left = node.left
+					var init = false
+				}
 				var right = walk(node.right).ret
 				for (var i in right) {
-					addVar(varname, i)
+					assign(left, i, init)
+					// addVar(varname, i)
 					var r = walk(node.body)
 					var b = breaks(r)
 					if (b.return) return r
@@ -969,10 +1006,18 @@ function simplify(code, opts) {
 				break
 			case "ForOfStatement":
 				// assume only 1 var for for of
-				var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+				// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+				if (node.left.type === 'VariableDeclaration') {
+					var left = node.left.declarations[0].id
+					var init = true
+				} else {
+					var left = node.left
+					var init = false
+				}
 				var right = walk(node.right).ret
 				for (var i of right) {
-					addVar(varname, i)
+					assign(left, i, init)
+					// addVar(varname, i)
 					var r = walk(node.body)
 					var b = breaks(r)
 					if (b.return) return r

@@ -1019,13 +1019,14 @@ function simplify(code, opts) {
 				break
 
 			case "LogicalExpression":
+				var left = walk(node.left)
 				switch (node.operator) {
 					case "||":
-						ret.ret = walk(node.left).ret || walk(node.right).ret
-						break
+						return left.ret ? left : walk(node.right)
 					case "&&":
-						ret.ret = walk(node.left).ret && walk(node.right).ret
-						break
+						return left.ret ? walk(node.right) : left
+					default:
+						console.log('unexpected LogicalExpression')
 				}
 				return ret
 

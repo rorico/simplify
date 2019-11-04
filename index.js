@@ -847,20 +847,6 @@ function simplify(code, opts) {
 
 			case "NewExpression":
 			case "CallExpression":
-				
-				// var argsInfo = node.arguments.reduce((a, arg) => {
-				// 	arg = walk(arg)
-				// 	if (arg.spread) {
-				// 		return [a[0].concat(arg.ret), a[1].concat(arg.str)]
-				// 	} else {
-				// 		a[0].push(arg.ret)
-				// 		a[1].push(arg.str)
-				// 		return a
-				// 	}
-				// }, [[], []])
-				// var args = argsInfo[0]
-				// var argStrs = argsInfo[1]
-
 				var argsInfo = node.arguments.reduce((a, arg) => {
 					arg = walk(arg)
 					if (arg.spread) {
@@ -890,21 +876,8 @@ function simplify(code, opts) {
 					thisStr = o.objStr
 					func = o.val
 					str = o.str
-
-					// var specialCalls = ['call', 'apply']
-					// if (typeof obj === "function" && specialCalls.includes(key)) {
-					// 	func = obj
-					// 	callType = key
-					// }
-					// todo something about bind
 				} else {
-					var knownTypes = ["Identifier", "FunctionExpression", "ArrowFunctionExpression", "CallExpression"]
 					func = walk(node.callee).ret
-					if (!knownTypes.includes(node.callee.type)) {
-						// this probably works, but I don't know it / haven't tested
-						console.log("unexpected callee type", node.callee.type, node)
-						// process.exit(1)
-					}
 				}
 				
 				if (typeof func !== 'function') {
@@ -953,7 +926,6 @@ function simplify(code, opts) {
 						argStrs = argStrs.slice(1)
 						var moreArgs = args.slice(1)
 						var ret = function(...args) {
-							// console.log('binded call', thisArg, thisStr, argStrs.concat(ret.argStrs), moreArgs.concat(args))
 							f.thisStr = thisStr
 							f.argStrs = argStrs.concat(ret.argStrs)
 							return f.apply(thisArg, moreArgs.concat(args))
@@ -962,7 +934,6 @@ function simplify(code, opts) {
 					}
 					// technically can pass a primative for this, but no one does that
 					// it is also casted into an object
-					// console.warn('Function.prototype.bind used, not completely supported')
 					// to get this to work, likely need to write custom wrapper
 					// need to handle extra args too
 				}

@@ -34,7 +34,6 @@ function simplify(code, opts) {
 
 	if (!opts) opts = {}
 	var module = {}
-	var req = {}
 	var exposed = {}
 	var overrides = getOverrides({
 		getUnderStringObj,
@@ -61,8 +60,7 @@ function simplify(code, opts) {
 	console.log("parsed through file", filename)
 
 	if (opts.node && opts.filename) {
-		req.loaded = loaded = true
-		// require.cache[file].loaded = loaded = true
+		module.loaded = loaded = true
 	}
 	if (opts.node) {
 		exposed["module.exports"] = module.exports
@@ -1446,22 +1444,14 @@ function simplify(code, opts) {
 					if (file) {
 						file = path.resolve(file)
 						// hacky
-						req = require.cache[file] = {
+						module = require.cache[file] = {
 							id: file,
 							filename: file,
 							exports: exports,
 							parent: opts.parent,
 							loaded: false,
 							children: [],
-							paths: [file]
-						}
-						module = {
-							set exports(x) {
-								req.exports = x
-							},
-							get exports() {
-								return req.exports
-							}
+							paths: [file],
 						}
 						// gonna assume this is defined with filename for now
 						var moduleFolder = path.join(opts.package, "node_modules")
@@ -1490,7 +1480,7 @@ function simplify(code, opts) {
 								if ((name.startsWith(".") || name.includes('/') || name.includes('\\')) && !require.cache[file]) {
 									var todo = fs.readFileSync(file)
 									opts.filename = file
-									opts.parent = req
+									opts.parent = module
 									simplify(todo, opts)
 								}
 								var ret = require(file)

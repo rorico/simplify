@@ -6,6 +6,7 @@ var lognode = require("./lognode")
 var ignoreGlobal = require("./ignoreGlobal")
 var path = require("path")
 var simplifyError = require("./simplifyError")
+var getOverrides = require('./overrides')
 var functionName = Symbol('name')
 var modules = {}
 var called = new Set()
@@ -35,6 +36,12 @@ function simplify(code, opts) {
 	var module = {}
 	var req = {}
 	var exposed = {}
+	var overrides = getOverrides({
+		getUnderStringObj,
+		addUnder,
+		removeUnder,
+	})
+
 	var acornOpts = {}
 	if (opts.comments) {
 		var comments = []
@@ -937,6 +944,10 @@ function simplify(code, opts) {
 					// to get this to work, likely need to write custom wrapper
 					// need to handle extra args too
 				}
+				if (overrides.has(func)) {
+					func = overrides.get(func)
+				}
+
 				func.argStrs = argStrs
 				func.thisStr = thisStr
 

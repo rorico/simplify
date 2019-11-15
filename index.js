@@ -996,7 +996,7 @@ function simplify(code, opts) {
 				}
 
 				var oldCall = callstack
-				callstack = callstack.concat([[filename + ':' + node.loc.start.line + ':' + node.loc.start.column+1, filename, node.loc]])
+				callstack = callstack.concat([[filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1), filename, node.loc]])
 
 				if (isNew) {
 					ret.ret = new func(...args)

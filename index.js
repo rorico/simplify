@@ -19,6 +19,7 @@ var findClosures = new Map()
 var asString = new Map()
 var under = new Map()
 var underString = new Map()
+var callstack = []
 
 
 function simplify(code, opts) {
@@ -413,7 +414,7 @@ function simplify(code, opts) {
 						// todo, better way to get info about arguments from global call
 						// todo on callbacks with multiple calls seperate them
 						if (!func.callStr) {
-							// console.log('callback called without attaching to a global function', arguments[i], node.loc, filename)
+							console.log('callback called without attaching to a global function', arguments[i], node.loc, filename, callstack)
 							// console.log('callback called without attaching to a global function', node.loc.start, filename)
 							// process.exit()
 							str = node.id ? node.id.name : 'some_function_with_external_call'
@@ -994,11 +995,16 @@ function simplify(code, opts) {
 					args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
 				}
 
+				var oldCall = callstack
+				callstack = callstack.concat([[filename + ':' + node.loc.start.line + ':' + node.loc.start.column+1, filename, node.loc]])
+
 				if (isNew) {
 					ret.ret = new func(...args)
 				} else {
 					ret.ret = func.apply(thisArg, args)
 				}
+
+				callstack = oldCall
 
 				
 				if (callStr) {

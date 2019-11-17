@@ -147,6 +147,9 @@ function simplify(code, opts) {
 	function getFileLink(node) {
 		return filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1)
 	}
+	function getCallStack(node) {
+		return callstack.map(c => c[0]).concat(node ? getFileLink(node) : [])
+	}
 
 	function toString(obj) {
 		// todo some limit on size
@@ -419,7 +422,7 @@ function simplify(code, opts) {
 						// todo, better way to get info about arguments from global call
 						// todo on callbacks with multiple calls seperate them
 						if (!func.callStr) {
-							console.log('callback called without attaching to a global function', arguments[i], getFileLink(node), callstack)
+							console.log('callback called without attaching to a global function', arguments[i], getCallStack(node))
 							// process.exit()
 							// console.log('callback called without attaching to a global function', node.loc.start, filename)
 							// process.exit()

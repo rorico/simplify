@@ -398,6 +398,7 @@ function simplify(code, opts) {
 			var params = node.params
 			// this will get passed in
 			var argStrs = func.argStrs || []
+			var calleds = !!func.argStrs
 			// clear it to ensure that when getting it is only exactly after its called
 			func.argStrs = undefined
 			var oldVars = vars
@@ -409,7 +410,7 @@ function simplify(code, opts) {
 				var arg = arguments[i]
 				if (p.type === "Identifier") {
 					var str = argStrs[i]
-					if (!str && !hasClosure(arguments[i])) {
+					if (!str && !calleds && !func.argsNotGlobal) {
 
 						// todo, better way to get info about arguments from global call
 						// todo on callbacks with multiple calls seperate them
@@ -993,6 +994,8 @@ function simplify(code, opts) {
 					callStr = str
 					// give some context for callbacks
 					args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
+				} else {
+					args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
 				}
 
 				var oldCall = callstack

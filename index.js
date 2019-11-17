@@ -947,7 +947,7 @@ function simplify(code, opts) {
 					// like name, node
 					var o = getObj(node.callee)
 					
-					thisArg = obj = o.obj
+					thisArg = o.obj
 					thisStr = o.objStr
 					func = o.val
 					str = o.str

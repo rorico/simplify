@@ -499,6 +499,69 @@ function simplify(code, opts) {
 		}
 		return func
 	}
+	function callFunction(func, node, args, argStrs, thisArg, thisStr, isNew) {
+		var ret = {
+			ret: undefined,
+			delete: false,
+			return: false,
+			break: false,
+			continue: false,
+			spread: false,
+			varPath: [],
+			str: ''
+		}
+		
+		func.argStrs = argStrs
+		func.thisStr = thisStr
+
+		var currClos = closuresMod
+		closuresMod = new Set()
+
+		var oldCall = callstack
+		callstack = callstack.concat([[filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1), filename, node.loc]])
+
+		if (isNew) {
+			ret.ret = new func(...args)
+		} else {
+			ret.ret = func.apply(thisArg, args)
+		}
+
+		callstack = oldCall
+
+		
+		// if (callStr) {
+			
+		// 	setString(ret.ret, callStr)
+		// }
+		// todo, not like this
+		if (func.ret) {
+			// don't copy entire object cause other places assume reference is kept
+			// also because using new doesn't actually set it
+			ret.str = func.ret.str
+			// ret.return = false
+		}
+
+		if (closuresMod.size) {
+			node.side = true
+			for (var c of closuresMod.values()) {
+				var contained = false
+				var o = c
+				while (o) {
+					if (o === vars) {
+						contained = true
+						break
+					}
+					o = o.__proto__
+				}
+				if (!contained) {
+					currClos.add(c)
+				}
+			}
+		}
+		closuresMod = currClos
+		return ret
+	}
+
 	function reset(node) {
 		if (node.calls) node.calls = 0
 		if (node.visits) node.visits = 0
@@ -630,22 +693,27 @@ function simplify(code, opts) {
 		v.uses = 0
 		return val
 	}
-	function setProp(obj, name, val, node, varPath, str) {
+	function setProp(obj, name, val, node, varPath, str, objStr) {
 		if (obj[name]) {
 			removeUnder(obj[name], obj)
 		}
-		obj[name] = val
-		addUnder(val, obj)
-		if (str) {
-			addUnderString(obj, name, str)
-			setString(obj[name], str)
-		}
-		var mod = closuresAffected(obj)
-		mod.forEach(c => closuresMod.add(c))
-
-		if (mod.has(global)) {
-			if (varPath[0]) {
-				exposed[varPath.join(("."))] = val
+		var set = Object.getOwnPropertyDescriptor(obj, name) && Object.getOwnPropertyDescriptor(obj, name).set
+		if (set) {
+			callFunction(set, node, [val], [str], obj, objStr)
+		} else {
+			obj[name] = val
+			addUnder(val, obj)
+			if (str) {
+				addUnderString(obj, name, str)
+				setString(obj[name], str)
+			}
+			var mod = closuresAffected(obj)
+			mod.forEach(c => closuresMod.add(c))
+	
+			if (mod.has(global)) {
+				if (varPath[0]) {
+					exposed[varPath.join(("."))] = val
+				}
 			}
 		}
 		// todo fix
@@ -948,10 +1016,6 @@ function simplify(code, opts) {
 					func = overrides.get(func)
 				}
 
-				func.argStrs = argStrs
-				func.thisStr = thisStr
-
-
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId
@@ -966,10 +1030,6 @@ function simplify(code, opts) {
 				// 	// means not defined in js
 				// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
 				}
-
-				var currClos = closuresMod
-				closuresMod = new Set()
-
 
 				var isNew = node.type === "NewExpression"
 
@@ -998,48 +1058,8 @@ function simplify(code, opts) {
 					args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
 				}
 
-				var oldCall = callstack
-				callstack = callstack.concat([[filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1), filename, node.loc]])
 
-				if (isNew) {
-					ret.ret = new func(...args)
-				} else {
-					ret.ret = func.apply(thisArg, args)
-				}
-
-				callstack = oldCall
-
-				
-				if (callStr) {
-					
-					setString(ret.ret, callStr)
-				}
-				// todo, not like this
-				if (func.ret) {
-					// don't copy entire object cause other places assume reference is kept
-					// also because using new doesn't actually set it
-					ret.str = func.ret.str
-					// ret.return = false
-				}
-				if (closuresMod.size) {
-					node.side = true
-					for (var c of closuresMod.values()) {
-						var contained = false
-						var o = c
-						while (o) {
-							if (o === vars) {
-								contained = true
-								break
-							}
-							o = o.__proto__
-						}
-						if (!contained) {
-							currClos.add(c)
-						}
-					}
-				}
-				closuresMod = currClos
-				return ret
+				return callFunction(func, node, args, argStrs, thisArg, thisStr, isNew)
 
 			case "ConditionalExpression":
 			case "IfStatement":

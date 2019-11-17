@@ -215,7 +215,7 @@ function simplify(code, opts) {
 	}
 	function composeIfExists(...list) {
 		var use = false
-		var ret = list.reduce(e => {
+		var ret = list.map(e => {
 			if (typeof e === 'string') {
 				return e
 			} else if (e.str) {
@@ -224,7 +224,7 @@ function simplify(code, opts) {
 			} else {
 				return toString(e.val || e.ret)
 			}
-		}, '')
+		}).join('')
 		return use ? ret : undefined
 	}
 

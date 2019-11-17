@@ -799,7 +799,7 @@ function simplify(code, opts) {
 		if (key === 'name' && obj[functionName]) {
 			key = functionName
 		}
-		var str = objStr || hasString(obj) ? toString(obj) : ''
+		var str = objStr || (hasString(obj) ? toString(obj) : '')
 		if (str) {
 			if (typeof key === 'symbol') {
 				str += '[' + key.toString() + ']'

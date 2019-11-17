@@ -952,7 +952,9 @@ function simplify(code, opts) {
 					func = o.val
 					str = o.str
 				} else {
-					func = walk(node.callee).ret
+					var f = walk(node.callee)
+					func = f.ret
+					str = f.str
 				}
 				
 				if (typeof func !== 'function') {

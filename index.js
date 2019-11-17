@@ -1162,7 +1162,7 @@ function simplify(code, opts) {
 				} else {
 					console.log("unexpected assignment operator")
 				}
-				ret.ret = setProp(o.obj, o.key, val, node, o.varPath, str)
+				ret.ret = setProp(o.obj, o.key, val, node, o.varPath, str, o.objStr)
 				ret.str = str
 				if (o.str) {
 					if (recording) {

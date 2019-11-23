@@ -10,6 +10,10 @@ var simplifyError = require("./simplifyError")
 var getOverrides = require('./overrides')
 var side = require('./side')
 var functionName = Symbol('name')
+// var path = require("path").posix // use posix as zip are probably using posix
+// var zip = require("zip")
+var folder
+
 var modules = {}
 var called = new Set()
 var calledWith = new Map()
@@ -40,6 +44,34 @@ function simplify(code, opts) {
 	if (!opts) opts = {}
 	var module = {}
 	var exposed = {}
+
+
+	// if (opts.folder) {
+	// 	// TODO all this logic for zip files
+	// 	var todo = code
+	// 	// todo caching and removal of unzipping twice
+	// 	if (!folder) folder = zip.Reader(code).toObject()
+
+	// 	var file = opts.startFile
+	// 	if (!file) console.log("no startFile defined")
+	// 	if (!(file in folder)) console.log("startFile missing", file)
+
+	// 	var foldername = path.dirname(file)
+	// 	code = folder[file]
+	// 	if (opts.module) {
+	// 		module = opts.module
+	// 	}
+	// 	// console.log(code.toString())
+	// }
+
+		// var file = opts.startFile
+		// file = 
+		// file = require.resolve(file, {paths: ['./']})
+		// if (!file) console.log("no startFile defined")
+		// // if (!(file in folder)) console.log("startFile missing", file)
+
+		// var foldername = path.dirname(file)
+
 	var overrides = getOverrides({
 		getUnderStringObj,
 		addUnder,

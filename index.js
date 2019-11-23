@@ -4,9 +4,11 @@ var astravel = require("astravel")
 var fs = require("fs")
 var lognode = require("./lognode")
 var ignoreGlobal = require("./ignoreGlobal")
+var ignore = require("./ignore")
 var path = require("path")
 var simplifyError = require("./simplifyError")
 var getOverrides = require('./overrides')
+var side = require('./side')
 var functionName = Symbol('name')
 var modules = {}
 var called = new Set()
@@ -1048,27 +1050,44 @@ function simplify(code, opts) {
 
 				var callStr
 				// also filter things like ' '.substring and [].join
-				if (!func.node && !(thisArg && !closuresAffected(thisArg).has(global)) && !isNew && func !== Object.defineProperty) {
-					if (!str) {
-						str = toString(func)
+				if (!func.node && !isNew) {
+					var strParts = [{
+						str: str,
+						val: func
+					}, '(']
+					if (argsInfo.length) {
+						argsInfo.reduce((a, c) => (a.push(c, ','), a), strParts)
+						// remove trailing comma
+						strParts.pop()
 					}
-					var argsStr = argsInfo.map(a => a.str || toString(a.ret)).join(', ')
-					str += '(' + argsStr + ')'
-					if (recording) {
-						if (!ignoreGlobal[str.split('.')[0]] && closuresAffected(func).has(global)) {
-							if (!isNew) {
-								console.log(str)
-								console.log(node, closuresAffected(func))
-							}
+					strParts.push(')')
+					callStr = composeIfExists(...strParts)
+					if (recording && callStr) {
+						var hasSide = !ignore.has(func)
+						if (side.affectsFirst.has(func)) {
+							hasSide = !!argStrs[0]
+						}
+						if (side.affectsThis.has(func)) {
+							hasSide = !!thisStr
+						}
+						if (hasSide) {
+							console.log(callStr, getFileLink(node))
 							// console.log("global", node, str, args)
 						}
 
 					}
-					callStr = str
 					// give some context for callbacks
-					args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
+					if (callStr) {
+						args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
+					} else {
+						args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
+					}
 				} else {
 					args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
+				}
+				
+				if (side.affectsFirst.has(func)) {
+					callStr = argStrs[0]
 				}
 
 

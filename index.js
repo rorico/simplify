@@ -186,7 +186,10 @@ function simplify(code, opts) {
 			} else if (typeof obj === 'symbol') {
 				ret = obj.toString()
 			} else if (typeof obj === 'string') {
-				ret = '"' + obj + '"'
+				// to handle escape characters
+				// todo not like this
+				ret = JSON.stringify(obj)
+				// ret = '"' + obj + '"'
 			} else {
 				ret = '' + obj
 			}

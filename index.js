@@ -35,6 +35,7 @@ function simplify(code, opts) {
 	var replaceCache = new Map()
 	var loaded = false
 
+	var overLvls = {}
 	var filename = opts.filename
 
 	if (!opts) opts = {}

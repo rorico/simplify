@@ -148,7 +148,7 @@ function simplify(code, opts) {
 		return filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1)
 	}
 	function getCallStack(node) {
-		return callstack.map(c => c[0]).concat(node ? getFileLink(node) : [])
+		return callstack.map(c => c[0]).concat(node ? getFileLink(node) : []).reverse()
 	}
 
 	function toString(obj) {

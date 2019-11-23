@@ -46,11 +46,10 @@ function simplify(code, opts) {
 		removeUnder,
 	})
 
-	var acornOpts = {}
+	var acornOpts = { locations: true }
 	if (opts.comments) {
 		var comments = []
 		acornOpts.onComment = comments
-		acornOpts.locations = true
 	}
 
 	var ast = acorn.parse(code, acornOpts)

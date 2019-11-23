@@ -1030,6 +1030,11 @@ function simplify(code, opts) {
 					// need to handle extra args too
 				}
 
+				// polyfills can be undefined while initializing polyfills
+				if (polyfills && polyfills.has(func)) {
+					func = polyfills.get(func)
+				}
+
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId

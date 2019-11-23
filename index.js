@@ -23,6 +23,8 @@ var under = new Map()
 var underString = new Map()
 var callstack = []
 
+var poly = fs.readFileSync('./polyfill.js')
+var polyfills = simplify(poly, {node: true, filename: './polyfill.js', package: __dirname, comments: true}).exposed['module.exports']
 
 function simplify(code, opts) {
 	var vars = {}
@@ -1027,9 +1029,6 @@ function simplify(code, opts) {
 					// to get this to work, likely need to write custom wrapper
 					// need to handle extra args too
 				}
-				if (overrides.has(func)) {
-					func = overrides.get(func)
-				}
 
 				if (func.node) {
 					var n = func.node
@@ -1090,6 +1089,9 @@ function simplify(code, opts) {
 					callStr = argStrs[0]
 				}
 
+				if (overrides.has(func)) {
+					func = overrides.get(func)
+				}
 
 				return callFunction(func, node, args, argStrs, thisArg, thisStr, isNew)
 

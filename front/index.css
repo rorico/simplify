@@ -33,3 +33,13 @@
 	cursor: pointer;
 }
 
+.overLvl1 {
+	color: blue;
+}
+
+.overLvl2 {
+	color: green;
+}
+.overLvl3 {
+	color: orange;
+}

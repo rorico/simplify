@@ -664,12 +664,23 @@ function simplify(code, opts) {
 		// 	}
 		// }
 		addClosure(val, vars, name)
+		// if (node && node.overLvl === undefined) {
+		// 	node.overLvl = overLvls[name] ? overLvls[name]++ : (overLvls[name] = 0)
+		// }
+		// var overLvl = 0
+		// if (name in vars) {
+		// 	overLvl = vars[name].overLvl + 1
+		// 	if (node) {
+		// 		node.overLvl = overLvl
+		// 	}
+		// }
 		vars[name] = {
 			uses: 0,
 			val: val,
 			// closure: closure,
 			vars: vars,
 			node: node,
+			// overLvl: overLvl,
 			init: node,
 			str: str,
 		}

@@ -296,7 +296,7 @@ function simplify(code, opts) {
 			if (hasClosure(obj)) {
 				getClosure(obj).forEach((_, c) => {
 					ret.add(c)
-					if (window.testing) console.log(c)
+					if (global.testing) console.log(c)
 				})
 			}
 			if (under.has(obj)) {
@@ -748,10 +748,6 @@ function simplify(code, opts) {
 				console.log(name, "not defined, should have errored")
 			}
 			var ret = global[name]
-			// console.log('global var', name)
-			if (name === 'document' || ret === document) {
-				console.log('jnkfdjgkldsj'. name)
-			}
 			setString(ret, name)
 			addClosure(ret, global, name)
 			return {
@@ -950,7 +946,7 @@ function simplify(code, opts) {
 				var args = argsInfo.map(a => a.ret)
 				var argStrs = argsInfo.map(a => a.str)
 
-				var thisArg = window
+				var thisArg = global
 				//shouldn't need this as this is never primitive
 				var thisStr // don't have str for window since its not primitive
 				var callType = "normal"
@@ -1574,9 +1570,6 @@ function simplify(code, opts) {
 					}
 					addVar("module", module)
 					// might have to do some path stuff
-					// just to not break things
-					document = {}
-					window = {}
 				}
 				break
 			case "ObjectExpression":

@@ -1034,6 +1034,15 @@ function simplify(code, opts) {
 					func = polyfills.get(func)
 				}
 
+				// this can't live in polyfill as addFunction is local
+				if (func === Function) {
+					// todo: make global scoped
+					func = function(...args) {
+						var funcStr = '!function(' + args.slice(0, args.length - 2).join(', ') + ') {' + args[args.length - 1] + '}'
+						return addFunction(parse(funcStr).body[0].expression.argument)
+					}
+				}
+
 				if (func.node) {
 					var n = func.node
 					node.funcId = n.nodeId

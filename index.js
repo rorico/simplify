@@ -52,7 +52,7 @@ function simplify(code, opts) {
 		acornOpts.onComment = comments
 	}
 
-	var ast = acorn.parse(code, acornOpts)
+	var ast = parse(code)
 	allAsts.push(ast)
 
 	if (opts.comments) {
@@ -146,6 +146,10 @@ function simplify(code, opts) {
 		}
 	}
 	return ret
+
+	function parse(code) {
+		return acorn.parse(code, acornOpts)
+	}
 
 	function getFileLink(node) {
 		return filename + ':' + node.loc.start.line + ':' + (node.loc.start.column+1)
@@ -1638,7 +1642,7 @@ function simplify(code, opts) {
 
 			case "ClassDeclaration":
 			case "ClassExpression":
-				var constructor = addFunction(acorn.parse('function placeholder() {}').body[0])
+				var constructor = addFunction(parse('function placeholder() {}').body[0])
 				var proto = {}
 				var props = {}
 				for (var method of node.body.body) {

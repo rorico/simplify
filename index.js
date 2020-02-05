@@ -159,11 +159,17 @@ function simplify(code, opts) {
 	}
 
 	function toString(obj) {
-		// todo some limit on size
+		// todo some limit on size -> str size vs #num of keys
 		// todo prototypes
+		// todo configurable
 		// do this to handle circular objects
+		var maxLength = 100
 		var handled = new Set()
 		return rec(obj)
+		function childRec(obj) {
+			var str = rec(obj)
+			return str.length > maxLength ? '(...)' : str
+		}
 		function rec(obj) {
 			if (handled.has(obj)) {
 				return '[circular structure]'
@@ -185,10 +191,10 @@ function simplify(code, opts) {
 					ret += '(' + obj.node.params.map(p => p.name).join(', ') + ') {}'
 				}
 			} else if (Array.isArray(obj)) {
-				ret = '[' + obj.map(rec).join(', ') +']'
+				ret = '[' + obj.map(childRec).join(', ') +']'
 			} else if (obj && typeof obj === 'object') {
 				ret = '{' + Object.keys(obj).map(k => {
-					return k + ': ' + (Object.getOwnPropertyDescriptor(obj, k).get ? 'getter' : rec(obj[k]))
+					return k + ': ' + (Object.getOwnPropertyDescriptor(obj, k).get ? 'getter' : childRec(obj[k]))
 				}).join(', ') + '}'
 			} else if (typeof obj === 'symbol') {
 				ret = obj.toString()

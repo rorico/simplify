@@ -243,7 +243,7 @@ function simplify(code, opts) {
 				return e
 			} else if (e.str) {
 				use = true
-				return e.str
+				return '**' + e.str + '**'
 			} else {
 				return toString(e.val || e.ret)
 			}
@@ -1420,18 +1420,9 @@ function simplify(code, opts) {
 							ret.ret = left instanceof right
 							break
 						default:
-							console.log("unexpected binary", node.operator)
+							console.log("unexpected binary", node.operator, filename)
 					}
-					var leftS = res.left.str
-					var rightS = res.right.str
-					if (leftS || rightS) {
-						leftS = leftS || toString(left)
-						rightS = rightS || toString(right)
-						if (!leftS) {
-							console.log(left, leftS)
-						}
-						ret.str = leftS + ' ' + node.operator + ' ' + rightS
-					}
+					ret.str = composeIfExists(res.left, ' ' + node.operator + ' ', res.right)
 				}
 				break
 			case "BlockStatement":

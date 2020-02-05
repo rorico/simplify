@@ -33,7 +33,7 @@ if (!fArgs) fArgs = JSON.parse(tryA)
 if (!ret) ret = JSON.parse(tryR)
 
 
-var out = simplify(code)
+var out = simplify(code, {})
 var func = out.call(func, fArgs)
 if (!sameOut(func.ret, ret)) {
 	console.log("incorrect output", func.ret, "!==", ret)

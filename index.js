@@ -483,12 +483,13 @@ function simplify(code, opts) {
 			for (var i in arguments) {
 				addUnderString(arguments, i, argStrs[i])
 			}
+			var that = func.arrowThis || this
 			// may cause incorrect closure values
-			addVar("this", this, node.thisUsed)
-			if (!hasClosure(this)) {
+			addVar("this", that, node.thisUsed, func.thisStr)
+			if (!hasClosure(that)) {
 				// todo, better way to get info about arguments from global call
-				addClosure(this, global, 'treiuu')
-				setString(this, 'this')
+				addClosure(that, global, 'treiuu')
+				setString(that, 'this')
 			}
 
 			initHoisted(node.body)
@@ -516,7 +517,9 @@ function simplify(code, opts) {
 		}
 		if (node.type === 'ArrowFunctionExpression') {
 			// todo add str
-			func.arrowThis = getVar('this')
+			var arrowThis = getV('this')
+			func.arrowThis = arrowThis.val
+			func.thisStr = arrowThis.str
 		}
 		if (node.generator || node.async) {
 			console.log('unsupported function properties', node, filename)
@@ -536,7 +539,10 @@ function simplify(code, opts) {
 		}
 		
 		func.argStrs = argStrs
-		func.thisStr = thisStr
+		if (!func.arrowThis) {
+			// don't override thisStr, since it will be using a different thisArg anyways
+			func.thisStr = thisStr
+		}
 
 		var currClos = closuresMod
 		closuresMod = new Set()
@@ -987,10 +993,6 @@ function simplify(code, opts) {
 					closuresMod.add(global)
 				} else if (func === process.exit) {
 					console.log("exiting program")
-				}
-
-				if (func.arrowThis) {
-					thisArg = func.arrowThis
 				}
 
 				//pass some data into the function, expect it to be consumed immediately and removed

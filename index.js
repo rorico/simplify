@@ -402,8 +402,8 @@ function simplify(code, opts) {
 		var closure = vars
 		// don't want to make new required modules disappear
 		if (loaded) funcDefined.add(node)
-		var func = function() {
-			if (node.generator || node.async) {
+		function setup() {
+			if (node.async) {
 				console.log('unssuported call', node)
 				process.exit()
 			}
@@ -493,19 +493,46 @@ function simplify(code, opts) {
 			}
 
 			initHoisted(node.body)
-			try {
-				var ret = walk(node.body)
-				// only used to pass to callExpression which should be immediately after
-				func.ret = ret
-				return ret.ret
-			} catch (e) {
-				throw e
-			} finally {
-				// do in finally in case try catches are part of code flow
-				// this can happen if a higher function modifies this one
-				// remove just in case
-				closuresMod.delete(vars)
-				vars = oldVars
+			return oldVars
+		}
+		function finish(oldVars) {
+			closuresMod.delete(vars)
+			vars = oldVars
+		}
+		var func
+		if (!node.generator) {
+			func = function() {
+				var oldVars = setup.apply(this, arguments)
+				try {
+					var ret = walk(node.body, { vars })
+					// only used to pass to callExpression which should be immediately after
+					func.ret = ret
+					return ret.ret
+				} catch (e) {
+					throw e
+				} finally {
+					// do in finally in case try catches are part of code flow
+					// this can happen if a higher function modifies this one
+					// remove just in case
+					finish(oldVars)
+				}
+			}
+		} else {
+			func = function*() {
+				var oldVars = setup.apply(this, arguments)
+				try {
+					var ret = yield* walkGen(node.body, { vars })
+					// only used to pass to callExpression which should be immediately after
+					func.ret = ret
+					return ret.ret
+				} catch (e) {
+					throw e
+				} finally {
+					// do in finally in case try catches are part of code flow
+					// this can happen if a higher function modifies this one
+					// remove just in case
+					finish(oldVars)
+				}
 			}
 		}
 		// for access to node from function
@@ -521,7 +548,7 @@ function simplify(code, opts) {
 			func.arrowThis = arrowThis.val
 			func.thisStr = arrowThis.str
 		}
-		if (node.generator || node.async) {
+		if (node.async) {
 			console.log('unsupported function properties', node, filename)
 		}
 		return func
@@ -917,8 +944,17 @@ function simplify(code, opts) {
 		}
 		return ret
 	}
+	
+	function walk(node, context) {
+		var gen = walkGen(node, context)
+		var ret = gen.next()
+		if (!ret.done) {
+			console.log('what, gen has not ended')
+		}
+		return ret.value
+	}
 
-	function walk(node) {
+	function *walkGen(node, context) {
 		var ret = {
 			ret: undefined,
 			delete: false,
@@ -929,6 +965,7 @@ function simplify(code, opts) {
 			varPath: [],
 			str: ''
 		}
+		vars = context.vars
 		var steps
 		var after
 		if (!node) {
@@ -1563,6 +1600,14 @@ function simplify(code, opts) {
 				}
 				break
 
+			case "YieldExpression":
+				// todo str
+				ret.ret = yield (yield* walkGen(node.argument, context)).ret
+				// force a switch in context, since it will be different from where it came
+				// todo make things more functional and less global - specifically make getV and assign based on context
+				vars = context.vars
+				return ret
+
 			case "VariableDeclaration":
 				break
 			case "Program":
@@ -1679,7 +1724,7 @@ function simplify(code, opts) {
 			case "TryStatement":
 				steps = function*() {
 					try {
-						var r = walk(node.block)
+						var r = yield* walkGen(node.block, context)
 						if (breakOut(r)) return r
 					} catch (e) {
 						if (node.handler) {
@@ -1814,7 +1859,7 @@ function simplify(code, opts) {
 		var gen = steps()
 		var child = gen.next()
 		while (!child.done) {
-			child = gen.next(walk(child.value))
+			child = gen.next(yield* walkGen(child.value, context))
 		}
 		return child.value
 	}

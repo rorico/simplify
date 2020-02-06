@@ -1677,22 +1677,25 @@ function simplify(code, opts) {
 				}
 				break
 			case "TryStatement":
-				try {
-					var r = walk(node.block)
-					if (breakOut(r)) return r
-				} catch (e) {
-					if (node.handler) {
-						addVar(node.handler.param.name, e)
-						var r = walk(node.handler.body)
+				steps = function*() {
+					try {
+						var r = walk(node.block)
 						if (breakOut(r)) return r
+					} catch (e) {
+						if (node.handler) {
+							addVar(node.handler.param.name, e)
+							var r = yield node.handler.body
+							if (breakOut(r)) return r
+						}
+					} finally {
+						if (node.finalizer) {
+							var r = yield node.finalizer
+							if (breakOut(r)) return r
+						}
 					}
-				} finally {
-					if (node.finalizer) {
-						var r = walk(node.finalizer)
-						if (breakOut(r)) return r
-					}
+					return ret
 				}
-				return ret
+				break
 
 			case "TaggedTemplateExpression":
 				steps = function*() {

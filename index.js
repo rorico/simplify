@@ -905,6 +905,7 @@ function simplify(code, opts) {
 			varPath: [],
 			str: ''
 		}
+		var steps
 		var after
 		if (!node) {
 			console.log("unexpected null node")
@@ -1703,27 +1704,37 @@ function simplify(code, opts) {
 				process.exit()
 				break
 		}
-		var res = {}
-		for (var key in node) {
-			var val = node[key]
-			if (Array.isArray(val)) {
-				res[key] = [];
-				for (var i = 0 ; i < val.length ; i++) {
-					var c = val[i]
-					if (!c) continue
-					var r = walk(c)
-					if (breakOut(r)) {
-						return r 
+		if (!steps) {
+			steps = function *() {
+				var res = {}
+				for (var key in node) {
+					var val = node[key]
+					if (Array.isArray(val)) {
+						res[key] = [];
+						for (var i = 0 ; i < val.length ; i++) {
+							var c = val[i]
+							if (!c) continue
+							var r = yield c
+							if (breakOut(r)) {
+								return r
+							}
+							res[key][i] = r
+						}
+					} else if (val && typeof val.type === "string") {
+						var r = res[key] = yield val
+						if (breakOut(r)) return r
 					}
-					res[key][i] = r
 				}
-			} else if (val && typeof val.type === "string") {
-				var r = res[key] = walk(val)
-				if (breakOut(r)) return r
+				if (after) after(res)
+				return ret
 			}
 		}
-		if (after) after(res)
-		return ret
+		var gen = steps()
+		var child = gen.next()
+		while (!child.done) {
+			child = gen.next(walk(child.value))
+		}
+		return child.value
 	}
 	function addSide(node) {
 		var ret = []

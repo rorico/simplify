@@ -844,8 +844,8 @@ function simplify(code, opts) {
 		var key = node.computed ? (yield node.property).ret : node.property.name
 		return getWithKey(obj, key, objStr)
 	}
-	function getPropWithKey(obj, node, objStr) {
-		return getObjRet(getWithKeyVal(obj, node, objStr))
+	function getPropWithKey(obj, key, objStr) {
+		return getObjRet(getWithKey(obj, key, objStr))
 	}
 	function getWithKey(obj, key, objStr) {
 		if (key === 'name' && obj[functionName]) {

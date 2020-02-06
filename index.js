@@ -923,21 +923,23 @@ function simplify(code, opts) {
 
 		switch (node.type) {
 			case "VariableDeclarator":
-				var init = node.init && walk(node.init)
-				if (node.id.type === 'Identifier') {
-					addVar(node.id.name, init && init.ret, node, init && init.str)
-				} else if (node.id.type === 'ObjectPattern') {
-					for (var prop of node.id.properties) {
-						if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
-						if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
-						addVar(prop.key.name, init && init.ret, prop, init && init.str)
+				steps = function*() {
+					var init = node.init && (yield node.init)
+					if (node.id.type === 'Identifier') {
+						addVar(node.id.name, init && init.ret, node, init && init.str)
+					} else if (node.id.type === 'ObjectPattern') {
+						for (var prop of node.id.properties) {
+							if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
+							if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
+							addVar(prop.key.name, init && init.ret, prop, init && init.str)
+						}
+					} else {
+						// array pattern
+						console.log('unexpected VariableDeclarator type', node.id.type, node)
 					}
-				} else {
-					// array pattern
-					console.log('unexpected VariableDeclarator type', node.id.type, node)
+					return ret
 				}
-				return ret
-
+				break
 			// these are different, but mostly the same for now
 			case "FunctionDeclaration":
 				// these should be hoisted already
@@ -1119,50 +1121,59 @@ function simplify(code, opts) {
 
 			case "ConditionalExpression":
 			case "IfStatement":
-				var test = walk(node.test)
-				if (test.ret) {
-					node.true = node.true ? node.true + 1 : 1
-					if (!node.consequent) {
-						console.log("missing if consequent")
+				steps = function*() {
+					var test = yield node.test
+					if (test.ret) {
+						node.true = node.true ? node.true + 1 : 1
+						if (!node.consequent) {
+							console.log("missing if consequent")
+						}
+						return (yield node.consequent)
+					} else if (node.alternate) {
+						return (yield node.alternate)
 					}
-					return walk(node.consequent)
-				} else if (node.alternate) {
-					return walk(node.alternate)
+					return ret
 				}
-				return ret
+				break
 
 			case "SwitchStatement":
-				var d = walk(node.discriminant).ret
-				var b = false
-				var cont = false
-				for (var c of node.cases) {
-					// default has no test
-					if (cont || !c.test || walk(c.test).ret === d) {
-						cont = true
-						for (var s of c.consequent) {
-							var r = walk(s)
-							var b = breaks(r, node.label)
-							if (b.return || b.continue) return r
-							if (b.break) {
-								cont = false
-								b = true
+				steps = function*() {
+					var d = (yield node.discriminant).ret
+					var b = false
+					var cont = false
+					for (var c of node.cases) {
+						// default has no test
+						if (cont || !c.test || (yield c.test).ret === d) {
+							cont = true
+							for (var s of c.consequent) {
+								var r = yield s
+								var b = breaks(r, node.label)
+								if (b.return || b.continue) return r
+								if (b.break) {
+									cont = false
+									b = true
+									break
+								}
+							}
+							if (b) {
 								break
 							}
 						}
-						if (b) {
-							break
-						}
 					}
+					return ret
 				}
-				return ret
+				break
 
 			case "LabeledStatement":
-				if (node.label.type !== 'Identifier') {
-					console.log('unexpected label type', node.label.type, node)
+				steps = function*() {
+					if (node.label.type !== 'Identifier') {
+						console.log('unexpected label type', node.label.type, node)
+					}
+					node.body.label = node.label.name
+					yield node.body
+					return ret
 				}
-				node.body.label = node.label.name
-				walk(node.body)
-				return ret
+				break
 	
 			case "BreakStatement":
 				ret.break = node.label ? node.label.name : true
@@ -1308,53 +1319,61 @@ function simplify(code, opts) {
 				return ret
 
 			case "ForStatement":
-				for (node.init ? walk(node.init) : "" ; node.test ? walk(node.test).ret : true ; node.update ? walk(node.update) : "") {
-					var r = walk(node.body)
-					var b = breaks(r)
-					if (b.return) return r
-					if (b.break) break
-					if (b.continue) continue
+				steps = function*() {
+					for (node.init ? (yield node.init) : "" ; node.test ? (yield node.test).ret : true ; node.update ? (yield node.update) : "") {
+						var r = yield node.body
+						var b = breaks(r)
+						if (b.return) return r
+						if (b.break) break
+						if (b.continue) continue
+					}
+					return ret
 				}
-				return ret
 				break
 			case "DoWhileStatement":
-				do {
-					node.true = node.true ? node.true + 1 : 1
-					var r = walk(node.body)
-					var b = breaks(r)
-					if (b.return) return r
-					if (b.break) break
-					if (b.continue) continue
-				} while (walk(node.test).ret)
-				return ret
-
-			case "WhileStatement":
-				while (walk(node.test).ret) {
-					node.true = node.true ? node.true + 1 : 1
-					var r = walk(node.body)
-					var b = breaks(r)
-					if (b.return) return r
-					if (b.break) break
-					if (b.continue) continue
+				steps = function*() {
+					do {
+						node.true = node.true ? node.true + 1 : 1
+						var r = yield node.body
+						var b = breaks(r)
+						if (b.return) return r
+						if (b.break) break
+						if (b.continue) continue
+					} while ((yield node.test).ret)
+					return ret
 				}
-				return ret
 				break
-
+			case "WhileStatement":
+				steps = function*() {
+					while ((yield node.test).ret) {
+						node.true = node.true ? node.true + 1 : 1
+						var r = yield node.body
+						var b = breaks(r)
+						if (b.return) return r
+						if (b.break) break
+						if (b.continue) continue
+					}
+					return ret
+				}
+				break
 
 			case "ExpressionStatement":
 				break
 
 			case "LogicalExpression":
-				var left = walk(node.left)
-				switch (node.operator) {
-					case "||":
-						return left.ret ? left : walk(node.right)
-					case "&&":
-						return left.ret ? walk(node.right) : left
-					default:
-						console.log('unexpected LogicalExpression')
+				steps = function*() {
+					var left = yield node.left
+					switch (node.operator) {
+						case "||":
+							return left.ret ? left : (yield node.right)
+						case "&&":
+							return left.ret ? (yield node.right) : left
+						default:
+							console.log('unexpected LogicalExpression')
+					}
+					return ret
 				}
-				return ret
+				break
 
 			// TODO: seperate these
 			case "BinaryExpression":
@@ -1610,10 +1629,10 @@ function simplify(code, opts) {
 				return ret
 
 			case "ThrowStatement":
-				// TODO make this message global
-				// throw Error("thrown error from program " + walk(node.argument).ret)
-				throw walk(node.argument).ret
-
+				steps = function*() {
+					throw (yield node.argument).ret
+				}
+				break
 			case "TryStatement":
 				try {
 					var r = walk(node.block)
@@ -1633,22 +1652,33 @@ function simplify(code, opts) {
 				return ret
 
 			case "TaggedTemplateExpression":
-				if (node.quasi.type !== "TemplateLiteral") console.log("unexpected quasi type")
-				if (node.tag.type !== "Identifier") console.log("tag not Identifier not handled")
-				var quasis = node.quasi.quasis.map(q => q.value.cooked)
-				var expressions = node.quasi.expressions.map(e => walk(e).ret)
-				ret.ret = walk(node.tag).ret(quasis, ...expressions)
-				return ret
-			case "TemplateLiteral":
-				var quasis = node.quasis.map(q => q.value.cooked)
-				var expressions = node.expressions.map(e => walk(e).ret)
-				ret.ret = quasis[0]
-				// maybe check that expressions.length = quasis.length - 1
-				for (var i = 0 ; i < expressions.length ; i++) {
-					ret.ret += expressions[i] + quasis[i+1]
+				steps = function*() {
+					if (node.quasi.type !== "TemplateLiteral") console.log("unexpected quasi type")
+					if (node.tag.type !== "Identifier") console.log("tag not Identifier not handled")
+					var quasis = node.quasi.quasis.map(q => q.value.cooked)
+					var expressions = []
+					for (var ex of node.quasi.expressions) {
+						expressions.push((yield ex).ret)
+					}
+					ret.ret = (yield node.tag).ret(quasis, ...expressions)
+					return ret
 				}
-				return ret
-
+				break
+			case "TemplateLiteral":
+				steps = function*() {
+					var quasis = node.quasis.map(q => q.value.cooked)
+					var expressions = []
+					for (var e of node.expressions) {
+						expressions.push((yield e).ret)
+					}
+					ret.ret = quasis[0]
+					// maybe check that expressions.length = quasis.length - 1
+					for (var i = 0 ; i < expressions.length ; i++) {
+						ret.ret += expressions[i] + quasis[i+1]
+					}
+					return ret
+				}
+				break
 			case "ClassDeclaration":
 			case "ClassExpression":
 				var constructor = addFunction(parse('function placeholder() {}').body[0])
@@ -1685,10 +1715,13 @@ function simplify(code, opts) {
 				return ret
 			
 			case "SequenceExpression":
-				for (var ex of node.expressions) {
-					ret = walk(ex)
+				steps = function*() {
+					for (var ex of node.expressions) {
+						ret = yield ex
+					}
+					return ret
 				}
-				return ret
+				break
 
 			// these are comments
 			case "Line":

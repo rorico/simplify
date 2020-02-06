@@ -64,7 +64,7 @@ function simplify(code, opts) {
 	}
 
 	initHoisted(ast)
-	walk(ast)
+	walk(ast, { vars })
 	console.log("parsed through file", filename)
 
 	if (opts.node && opts.filename) {

@@ -1252,11 +1252,11 @@ function simplify(code, opts) {
 						str = rightStr
 					} else if (node.operator === "+=") {
 						var left = getObjRet(o)
-						val = o.val + rightVal
+						val = left.val + rightVal
 						str = composeIfExists(left, ' + ', + right)
 					} else if (node.operator === "-=") {
 						var left = getObjRet(o)
-						val = o.val - rightVal
+						val = left.val - rightVal
 						str = composeIfExists(left, ' + ', + right)
 					} else {
 						console.log("unexpected assignment operator")

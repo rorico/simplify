@@ -4,8 +4,8 @@ function c() {
     for (var [a, b] of weird) {
         sum[0] += a + b
     }
-    // var [a,b] = [1,2]
-    return sum[0]
+    var [ret] = sum
+    return ret
 }
 
 -----------------------------------

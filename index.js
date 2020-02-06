@@ -677,8 +677,8 @@ function simplify(code, opts) {
 			for (var prop of node.properties) {
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
 				var key = yield* getKey(prop)
-				var p = getProp(val, key, str)
-				yield* assign(prop, p.val, init, p.str)
+				var p = getPropWithKey(val, key, str)
+				yield* assign(prop.value, p.val, init, p.str)
 			}
 		} else if (node.type === "ArrayPattern") {
 			// TODO this well
@@ -689,7 +689,7 @@ function simplify(code, opts) {
 				yield* assign(prop, p.val, init, p.str)
 			}
 		} else {
-			console.log("unknown param type", node)
+			console.log("unknown assign type", node, getCallStack(node))
 		}
 	}
 	function addVar(name, val, node, str) {
@@ -951,20 +951,8 @@ function simplify(code, opts) {
 		switch (node.type) {
 			case "VariableDeclarator":
 				steps = function*() {
-					var init = node.init && (yield node.init)
-					if (node.id.type === 'Identifier') {
-						addVar(node.id.name, init && init.ret, node, init && init.str)
-					} else if (node.id.type === 'ObjectPattern') {
-						for (var prop of node.id.properties) {
-							if (prop.key.type !== "Identifier") console.log("ObjectPattern key not Identifier", prop)
-							if (prop.value.type !== "Identifier") console.log("ObjectPattern value not Identifier", prop)
-							addVar(prop.key.name, init && init.ret, prop, init && init.str)
-						}
-					} else {
-						// array pattern
-						console.log('unexpected VariableDeclarator type', node.id.type, node)
-					}
-					return ret
+					var init = node.init ? yield node.init : {}
+					yield* assign(node.id, init.ret, true, init.str)
 				}
 				break
 			// these are different, but mostly the same for now

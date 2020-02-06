@@ -643,7 +643,7 @@ function simplify(code, opts) {
 		}
 	}
 
-	function assign(node, val, init, str) {
+	function *assign(node, val, init, str) {
 		if (node.type === "Identifier") {
 			if (init) {
 				addVar(node.name, val, node, str)
@@ -654,9 +654,9 @@ function simplify(code, opts) {
 			// TODO this well
 			for (var prop of node.properties) {
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
-				var key = getKey(prop)
+				var key = yield* getKey2(prop)
 				var p = getProp(val, key, str)
-				assign(prop, p.val, init, p.str)
+				yield* assign(prop, p.val, init, p.str)
 			}
 		} else if (node.type === "ArrayPattern") {
 			// TODO this well
@@ -664,7 +664,7 @@ function simplify(code, opts) {
 				var prop = node.elements[i]
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
 				var p = getPropWithKey(val, i, str)
-				assign(prop, p.val, init, p.str)
+				yield* assign(prop, p.val, init, p.str)
 			}
 		} else {
 			console.log("unknown param type", node)
@@ -804,6 +804,13 @@ function simplify(code, opts) {
 			return node.key.name
 		}
 	}
+	function *getKey2(node) {
+		if (node.computed || node.key.type === 'Literal') {
+			return (yield node.key).ret
+		} else {
+			return node.key.name
+		}
+	}
 	function getObj(node) {
 		return getObjRet(getObjKey(node))
 	}
@@ -816,6 +823,23 @@ function simplify(code, opts) {
 		var obj = res.ret
 		var objStr = res.str
 		var key = node.computed ? walk(node.property).ret : node.property.name
+		return getWithKey(obj, key, objStr)
+	}
+	function *getObj2(node) {
+		return getObjRet(yield* getObjKey2(node))
+	}
+	function *getObjKey2(node) {
+		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
+		if (!node.object || !node.property)
+			console.log("missing member object or property")
+
+		var res = yield node.object
+		var obj = res.ret
+		if (!obj) {
+			// console.log('obj is falsy', getCallStack(node))
+		}
+		var objStr = res.str
+		var key = node.computed ? (yield node.property).ret : node.property.name
 		return getWithKey(obj, key, objStr)
 	}
 	function getPropWithKey(obj, node, objStr) {
@@ -951,173 +975,177 @@ function simplify(code, opts) {
 
 			case "NewExpression":
 			case "CallExpression":
-				var argsInfo = node.arguments.reduce((a, arg) => {
-					arg = walk(arg)
-					if (arg.spread) {
-						return a.concat(arg)
-					} else {
-						a.push(arg)
-						return a
+				steps = function*() {
+					var argsInfo = []
+					for (var arg of node.arguments)  {
+						var argRet = yield arg
+						if (argRet.spread) {
+							argsInfo = argsInfo.concat(argRet)
+							// todo: this isn't done properly, but it works for now
+							// argsInfo.push(...argRet)
+						} else {
+							argsInfo.push(argRet)
+						}
 					}
-				}, [])
-				
-				var args = argsInfo.map(a => a.ret)
-				var argStrs = argsInfo.map(a => a.str)
-
-				var thisArg = global
-				//shouldn't need this as this is never primitive
-				var thisStr // don't have str for window since its not primitive
-				var callType = "normal"
-				var func
-				var str
-				if (node.callee.type === "MemberExpression") {
-					// do it this way to maintain thisArg
-					// can bind it, but that removes/changes some properties added
-					// like name, node
-					var o = getObj(node.callee)
 					
-					thisArg = o.obj
-					thisStr = o.objStr
-					func = o.val
-					str = o.str
-				} else {
-					var f = walk(node.callee)
-					func = f.ret
-					str = f.str
-				}
+					var args = argsInfo.map(a => a.ret)
+					var argStrs = argsInfo.map(a => a.str)
+
+					var thisArg = global
+					//shouldn't need this as this is never primitive
+					var thisStr // don't have str for window since its not primitive
+					var callType = "normal"
+					var func
+					var str
+					if (node.callee.type === "MemberExpression") {
+						// do it this way to maintain thisArg
+						// can bind it, but that removes/changes some properties added
+						// like name, node
+						var o = yield* getObj2(node.callee)
+						
+						thisArg = o.obj
+						thisStr = o.objStr
+						func = o.val
+						str = o.str
+					} else {
+						var f = yield node.callee
+						func = f.ret
+						str = f.str
+					}
 				
-				if (typeof func !== 'function') {
-					console.log("var is not function", func, node)
-					throw new simplifyError("not a function")
-				} else if (func === console.log) {
-					// to seperate logs from code
-					args.unshift("from program")
-					// console is a global side effect
-					closuresMod.add(global)
-				} else if (func === process.exit) {
-					console.log("exiting program")
-				}
-
-				//pass some data into the function, expect it to be consumed immediately and removed
-				if (func === Function.prototype.call) {
-					func = thisArg
-					thisArg = args[0]
-					thisStr = argStrs[0]
-					args = args.slice(1)
-					if (!Array.isArray(args)) {
-						console.log('anskdfljasndfljn', args)
+					if (typeof func !== 'function') {
+						console.log("var is not function", func, node)
+						throw new simplifyError("not a function")
+					} else if (func === console.log) {
+						// to seperate logs from code
+						args.unshift("from program")
+						// console is a global side effect
+						closuresMod.add(global)
+					} else if (func === process.exit) {
+						console.log("exiting program")
 					}
-					argStrs = argStrs.slice(1)
-				} else if (func === Function.prototype.apply) {
-					func = thisArg
-					thisArg = args[0]
-					thisStr = argStrs[0]
-					args = args[1] || []
-					argStrs = getUnderStringObj(args[1] || [])
-					if (!Array.isArray(args)) {
-						// array-like, ex arguments
-						args = Array.from(args)
-						setUnderString(args, argStrs)
-					}
-				} else if (func === Function.prototype.bind) {
-					func = function(...args) {
-						var f = this
-						var argStrs = func.argStrs
-						var thisArg = args[0]
-						var thisStr = argStrs[0]
+	
+					//pass some data into the function, expect it to be consumed immediately and removed
+					if (func === Function.prototype.call) {
+						func = thisArg
+						thisArg = args[0]
+						thisStr = argStrs[0]
+						args = args.slice(1)
+						if (!Array.isArray(args)) {
+							console.log('anskdfljasndfljn', args)
+						}
 						argStrs = argStrs.slice(1)
-						var moreArgs = args.slice(1)
-						var ret = function(...args) {
-							f.thisStr = thisStr
-							f.argStrs = argStrs.concat(ret.argStrs)
-							return f.apply(thisArg, moreArgs.concat(args))
+					} else if (func === Function.prototype.apply) {
+						func = thisArg
+						thisArg = args[0]
+						thisStr = argStrs[0]
+						args = args[1] || []
+						argStrs = getUnderStringObj(args[1] || [])
+						if (!Array.isArray(args)) {
+							// array-like, ex arguments
+							args = Array.from(args)
+							setUnderString(args, argStrs)
 						}
-						return ret
-					}
-					// technically can pass a primative for this, but no one does that
-					// it is also casted into an object
-					// to get this to work, likely need to write custom wrapper
-					// need to handle extra args too
-				}
-
-				// polyfills can be undefined while initializing polyfills
-				if (polyfills && polyfills.has(func)) {
-					func = polyfills.get(func)
-				}
-
-				// this can't live in polyfill as addFunction is local
-				if (func === Function) {
-					// todo: make global scoped
-					func = function(...args) {
-						var funcStr = '!function(' + args.slice(0, args.length - 2).join(', ') + ') {' + args[args.length - 1] + '}'
-						return addFunction(parse(funcStr).body[0].expression.argument)
-					}
-				}
-
-				if (func.node) {
-					var n = func.node
-					node.funcId = n.nodeId
-					node.callType = callType
-				// 	called.add(n)
-				// 	if (calledWith.has(n)) {
-				// 		calledWith.get(n).push(args)
-				// 	} else {
-				// 		calledWith.set(n, [args])
-				// 	}
-				// } else {
-				// 	// means not defined in js
-				// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
-				}
-
-				var isNew = node.type === "NewExpression"
-
-				var callStr
-				// also filter things like ' '.substring and [].join
-				if (!func.node && !isNew) {
-					var strParts = [{
-						str: str,
-						val: func
-					}, '(']
-					if (argsInfo.length) {
-						argsInfo.reduce((a, c) => (a.push(c, ','), a), strParts)
-						// remove trailing comma
-						strParts.pop()
-					}
-					strParts.push(')')
-					callStr = composeIfExists(...strParts)
-					if (recording && callStr) {
-						var hasSide = !ignore.has(func)
-						if (side.affectsFirst.has(func)) {
-							hasSide = !!argStrs[0]
+					} else if (func === Function.prototype.bind) {
+						func = function(...args) {
+							var f = this
+							var argStrs = func.argStrs
+							var thisArg = args[0]
+							var thisStr = argStrs[0]
+							argStrs = argStrs.slice(1)
+							var moreArgs = args.slice(1)
+							var ret = function(...args) {
+								f.thisStr = thisStr
+								f.argStrs = argStrs.concat(ret.argStrs)
+								return f.apply(thisArg, moreArgs.concat(args))
+							}
+							return ret
 						}
-						if (side.affectsThis.has(func)) {
-							hasSide = !!thisStr
-						}
-						if (hasSide) {
-							console.log(callStr, getFileLink(node))
-							// console.log("global", node, str, args)
-						}
-
+						// technically can pass a primative for this, but no one does that
+						// it is also casted into an object
+						// to get this to work, likely need to write custom wrapper
+						// need to handle extra args too
 					}
-					// give some context for callbacks
-					if (callStr) {
-						args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
+	
+					// polyfills can be undefined while initializing polyfills
+					if (polyfills && polyfills.has(func)) {
+						func = polyfills.get(func)
+					}
+	
+					// this can't live in polyfill as addFunction is local
+					if (func === Function) {
+						// todo: make global scoped
+						func = function(...args) {
+							var funcStr = '!function(' + args.slice(0, args.length - 2).join(', ') + ') {' + args[args.length - 1] + '}'
+							return addFunction(parse(funcStr).body[0].expression.argument)
+						}
+	
+					if (func.node) {
+						var n = func.node
+						node.funcId = n.nodeId
+						node.callType = callType
+					// 	called.add(n)
+					// 	if (calledWith.has(n)) {
+					// 		calledWith.get(n).push(args)
+					// 	} else {
+					// 		calledWith.set(n, [args])
+					// 	}
+					// } else {
+					// 	// means not defined in js
+					// 	// TODO might want to do some Proxy stuff to see if there are any side effects on arguments
+					}
+	
+					var isNew = node.type === "NewExpression"
+	
+					var callStr
+					// also filter things like ' '.substring and [].join
+					if (!func.node && !isNew) {
+						var strParts = [{
+							str: str,
+							val: func
+						}, '(']
+						if (argsInfo.length) {
+							argsInfo.reduce((a, c) => (a.push(c, ','), a), strParts)
+							// remove trailing comma
+							strParts.pop()
+						}
+						strParts.push(')')
+						callStr = composeIfExists(...strParts)
+						if (recording && callStr) {
+							var hasSide = !ignore.has(func)
+							if (side.affectsFirst.has(func)) {
+								hasSide = !!argStrs[0]
+							}
+							if (side.affectsThis.has(func)) {
+								hasSide = !!thisStr
+							}
+							if (hasSide) {
+								console.log(callStr, getFileLink(node))
+								// console.log("global", node, str, args)
+							}
+	
+						}
+						// give some context for callbacks
+						if (callStr) {
+							args.forEach(a => typeof a === 'function' && (a.callStr = callStr))
+						} else {
+							args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
+						}
 					} else {
 						args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
 					}
-				} else {
-					args.forEach(a => typeof a === 'function' && (a.argsNotGlobal = true))
+					
+					if (side.affectsFirst.has(func)) {
+						callStr = argStrs[0]
+					}
+	
+					if (overrides.has(func)) {
+						func = overrides.get(func)
+					}
+	
+					return callFunction(func, node, args, argStrs, thisArg, thisStr, isNew)
 				}
-				
-				if (side.affectsFirst.has(func)) {
-					callStr = argStrs[0]
-				}
-
-				if (overrides.has(func)) {
-					func = overrides.get(func)
-				}
-
-				return callFunction(func, node, args, argStrs, thisArg, thisStr, isNew)
+				break
 
 			case "ConditionalExpression":
 			case "IfStatement":
@@ -1184,139 +1212,148 @@ function simplify(code, opts) {
 				return ret
 
 			case "AssignmentExpression":
-				var name = node.left.name
-				changed[name] = true
-				var right = walk(node.right)
-				var rightVal = right.ret
-				var rightStr = right.str
-				if (node.left.type === "Identifier") {
+				steps = function*() {
+					var name = node.left.name
+					changed[name] = true
+					var right = yield node.right
+					var rightVal = right.ret
+					var rightStr = right.str
+					if (node.left.type === "Identifier") {
+						var val
+						var str
+						if (node.operator === "=") {
+							val = rightVal
+							str = rightStr
+						} else if (node.operator === "+=") {
+							var left = getV(name)
+							val = left.val + rightVal
+							str = composeIfExists(left, ' + ', + right)
+						} else if (node.operator === "-=") {
+							var left = getV(name)
+							val = left.val - rightVal
+							str = composeIfExists(left, ' - ', + right)
+						} else {
+							console.log("unexpected assignment operator")
+						}
+
+						ret.ret = setVar(name, val, node, str)
+						ret.str = str
+						return ret
+					}
+					// TODO refactor this
+					var o = yield* getObjKey2(node.left)
 					var val
 					var str
 					if (node.operator === "=") {
 						val = rightVal
 						str = rightStr
 					} else if (node.operator === "+=") {
-						var left = getV(name)
-						val = left.val + rightVal
+						var left = getObjRet(o)
+						val = o.val + rightVal
 						str = composeIfExists(left, ' + ', + right)
 					} else if (node.operator === "-=") {
-						var left = getV(name)
-						val = left.val - rightVal
-						str = composeIfExists(left, ' - ', + right)
+						var left = getObjRet(o)
+						val = o.val - rightVal
+						str = composeIfExists(left, ' + ', + right)
 					} else {
 						console.log("unexpected assignment operator")
 					}
-
-					ret.ret = setVar(name, val, node, str)
+					ret.ret = setProp(o.obj, o.key, val, node, o.varPath, str, o.objStr)
 					ret.str = str
+					if (o.str) {
+						if (recording) {
+							console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
+						}
+						setString(ret.ret, o.str)
+					}
 					return ret
 				}
-				// TODO refactor this
-				var o = getObjKey(node.left)
-				var val
-				var str
-				if (node.operator === "=") {
-					val = rightVal
-					str = rightStr
-				} else if (node.operator === "+=") {
-					var left = getObjRet(o)
-					val = o.val + rightVal
-					str = composeIfExists(left, ' + ', + right)
-				} else if (node.operator === "-=") {
-					var left = getObjRet(o)
-					val = o.val - rightVal
-					str = composeIfExists(left, ' + ', + right)
-				} else {
-					console.log("unexpected assignment operator")
-				}
-				ret.ret = setProp(o.obj, o.key, val, node, o.varPath, str, o.objStr)
-				ret.str = str
-				if (o.str) {
-					if (recording) {
-						console.log("assigned", o.str + ' ' + node.operator + ' ' + toString(right))
-					}
-					setString(ret.ret, o.str)
-				}
-				return ret
 				break
 
 
 			case "UpdateExpression":
-				var arg = node.argument
-				var name = arg.name
-				if (arg.type === "Identifier") {
-					var val = getVar(name)
-					ret.ret = val
+				steps = function*() {
+					var arg = node.argument
+					var name = arg.name
+					if (arg.type === "Identifier") {
+						var val = getVar(name)
+						ret.ret = val
+						if (node.operator === "++") {
+							val++
+						} else if (node.operator === "--") {
+							val--
+						} else {
+							console.log("unknown update operator", node)
+						}
+						var res = setVar(name, val, node)
+						if (node.prefix) {
+							ret.ret = res
+						}
+						return ret
+					}
+					// need to update in object
+					var o = yield* getObj2(node.argument)
+					var obj = o.obj
+					var key = o.key
 					if (node.operator === "++") {
-						val++
+						ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
 					} else if (node.operator === "--") {
-						val--
+						ret.ret = (node.prefix ? --obj[key] : obj[key]--)
 					} else {
 						console.log("unknown update operator", node)
 					}
-					var res = setVar(name, val, node)
-					if (node.prefix) {
-						ret.ret = res
+					// todo update global
+					return ret
+				}
+				break
+			case "ForInStatement":
+				steps = function*() {
+					// assume only 1 var for for in
+					// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+					if (node.left.type === 'VariableDeclaration') {
+						var left = node.left.declarations[0].id
+						var init = true
+					} else {
+						var left = node.left
+						var init = false
+					}
+					var right = (yield node.right).ret
+					for (var i in right) {
+						yield* assign(left, i, init)
+						// addVar(varname, i)
+						var r = yield node.body
+						var b = breaks(r)
+						if (b.return) return r
+						if (b.break) break
+						if (b.continue) continue
 					}
 					return ret
 				}
-				// need to update in object
-				var o = getObj(node.argument)
-				var obj = o.obj
-				var key = o.key
-				if (node.operator === "++") {
-					ret.ret = (node.prefix ? ++obj[key] : obj[key]++)
-				} else if (node.operator === "--") {
-					ret.ret = (node.prefix ? --obj[key] : obj[key]--)
-				} else {
-					console.log("unknown update operator", node)
-				}
-				// todo update global
-				return ret
-				break
-			case "ForInStatement":
-				// assume only 1 var for for in
-				// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
-				if (node.left.type === 'VariableDeclaration') {
-					var left = node.left.declarations[0].id
-					var init = true
-				} else {
-					var left = node.left
-					var init = false
-				}
-				var right = walk(node.right).ret
-				for (var i in right) {
-					assign(left, i, init)
-					// addVar(varname, i)
-					var r = walk(node.body)
-					var b = breaks(r)
-					if (b.return) return r
-					if (b.break) break
-					if (b.continue) continue
-				}
-				return ret
 				break
 			case "ForOfStatement":
-				// assume only 1 var for for of
-				// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
-				if (node.left.type === 'VariableDeclaration') {
-					var left = node.left.declarations[0].id
-					var init = true
-				} else {
-					var left = node.left
-					var init = false
+				steps = function*() {
+					// assume only 1 var for for of
+					// var varname = node.left.type === "Identifier" ? node.left.name : node.left.declarations[0].id.name
+					if (node.left.type === 'VariableDeclaration') {
+						var left = node.left.declarations[0].id
+						var init = true
+					} else {
+						var left = node.left
+						var init = false
+					}
+					var right = (yield node.right).ret
+					for (var i of right) {
+						yield* assign(left, i, init)
+						// addVar(varname, i)
+						var r = yield node.body
+						var b = breaks(r)
+						if (b.return) return r
+						if (b.break) break
+						if (b.continue) continue
+					}
+					return ret
 				}
-				var right = walk(node.right).ret
-				for (var i of right) {
-					assign(left, i, init)
-					// addVar(varname, i)
-					var r = walk(node.body)
-					var b = breaks(r)
-					if (b.return) return r
-					if (b.break) break
-					if (b.continue) continue
-				}
-				return ret
+				break
 
 			case "ForStatement":
 				steps = function*() {
@@ -1450,14 +1487,17 @@ function simplify(code, opts) {
 			case "BlockStatement":
 				break
 			case "MemberExpression":
-				var o = getObj(node)
-				ret.ret = o.obj[o.key]
-				ret.var = o.varPath
-				ret.str = o.str
-				if (o.str) {
-					setString(ret.ret, o.str)
+				steps = function*() {
+					var o = yield* getObj2(node)
+					ret.ret = o.obj[o.key]
+					ret.var = o.varPath
+					ret.str = o.str
+					if (o.str) {
+						setString(ret.ret, o.str)
+					}
+					return ret
 				}
-				return ret
+				break
 			case "UnaryExpression":
 				// typeof is special in that it can handle variables never defined
 				if (node.operator === "typeof" && node.argument && node.argument.type === "Identifier" && !(node.argument.name in vars || node.argument.name in global)) {
@@ -1604,16 +1644,19 @@ function simplify(code, opts) {
 				}
 				break
 			case "ObjectExpression":
-				ret.ret = {}
-				var strings = {}
-				for (var prop of node.properties) {
-					var key = getKey(prop)
-					var val = walk(prop.value)
-					ret.ret[key] = val.ret
-					strings[key] = val.str
+				steps = function*() {
+					ret.ret = {}
+					var strings = {}
+					for (var prop of node.properties) {
+						var key = yield* getKey2(prop)
+						var val = yield prop.value
+						ret.ret[key] = val.ret
+						strings[key] = val.str
+					}
+					setUnderString(ret.ret, strings)
+					return ret
 				}
-				setUnderString(ret.ret, strings)
-				return ret
+				break
 			case "ArrayExpression":
 				after = (res) => {
 					ret.ret = res.elements.map(e => e && e.ret)
@@ -1681,38 +1724,41 @@ function simplify(code, opts) {
 				break
 			case "ClassDeclaration":
 			case "ClassExpression":
-				var constructor = addFunction(parse('function placeholder() {}').body[0])
-				var proto = {}
-				var props = {}
-				for (var method of node.body.body) {
-					if (method.kind === 'constructor') {
-						constructor = addFunction(method.value)
-					} else if (method.kind === 'method') {
-						var key = getKey(method)
-						proto[key] = addFunction(method.value)
-					} else if (['get', 'set'].includes(method.kind)) {
-						var key = getKey(method)
-						if (!props[key]) props[key] = {}
-						props[key][method.kind] = addFunction(method.value)
-					} else {
-						// getters and setters
-						console.log('unsupported method type', method.kind, method)
+				steps = function*() {
+					var constructor = addFunction(parse('function placeholder() {}').body[0])
+					var proto = {}
+					var props = {}
+					for (var method of node.body.body) {
+						if (method.kind === 'constructor') {
+							constructor = addFunction(method.value)
+						} else if (method.kind === 'method') {
+							var key = yield* getKey2(method)
+							proto[key] = addFunction(method.value)
+						} else if (['get', 'set'].includes(method.kind)) {
+							var key = yield* getKey2(method)
+							if (!props[key]) props[key] = {}
+							props[key][method.kind] = addFunction(method.value)
+						} else {
+							// getters and setters
+							console.log('unsupported method type', method.kind, method)
+						}
+						if (method.static) {
+							console.log('unsupported method properties', method)
+						}
 					}
-					if (method.static) {
-						console.log('unsupported method properties', method)
+					Object.assign(constructor.prototype, proto)
+					Object.defineProperties(constructor.prototype, props)
+					if (node.superClass) {
+						// don't support super yet
+						constructor.__proto__ = (yield node.superClass).ret
 					}
+					if (node.id) {
+						addVar(node.id.name, constructor, node, node.id.name)
+					}
+					ret.ret = constructor
+					return ret
 				}
-				Object.assign(constructor.prototype, proto)
-				Object.defineProperties(constructor.prototype, props)
-				if (node.superClass) {
-					// don't support super yet
-					constructor.__proto__ = walk(node.superClass).ret
-				}
-				if (node.id) {
-					addVar(node.id.name, constructor, node, node.id.name)
-				}
-				ret.ret = constructor
-				return ret
+				break
 			
 			case "SequenceExpression":
 				steps = function*() {

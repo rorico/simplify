@@ -681,7 +681,7 @@ function simplify(code, opts) {
 			// TODO this well
 			for (var prop of node.properties) {
 				if (prop.type === "RestElement") console.log("unsupported rest element ", prop)
-				var key = yield* getKey2(prop)
+				var key = yield* getKey(prop)
 				var p = getProp(val, key, str)
 				yield* assign(prop, p.val, init, p.str)
 			}
@@ -824,38 +824,18 @@ function simplify(code, opts) {
 			v.node.used--
 		}
 	}
-	function getKey(node) {
-		if (node.computed || node.key.type === 'Literal') {
-			return walk(node.key).ret
-		} else {
-			return node.key.name
-		}
-	}
-	function *getKey2(node) {
+
+	function *getKey(node) {
 		if (node.computed || node.key.type === 'Literal') {
 			return (yield node.key).ret
 		} else {
 			return node.key.name
 		}
 	}
-	function getObj(node) {
-		return getObjRet(getObjKey(node))
+	function *getObj(node) {
+		return getObjRet(yield* getObjKey(node))
 	}
-	function getObjKey(node) {
-		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
-		if (!node.object || !node.property)
-			console.log("missing member object or property")
-
-		var res = walk(node.object)
-		var obj = res.ret
-		var objStr = res.str
-		var key = node.computed ? walk(node.property).ret : node.property.name
-		return getWithKey(obj, key, objStr)
-	}
-	function *getObj2(node) {
-		return getObjRet(yield* getObjKey2(node))
-	}
-	function *getObjKey2(node) {
+	function *getObjKey(node) {
 		if (node.type !== "MemberExpression") console.log("getObj not MemberExpression")
 		if (!node.object || !node.property)
 			console.log("missing member object or property")
@@ -1038,7 +1018,7 @@ function simplify(code, opts) {
 						// do it this way to maintain thisArg
 						// can bind it, but that removes/changes some properties added
 						// like name, node
-						var o = yield* getObj2(node.callee)
+						var o = yield* getObj(node.callee)
 						
 						thisArg = o.obj
 						thisStr = o.objStr
@@ -1049,7 +1029,7 @@ function simplify(code, opts) {
 						func = f.ret
 						str = f.str
 					}
-				
+
 					if (typeof func !== 'function') {
 						console.log("var is not function", func, node)
 						throw new simplifyError("not a function")
@@ -1061,7 +1041,7 @@ function simplify(code, opts) {
 					} else if (func === process.exit) {
 						console.log("exiting program")
 					}
-	
+
 					//pass some data into the function, expect it to be consumed immediately and removed
 					if (func === Function.prototype.call) {
 						func = thisArg
@@ -1103,12 +1083,12 @@ function simplify(code, opts) {
 						// to get this to work, likely need to write custom wrapper
 						// need to handle extra args too
 					}
-	
+
 					// polyfills can be undefined while initializing polyfills
 					if (polyfills && polyfills.has(func)) {
 						func = polyfills.get(func)
 					}
-	
+
 					// this can't live in polyfill as addFunction is local
 					if (func === Function) {
 						// todo: make global scoped
@@ -1278,7 +1258,7 @@ function simplify(code, opts) {
 						return ret
 					}
 					// TODO refactor this
-					var o = yield* getObjKey2(node.left)
+					var o = yield* getObjKey(node.left)
 					var val
 					var str
 					if (node.operator === "=") {
@@ -1329,7 +1309,7 @@ function simplify(code, opts) {
 						return ret
 					}
 					// need to update in object
-					var o = yield* getObj2(node.argument)
+					var o = yield* getObj(node.argument)
 					var obj = o.obj
 					var key = o.key
 					if (node.operator === "++") {
@@ -1525,7 +1505,7 @@ function simplify(code, opts) {
 				break
 			case "MemberExpression":
 				steps = function*() {
-					var o = yield* getObj2(node)
+					var o = yield* getObj(node)
 					ret.ret = o.obj[o.key]
 					ret.var = o.varPath
 					ret.str = o.str
@@ -1693,7 +1673,7 @@ function simplify(code, opts) {
 					ret.ret = {}
 					var strings = {}
 					for (var prop of node.properties) {
-						var key = yield* getKey2(prop)
+						var key = yield* getKey(prop)
 						var val = yield prop.value
 						ret.ret[key] = val.ret
 						strings[key] = val.str
@@ -1780,10 +1760,10 @@ function simplify(code, opts) {
 						if (method.kind === 'constructor') {
 							constructor = addFunction(method.value)
 						} else if (method.kind === 'method') {
-							var key = yield* getKey2(method)
+							var key = yield* getKey(method)
 							proto[key] = addFunction(method.value)
 						} else if (['get', 'set'].includes(method.kind)) {
-							var key = yield* getKey2(method)
+							var key = yield* getKey(method)
 							if (!props[key]) props[key] = {}
 							props[key][method.kind] = addFunction(method.value)
 						} else {

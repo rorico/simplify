@@ -1638,11 +1638,9 @@ function simplify(code, opts) {
 								var ret = getBaseRet()
 								ret.ret = require(file)
 								if (!require.cache[file] || !require.cache[file][requireRead]) {
-									if (whitelist.has(ret.ret)) {
-										addClosure(ret.ret, global, 'treiotuneroitnia')
-										setString(ret.ret, 'require("' + name + '")')
-										ret.str = 'require("' + name + '")'
-									}
+									addClosure(ret.ret, global, 'treiotuneroitnia')
+									setString(ret.ret, 'require("' + name + '")')
+									ret.str = 'require("' + name + '")'
 								}
 								fakeRequire.ret = ret
 								return ret.ret

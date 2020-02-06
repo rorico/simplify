@@ -1,17 +1,8 @@
+var getBaseRet = require('./baseRet')
 module.exports = function(helpers) {
     var map = new Map()
-    var baseRet = {
-        ret: undefined,
-        delete: false,
-        return: false,
-        break: false,
-        continue: false,
-        spread: false,
-        varPath: [],
-        str: ''
-    }
     function getRet(func) {
-        var ret = Object.assign({}, baseRet)
+        var ret = getBaseRet()
         func.ret = ret
         return ret
     }

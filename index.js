@@ -9,6 +9,8 @@ var path = require("path")
 var simplifyError = require("./simplifyError")
 var getOverrides = require('./overrides')
 var side = require('./side')
+var getBaseRet = require('./baseRet')
+
 var functionName = Symbol('name')
 var modules = {}
 var called = new Set()
@@ -554,16 +556,7 @@ function simplify(code, opts) {
 		return func
 	}
 	function callFunction(func, node, args, argStrs, thisArg, thisStr, isNew) {
-		var ret = {
-			ret: undefined,
-			delete: false,
-			return: false,
-			break: false,
-			continue: false,
-			spread: false,
-			varPath: [],
-			str: ''
-		}
+		var ret = getBaseRet()
 		
 		func.argStrs = argStrs
 		if (!func.arrowThis) {
@@ -935,16 +928,7 @@ function simplify(code, opts) {
 	}
 
 	function *walkGen(node, context) {
-		var ret = {
-			ret: undefined,
-			delete: false,
-			return: false,
-			break: false,
-			continue: false,
-			spread: false,
-			varPath: [],
-			str: ''
-		}
+		var ret = getBaseRet()
 		vars = context.vars
 		var steps
 		var after

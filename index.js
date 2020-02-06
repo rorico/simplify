@@ -9,6 +9,7 @@ var path = require("path")
 var simplifyError = require("./simplifyError")
 var getOverrides = require('./overrides')
 var side = require('./side')
+var fakeRequireFilter = require('./fakeRequireFilter')
 var getBaseRet = require('./baseRet')
 
 var functionName = Symbol('name')
@@ -27,6 +28,7 @@ var callstack = []
 
 var poly = fs.readFileSync('./polyfill.js')
 var polyfills = simplify(poly, {node: true, filename: './polyfill.js', package: __dirname, comments: true}).exposed['module.exports']
+var requireRead = Symbol('requireRead')
 
 function simplify(code, opts) {
 	var vars = {}
@@ -1596,6 +1598,7 @@ function simplify(code, opts) {
 							loaded: false,
 							children: [],
 							paths: [file],
+							[requireRead]: true,
 						}
 						// gonna assume this is defined with filename for now
 						var moduleFolder = path.join(opts.package, "node_modules")
@@ -1621,14 +1624,28 @@ function simplify(code, opts) {
 							var oldRecording = recording
 							recording = false
 							try {
-								if ((name.startsWith(".") || name.includes('/') || name.includes('\\')) && !require.cache[file]) {
-									var todo = fs.readFileSync(file)
-									opts.filename = file
-									opts.parent = module
-									simplify(todo, opts)
+								// name === file is for default node modules like http
+								if (name !== file && !require.cache[file] && path.extname(file) === '.js') {
+									if (fakeRequireFilter(name, file)) {
+										var todo = fs.readFileSync(file)
+										opts.filename = file
+										opts.parent = module
+										simplify(todo, opts)
+									} else {
+										console.error(name, file, 'require file as node runner')
+									}
 								}
-								var ret = require(file)
-								return ret
+								var ret = getBaseRet()
+								ret.ret = require(file)
+								if (!require.cache[file] || !require.cache[file][requireRead]) {
+									if (whitelist.has(ret.ret)) {
+										addClosure(ret.ret, global, 'treiotuneroitnia')
+										setString(ret.ret, 'require("' + name + '")')
+										ret.str = 'require("' + name + '")'
+									}
+								}
+								fakeRequire.ret = ret
+								return ret.ret
 							} catch (e) {
 								console.log("cannot require", ...args, e)
 								process.exit(1)

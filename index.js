@@ -971,9 +971,13 @@ function simplify(code, opts) {
 					for (var arg of node.arguments)  {
 						var argRet = yield arg
 						if (argRet.spread) {
-							argsInfo = argsInfo.concat(argRet)
-							// todo: this isn't done properly, but it works for now
-							// argsInfo.push(...argRet)
+							for (var r in argRet.ret) {
+								var p = getPropWithKey(argRet.ret, r, argRet.str)
+								argsInfo.push({
+									ret: p.val,
+									str: p.str
+								})
+							}
 						} else {
 							argsInfo.push(argRet)
 						}

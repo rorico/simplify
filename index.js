@@ -400,7 +400,7 @@ function simplify(code, opts) {
 		return node instanceof Function
 	}
 
-	function addFunction(node) {
+	function addFunction(node, superClass, isConstructor) {
 		node.calls = node.calls || 0
 		// need a seperate closure for each call
 		var closure = vars
@@ -508,7 +508,13 @@ function simplify(code, opts) {
 			func = function() {
 				var oldVars = setup.apply(this, arguments)
 				try {
-					var ret = walk(node.body, { vars })
+					var ret = walk(node.body, { vars, superClass })
+					if (superClass && isConstructor && !ret.return) {
+						var that = getV('this')
+						ret = getBaseRet()
+						ret.ret = that.val
+						ret.str = that.str
+					}
 					// only used to pass to callExpression which should be immediately after
 					func.ret = ret
 					return ret.ret
@@ -525,7 +531,7 @@ function simplify(code, opts) {
 			func = function*() {
 				var oldVars = setup.apply(this, arguments)
 				try {
-					var ret = yield* walkGen(node.body, { vars })
+					var ret = yield* walkGen(node.body, { vars, superClass })
 					// only used to pass to callExpression which should be immediately after
 					func.ret = ret
 					return ret.ret
@@ -998,10 +1004,26 @@ function simplify(code, opts) {
 						// like name, node
 						var o = yield* getObj(node.callee)
 						
-						thisArg = o.obj
-						thisStr = o.objStr
+						if (node.callee.object.type === "Super") {
+							// super is a special snowflake
+							var that = getV('this')
+							thisArg = that.val
+							thisStr = that.str
+						} else {
+							thisArg = o.obj
+							thisStr = o.objStr
+						}
 						func = o.val
 						str = o.str
+					} else if (node.callee.type === "Super") {
+						// super is very special
+						// this is also kinda hacky
+						// relies on returning this at the end of constructor
+						var newThis = new context.superClass(...args)
+						newThis.__proto__ = getVar('this').__proto__
+						var ret = getBaseRet()
+						ret.ret = setVar('this', newThis)
+						return ret
 					} else {
 						var f = yield node.callee
 						func = f.ret
@@ -1074,7 +1096,8 @@ function simplify(code, opts) {
 							var funcStr = '!function(' + args.slice(0, args.length - 2).join(', ') + ') {' + args[args.length - 1] + '}'
 							return addFunction(parse(funcStr).body[0].expression.argument)
 						}
-	
+					}
+
 					if (func.node) {
 						var n = func.node
 						node.funcId = n.nodeId
@@ -1687,6 +1710,10 @@ function simplify(code, opts) {
 				varPath = ["this"]
 				return ret
 
+			case "Super":
+				ret.ret = context.superClass.prototype
+				return ret
+
 			case "ThrowStatement":
 				steps = function*() {
 					throw (yield node.argument).ret
@@ -1744,19 +1771,26 @@ function simplify(code, opts) {
 			case "ClassDeclaration":
 			case "ClassExpression":
 				steps = function*() {
-					var constructor = addFunction(parse('function placeholder() {}').body[0])
+					var superClass = node.superClass && (yield node.superClass).ret
+					var constructorF
+					// todo: not like this, makes it hard to track
+					if (superClass) {
+						constructorF = parse('class placeholder extends Object { constructor(...args) { super(...args) } }').body[0].body.body[0].value
+					} else {
+						constructorF = parse('function placeholder() {}').body[0]
+					}
 					var proto = {}
 					var props = {}
 					for (var method of node.body.body) {
 						if (method.kind === 'constructor') {
-							constructor = addFunction(method.value)
+							constructor = constructorF = method.value
 						} else if (method.kind === 'method') {
 							var key = yield* getKey(method)
-							proto[key] = addFunction(method.value)
+							proto[key] = addFunction(method.value, superClass)
 						} else if (['get', 'set'].includes(method.kind)) {
 							var key = yield* getKey(method)
 							if (!props[key]) props[key] = {}
-							props[key][method.kind] = addFunction(method.value)
+							props[key][method.kind] = addFunction(method.value, superClass)
 						} else {
 							// getters and setters
 							console.log('unsupported method type', method.kind, method)
@@ -1765,12 +1799,12 @@ function simplify(code, opts) {
 							console.log('unsupported method properties', method)
 						}
 					}
+					var constructor = addFunction(constructorF, superClass, true)
+					if (superClass) {
+						constructor.prototype = Object.create(superClass.prototype)
+					}
 					Object.assign(constructor.prototype, proto)
 					Object.defineProperties(constructor.prototype, props)
-					if (node.superClass) {
-						// don't support super yet
-						constructor.__proto__ = (yield node.superClass).ret
-					}
 					if (node.id) {
 						addVar(node.id.name, constructor, node, node.id.name)
 					}

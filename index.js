@@ -30,6 +30,8 @@ var poly = fs.readFileSync('./polyfill.js')
 var polyfills = simplify(poly, {node: true, filename: './polyfill.js', package: __dirname, comments: true}).exposed['module.exports']
 var requireRead = Symbol('requireRead')
 
+class SimplifyPromise extends Promise {}
+
 function simplify(code, opts) {
 	var vars = {}
 	var changed = {}
@@ -407,11 +409,6 @@ function simplify(code, opts) {
 		// don't want to make new required modules disappear
 		if (loaded) funcDefined.add(node)
 		function setup() {
-			if (node.async) {
-				console.log('unssuported call', node)
-				process.exit()
-			}
-
 			if (recording) {
 				node.calls++
 				called.add(node)
@@ -504,7 +501,7 @@ function simplify(code, opts) {
 			vars = oldVars
 		}
 		var func
-		if (!node.generator) {
+		if (!node.generator && !node.async) {
 			func = function() {
 				var oldVars = setup.apply(this, arguments)
 				try {
@@ -527,7 +524,7 @@ function simplify(code, opts) {
 					finish(oldVars)
 				}
 			}
-		} else {
+		} else if (node.generator && !node.async) {
 			func = function*() {
 				var oldVars = setup.apply(this, arguments)
 				try {
@@ -538,7 +535,57 @@ function simplify(code, opts) {
 				} catch (e) {
 					throw e
 				} finally {
-					// do in finally in case try catches are part of code flow
+					// do in finally in case try catches are part of code flow	
+					// this can happen if a higher function modifies this one
+					// remove just in case
+					finish(oldVars)
+				}
+			}
+		} else if (!node.generator && node.async) {
+			func = async function() {
+				var oldVars = setup.apply(this, arguments)
+				try {
+					var gen = walkGen(node.body, { vars, superClass })
+					var promise = gen.next()
+					while (!promise.done) {
+						var promise = gen.next(await promise.value)
+					}
+					var ret = promise.value
+					// only used to pass to callExpression which should be immediately after
+					func.ret = ret
+					return ret.ret
+				} catch (e) {
+					throw e
+				} finally {
+					// do in finally in case try catches are part of code flow	
+					// this can happen if a higher function modifies this one
+					// remove just in case
+					finish(oldVars)
+				}
+			}
+		} else if (node.generator && node.async) {
+			func = async function*() {
+				var oldVars = setup.apply(this, arguments)
+				try {
+					var gen = walkGen(node.body, { vars, superClass })
+					var promise = gen.next()
+					while (!promise.done) {
+						var next
+						if (promise.value instanceof SimplifyPromise) {
+							next = await promise.value
+						} else {
+							next = yield promise.value
+						}
+						var promise = gen.next(next)
+					}
+					var ret = promise.value
+					// only used to pass to callExpression which should be immediately after
+					func.ret = ret
+					return ret.ret
+				} catch (e) {
+					throw e
+				} finally {
+					// do in finally in case try catches are part of code flow	
 					// this can happen if a higher function modifies this one
 					// remove just in case
 					finish(oldVars)
@@ -557,9 +604,6 @@ function simplify(code, opts) {
 			var arrowThis = getV('this')
 			func.arrowThis = arrowThis.val
 			func.thisStr = arrowThis.str
-		}
-		if (node.async) {
-			console.log('unsupported function properties', node, filename)
 		}
 		return func
 	}
@@ -1156,7 +1200,7 @@ function simplify(code, opts) {
 					if (side.affectsFirst.has(func)) {
 						callStr = argStrs[0]
 					}
-	
+
 					if (overrides.has(func)) {
 						func = overrides.get(func)
 					}
@@ -1583,12 +1627,39 @@ function simplify(code, opts) {
 
 			case "YieldExpression":
 				// todo str
-				ret.ret = yield (yield* walkGen(node.argument, context)).ret
+				if (node.delegate) {
+					var gen = (yield* walkGen(node.argument, context)).ret
+
+					// not just doing yield* since that makes asyncGenerators and generators incompatible
+					var s
+					var next
+					while (true) {
+						next = gen.next(s)
+						if (next instanceof Promise) {
+							next = yield SimplifyPromise.resolve(next)
+						}
+						if (next.done) break
+						s = yield next.value
+					}
+					ret.ret = next.value
+					return ret
+				} else {
+					ret.ret = yield (yield* walkGen(node.argument, context)).ret
+				}
 				// force a switch in context, since it will be different from where it came
 				// todo make things more functional and less global - specifically make getV and assign based on context
 				vars = context.vars
 				return ret
-
+				
+				
+			case "AwaitExpression":
+				// todo str
+				// this gets resolved by the async runner
+				ret.ret = yield SimplifyPromise.resolve((yield* walkGen(node.argument, context)).ret)
+				// see comment from yieldStatement
+				vars = context.vars
+				return ret
+				break
 			case "VariableDeclaration":
 				break
 			case "Program":

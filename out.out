@@ -1,0 +1,1491 @@
+eriouhaisndjfksdjn C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\node-fetch-npm\src\index.js
+callback called without attaching to a global function function () { [native code] } node_modules/npm/lib/npm.js:209:14 []
+callback called without attaching to a global function undefined node_modules/npm/lib/npm.js:209:14 []
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\which\which.js:28:21
+require("fs").stat("C:\\Program Files\\nodejs\\node.exe" + ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC".split(";")[0], function(er, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:35:3
+require("fs").stat("C:\\Program Files\\nodejs\\node.exe" + ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC".split(";")[0], function(er, stat) {}).stat.isSymbolicLink() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:28:8
+require("fs").stat("C:\\Program Files\\nodejs\\node.exe" + ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC".split(";")[0], function(er, stat) {}).stat.isFile() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:28:34
+require("events").apply({}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:87:3
+require("os").type() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\has-unicode\index.js:11:7
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\defaults.js:245:28
+callback called without attaching to a global function { access: null,
+  'allow-same-version': false,
+  'always-auth': false,
+  also: null,
+  audit: true,
+  'audit-level': 'low',
+  'auth-type': 'legacy',
+  before: null,
+  'bin-links': true,
+  browser: null,
+  ca: null,
+  cafile: null,
+  cache: 'C:\\Users\\danie\\AppData\\Roaming\\npm-cache',
+  'cache-lock-stale': 60000,
+  'cache-lock-retries': 10,
+  'cache-lock-wait': 10000,
+  'cache-max': Infinity,
+  'cache-min': 10,
+  cert: null,
+  cidr: null,
+  color: true,
+  depth: Infinity,
+  description: true,
+  dev: false,
+  'dry-run': false,
+  editor: 'notepad.exe',
+  'engine-strict': false,
+  force: false,
+  'fetch-retries': 2,
+  'fetch-retry-factor': 10,
+  'fetch-retry-mintimeout': 10000,
+  'fetch-retry-maxtimeout': 60000,
+  git: 'git',
+  'git-tag-version': true,
+  'commit-hooks': true,
+  global: false,
+  globalconfig: 'C:\\Program Files\\nodejs\\etc\\npmrc',
+  'global-style': false,
+  group: 0,
+  'ham-it-up': false,
+  heading: 'npm',
+  'if-present': false,
+  'ignore-prepublish': false,
+  'ignore-scripts': false,
+  'init-module': 'C:\\Users\\danie\\.npm-init.js',
+  'init-author-name': '',
+  'init-author-email': '',
+  'init-author-url': '',
+  'init-version': '1.0.0',
+  'init-license': 'ISC',
+  json: false,
+  key: null,
+  'legacy-bundling': false,
+  link: false,
+  'local-address': undefined,
+  loglevel: 'notice',
+  logstream: 
+   WriteStream {
+     connecting: false,
+     _hadError: false,
+     _handle: TTY { owner: [Circular], onread: [Function: onread] },
+     _parent: null,
+     _host: null,
+     _readableState: 
+      ReadableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        buffer: BufferList { length: 0 },
+        length: 0,
+        pipes: null,
+        pipesCount: 0,
+        flowing: null,
+        ended: false,
+        endEmitted: false,
+        reading: false,
+        errorEmitted: false,
+        sync: true,
+        needReadable: false,
+        emittedReadable: false,
+        readableListening: false,
+        resumeScheduled: false,
+        emitClose: false,
+        destroyed: false,
+        defaultEncoding: 'utf8',
+        awaitDrain: 0,
+        readingMore: false,
+        decoder: null,
+        encoding: null },
+     readable: false,
+     _events: 
+      { end: [Function: onReadableStreamEnd],
+        error: [Function: noop] },
+     _eventsCount: 2,
+     _maxListeners: undefined,
+     _writableState: 
+      WritableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        finalCalled: false,
+        needDrain: false,
+        ending: false,
+        ended: false,
+        finished: false,
+        destroyed: false,
+        decodeStrings: false,
+        defaultEncoding: 'utf8',
+        length: 0,
+        writing: false,
+        corked: 0,
+        sync: false,
+        bufferProcessing: false,
+        onwrite: [Function: bound onwrite],
+        writecb: null,
+        writelen: 0,
+        bufferedRequest: null,
+        lastBufferedRequest: null,
+        pendingcb: 0,
+        prefinished: false,
+        errorEmitted: false,
+        emitClose: false,
+        bufferedRequestCount: 0,
+        corkedRequestsFree: [Object] },
+     writable: true,
+     allowHalfOpen: false,
+     _sockname: null,
+     _writev: null,
+     _pendingData: null,
+     _pendingEncoding: '',
+     server: null,
+     _server: null,
+     columns: 388,
+     rows: 26,
+     _type: 'tty',
+     fd: 2,
+     _isStdio: true,
+     destroySoon: [Function: destroy],
+     _destroy: [Function],
+     [Symbol(asyncId)]: 3,
+     [Symbol(lastWriteQueueSize)]: 0,
+     [Symbol(timeout)]: null,
+     [Symbol(kBytesRead)]: 0,
+     [Symbol(kBytesWritten)]: 0 },
+  'logs-max': 10,
+  long: false,
+  maxsockets: 50,
+  message: '%s',
+  'metrics-registry': null,
+  'node-options': null,
+  'node-version': 'v10.0.0',
+  offline: false,
+  'onload-script': false,
+  only: null,
+  optional: true,
+  otp: null,
+  'package-lock': true,
+  'package-lock-only': false,
+  parseable: false,
+  'prefer-offline': false,
+  'prefer-online': false,
+  prefix: 'C:\\Program Files\\nodejs',
+  preid: '',
+  production: false,
+  progress: true,
+  proxy: null,
+  'https-proxy': null,
+  noproxy: null,
+  'user-agent': 'npm/{npm-version} node/{node-version} {platform} {arch}',
+  'read-only': false,
+  'rebuild-bundle': true,
+  registry: 'https://registry.npmjs.org/',
+  rollback: true,
+  save: true,
+  'save-bundle': false,
+  'save-dev': false,
+  'save-exact': false,
+  'save-optional': false,
+  'save-prefix': '^',
+  'save-prod': false,
+  scope: '',
+  'script-shell': null,
+  'scripts-prepend-node-path': 'warn-only',
+  searchopts: '',
+  searchexclude: null,
+  searchlimit: 20,
+  searchstaleness: 900,
+  'send-metrics': false,
+  shell: 'C:\\Windows\\system32\\cmd.exe',
+  shrinkwrap: true,
+  'sign-git-commit': false,
+  'sign-git-tag': false,
+  'sso-poll-frequency': 500,
+  'sso-type': 'oauth',
+  'strict-ssl': true,
+  tag: 'latest',
+  'tag-version-prefix': 'v',
+  timing: false,
+  tmp: 'C:\\Users\\danie\\AppData\\Local\\Temp',
+  unicode: false,
+  'unsafe-perm': true,
+  'update-notifier': true,
+  usage: false,
+  user: 0,
+  userconfig: 'C:\\Users\\danie\\.npmrc',
+  umask: 0,
+  version: false,
+  versions: false,
+  viewer: 'browser',
+  _exit: true } C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\proto-list\proto-list.js:16:10 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\isexe\\windows.js:36:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\isexe\\windows.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\isexe\\index.js:42:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\isexe\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\which\\which.js:87:20',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\which\\which.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'node_modules/npm/lib/npm.js:259:7',
+    'node_modules/npm/lib/npm.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:90:31',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+require("fs").readFile("C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\npmrc", "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+process.emit("load", {_events: {load: function() {}, error: function(er, conf) {}}, _eventsCount: 2, _maxListeners: undefined, list: [Object.setPrototypeOf({}, some_function_with_external_call.r)], root: getter, _awaiting: 0, _saving: 0, sources: {builtin: {path: "C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\npmrc", type: "ini", data: Object.setPrototypeOf({}, some_function_with_external_call.r)}}}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:281:29
+require("events").apply({}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:87:3
+callback called without attaching to a global function {} C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\proto-list\proto-list.js:16:10 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:314:20',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:338:10',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js:259:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js:281:29',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:98:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:105:14',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[17])})._resolve.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {})], root: getter, _awaiting: 1, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}}, usingBuiltin: true})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[17])})._resolve.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))], root: getter, _awaiting: 2, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}}, usingBuiltin: true})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\load-prefix.js:46:16
+require("fs").readdir("C:\\Users\\danie\\Desktop\\simplify", function(err, files) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\find-npm-prefix\find-prefix.js:38:5
+process.emit("load", {_events: {}, _eventsCount: 0, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:281:29
+require("fs").readdir("C:\\Users\\danie\\Desktop\\simplify", function(err, files) {}).files.indexOf("node_modules") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\find-npm-prefix\find-prefix.js:48:18
+require("fs").readFile("C:\\Users\\danie\\Desktop\\simplify\\.npmrc", "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+process.emit("load", {_events: {load: function}, _eventsCount: 1, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:281:29
+require("fs").readFile(Object.keys({}).reduce(function(c, k) {}, {}).userconfig, "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+process.emit("load", {_events: {error: function, load: function}, _eventsCount: 2, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:281:29
+assigned some_function_with_external_call.r.globalconfig = "C:\\Program Files\\nodejs\\etc\\npmrc"
+assigned some_function_with_external_call.r.globalignorefile = "C:\\Program Files\\nodejs\\etc\\npmignore"
+require("fs").readFile(Object.keys({}).reduce(function(c, k) {}, {}).globalconfig, "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+callback called without attaching to a global function { access: null,
+  'allow-same-version': false,
+  'always-auth': false,
+  also: null,
+  audit: true,
+  'audit-level': 'low',
+  'auth-type': 'legacy',
+  before: null,
+  'bin-links': true,
+  browser: null,
+  ca: null,
+  cafile: null,
+  cache: 'C:\\Users\\danie\\AppData\\Roaming\\npm-cache',
+  'cache-lock-stale': 60000,
+  'cache-lock-retries': 10,
+  'cache-lock-wait': 10000,
+  'cache-max': Infinity,
+  'cache-min': 10,
+  cert: null,
+  cidr: null,
+  color: true,
+  depth: Infinity,
+  description: true,
+  dev: false,
+  'dry-run': false,
+  editor: 'notepad.exe',
+  'engine-strict': false,
+  force: false,
+  'fetch-retries': 2,
+  'fetch-retry-factor': 10,
+  'fetch-retry-mintimeout': 10000,
+  'fetch-retry-maxtimeout': 60000,
+  git: 'git',
+  'git-tag-version': true,
+  'commit-hooks': true,
+  global: false,
+  globalconfig: 'C:\\Program Files\\nodejs\\etc\\npmrc',
+  'global-style': false,
+  group: 0,
+  'ham-it-up': false,
+  heading: 'npm',
+  'if-present': false,
+  'ignore-prepublish': false,
+  'ignore-scripts': false,
+  'init-module': 'C:\\Users\\danie\\.npm-init.js',
+  'init-author-name': '',
+  'init-author-email': '',
+  'init-author-url': '',
+  'init-version': '1.0.0',
+  'init-license': 'ISC',
+  json: false,
+  key: null,
+  'legacy-bundling': false,
+  link: false,
+  'local-address': undefined,
+  loglevel: 'notice',
+  logstream: 
+   WriteStream {
+     connecting: false,
+     _hadError: false,
+     _handle: TTY { owner: [Circular], onread: [Function: onread] },
+     _parent: null,
+     _host: null,
+     _readableState: 
+      ReadableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        buffer: BufferList { length: 0 },
+        length: 0,
+        pipes: null,
+        pipesCount: 0,
+        flowing: null,
+        ended: false,
+        endEmitted: false,
+        reading: false,
+        errorEmitted: false,
+        sync: true,
+        needReadable: false,
+        emittedReadable: false,
+        readableListening: false,
+        resumeScheduled: false,
+        emitClose: false,
+        destroyed: false,
+        defaultEncoding: 'utf8',
+        awaitDrain: 0,
+        readingMore: false,
+        decoder: null,
+        encoding: null },
+     readable: false,
+     _events: 
+      { end: [Function: onReadableStreamEnd],
+        error: [Function: noop] },
+     _eventsCount: 2,
+     _maxListeners: undefined,
+     _writableState: 
+      WritableState {
+        objectMode: false,
+        highWaterMark: 16384,
+        finalCalled: false,
+        needDrain: false,
+        ending: false,
+        ended: false,
+        finished: false,
+        destroyed: false,
+        decodeStrings: false,
+        defaultEncoding: 'utf8',
+        length: 0,
+        writing: false,
+        corked: 0,
+        sync: false,
+        bufferProcessing: false,
+        onwrite: [Function: bound onwrite],
+        writecb: null,
+        writelen: 0,
+        bufferedRequest: null,
+        lastBufferedRequest: null,
+        pendingcb: 0,
+        prefinished: false,
+        errorEmitted: false,
+        emitClose: false,
+        bufferedRequestCount: 0,
+        corkedRequestsFree: [Object] },
+     writable: true,
+     allowHalfOpen: false,
+     _sockname: null,
+     _writev: null,
+     _pendingData: null,
+     _pendingEncoding: '',
+     server: null,
+     _server: null,
+     columns: 388,
+     rows: 26,
+     _type: 'tty',
+     fd: 2,
+     _isStdio: true,
+     destroySoon: [Function: destroy],
+     _destroy: [Function],
+     [Symbol(asyncId)]: 3,
+     [Symbol(lastWriteQueueSize)]: 0,
+     [Symbol(timeout)]: null,
+     [Symbol(kBytesRead)]: 0,
+     [Symbol(kBytesWritten)]: 0 },
+  'logs-max': 10,
+  long: false,
+  maxsockets: 50,
+  message: '%s',
+  'metrics-registry': null,
+  'node-options': null,
+  'node-version': 'v10.0.0',
+  offline: false,
+  'onload-script': false,
+  only: null,
+  optional: true,
+  otp: null,
+  'package-lock': true,
+  'package-lock-only': false,
+  parseable: false,
+  'prefer-offline': false,
+  'prefer-online': false,
+  prefix: 'C:\\Program Files\\nodejs',
+  preid: '',
+  production: false,
+  progress: true,
+  proxy: null,
+  'https-proxy': null,
+  noproxy: null,
+  'user-agent': 'npm/{npm-version} node/{node-version} {platform} {arch}',
+  'read-only': false,
+  'rebuild-bundle': true,
+  registry: 'https://registry.npmjs.org/',
+  rollback: true,
+  save: true,
+  'save-bundle': false,
+  'save-dev': false,
+  'save-exact': false,
+  'save-optional': false,
+  'save-prefix': '^',
+  'save-prod': false,
+  scope: '',
+  'script-shell': null,
+  'scripts-prepend-node-path': 'warn-only',
+  searchopts: '',
+  searchexclude: null,
+  searchlimit: 20,
+  searchstaleness: 900,
+  'send-metrics': false,
+  shell: 'C:\\Windows\\system32\\cmd.exe',
+  shrinkwrap: true,
+  'sign-git-commit': false,
+  'sign-git-tag': false,
+  'sso-poll-frequency': 500,
+  'sso-type': 'oauth',
+  'strict-ssl': true,
+  tag: 'latest',
+  'tag-version-prefix': 'v',
+  timing: false,
+  tmp: 'C:\\Users\\danie\\AppData\\Local\\Temp',
+  unicode: false,
+  'unsafe-perm': true,
+  'update-notifier': true,
+  usage: false,
+  user: 0,
+  userconfig: 'C:\\Users\\danie\\.npmrc',
+  umask: 0,
+  version: false,
+  versions: false,
+  viewer: 'browser',
+  _exit: true,
+  globalignorefile: 'C:\\Program Files\\nodejs\\etc\\npmignore' } C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\proto-list\proto-list.js:16:10 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:314:20',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:338:10',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js:259:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js:281:29',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\config-chain\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, Object.keys(require("events").prototype)[17])})._resolve.bind({_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({__source__: "global"}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, some_function_with_external_call.r)], root: getter, _awaiting: 2, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini"}, builtin: {data: Object.setPrototypeOf({}, some_function_with_external_call.r)}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+process.emit("load", {_events: {error: function, load: function}, _eventsCount: 2, _maxListeners: undefined, list: [Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, some_function_with_external_call.r)], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, builtin: {data: Object.setPrototypeOf({}, some_function_with_external_call.r)}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:281:29
+require("assert")(some_function_with_external_call.r !== Object.prototype) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\set-user.js:10:3
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:20:26
+require("fs").mkdir("C:\\Program Files\\nodejs", 511, function(er) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:27:5
+require("fs").stat("C:\\Program Files\\nodejs", function(er2, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:44:17
+require("fs").stat("C:\\Program Files\\nodejs", function(er2, stat) {}).stat.isDirectory() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:47:33
+require("fs").stat("C:\\Program Files\\nodejs", function(er, st) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\set-user.js:24:5
+assigned some_function_with_external_call.r.user = 0
+process.nextTick(function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\load-uid.js:13:5
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:20:26
+require("fs").mkdir("C:\\Users\\danie\\Desktop\\simplify", 511, function(er) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:27:5
+require("fs").stat("C:\\Users\\danie\\Desktop\\simplify", function(er2, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:44:17
+require("fs").stat("C:\\Users\\danie\\Desktop\\simplify", function(er2, stat) {}).stat.isDirectory() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:47:33
+Array.isArray(some_function_with_external_call.r.access) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "restricted", "public"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "restricted", "public"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.access = null
+Array.isArray(some_function_with_external_call.r.allow-same-version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.allow-same-version = false
+Array.isArray(some_function_with_external_call.r.always-auth) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.always-auth = false
+Array.isArray(some_function_with_external_call.r.also) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "dev", "development"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "dev", "development"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.also = null
+Array.isArray(some_function_with_external_call.r.audit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.audit = true
+Array.isArray(some_function_with_external_call.r.audit-level) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["low", "moderate", "high", "critical"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["low", "moderate", "high", "critical"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("low") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.audit-level = "low"
+Array.isArray(some_function_with_external_call.r.auth-type) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["legacy", "sso", "saml", "oauth"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["legacy", "sso", "saml", "oauth"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("legacy") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.auth-type = "legacy"
+Array.isArray(some_function_with_external_call.r.before) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, Date]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, Date]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.before = null
+Array.isArray(some_function_with_external_call.r.bin-links) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.bin-links = true
+Array.isArray(some_function_with_external_call.r.browser) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.browser = null
+Array.isArray(some_function_with_external_call.r.ca) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.ca = null
+Array.isArray(some_function_with_external_call.r.cafile) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.cafile = undefined
+Array.isArray(some_function_with_external_call.r.cache) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.cache = "C:\\Users\\danie\\AppData\\Roaming\\npm-cache"
+Array.isArray(some_function_with_external_call.r.cache-lock-stale) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.cache-lock-stale) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.cache-lock-stale) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.cache-lock-stale = 60000
+Array.isArray(some_function_with_external_call.r.cache-lock-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.cache-lock-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.cache-lock-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.cache-lock-retries = 10
+Array.isArray(some_function_with_external_call.r.cache-lock-wait) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.cache-lock-wait) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.cache-lock-wait) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.cache-lock-wait = 10000
+Array.isArray(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.cache-max = Infinity
+Array.isArray(some_function_with_external_call.r.cache-min) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.cache-min) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.cache-min) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.cache-min = 10
+Array.isArray(some_function_with_external_call.r.cert) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.cert = null
+Array.isArray(some_function_with_external_call.r.cidr) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.cidr = null
+Array.isArray(process.env.NO_COLOR == null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["always", Boolean]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["always", Boolean]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("always") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.color = true
+Array.isArray(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.depth = Infinity
+Array.isArray(some_function_with_external_call.r.description) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.description = true
+Array.isArray(some_function_with_external_call.r.dev) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.dev = false
+Array.isArray(some_function_with_external_call.r.dry-run) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.dry-run = false
+Array.isArray(some_function_with_external_call.r.editor) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.editor = "notepad.exe"
+Array.isArray(some_function_with_external_call.r.engine-strict) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.engine-strict = false
+Array.isArray(some_function_with_external_call.r.force) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.force = false
+Array.isArray(some_function_with_external_call.r.fetch-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.fetch-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.fetch-retries) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.fetch-retries = 2
+Array.isArray(some_function_with_external_call.r.fetch-retry-factor) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.fetch-retry-factor) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.fetch-retry-factor) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.fetch-retry-factor = 10
+Array.isArray(some_function_with_external_call.r.fetch-retry-mintimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.fetch-retry-mintimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.fetch-retry-mintimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.fetch-retry-mintimeout = 10000
+Array.isArray(some_function_with_external_call.r.fetch-retry-maxtimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.fetch-retry-maxtimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.fetch-retry-maxtimeout) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.fetch-retry-maxtimeout = 60000
+Array.isArray(some_function_with_external_call.r.git) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.git = "git"
+Array.isArray(some_function_with_external_call.r.git-tag-version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.git-tag-version = true
+Array.isArray(some_function_with_external_call.r.commit-hooks) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.commit-hooks = true
+Array.isArray(some_function_with_external_call.r.global) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.global = false
+Array.isArray(some_function_with_external_call.r.globalconfig) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.globalconfig = "C:\\Program Files\\nodejs\\etc\\npmrc"
+Array.isArray(some_function_with_external_call.r.global-style) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.global-style = false
+Array.isArray(some_function_with_external_call.r.group) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.group) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.group) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.group = 0
+Array.isArray(some_function_with_external_call.r.ham-it-up) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.ham-it-up = false
+Array.isArray(some_function_with_external_call.r.heading) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.heading = "npm"
+Array.isArray(some_function_with_external_call.r.if-present) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.if-present = false
+Array.isArray(some_function_with_external_call.r.ignore-prepublish) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.ignore-prepublish = false
+Array.isArray(some_function_with_external_call.r.ignore-scripts) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.ignore-scripts = false
+Array.isArray(some_function_with_external_call.r.init-module) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-module = "C:\\Users\\danie\\.npm-init.js"
+Array.isArray(some_function_with_external_call.r.init-author-name) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-author-name = ""
+Array.isArray(some_function_with_external_call.r.init-author-email) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-author-email = ""
+Array.isArray(some_function_with_external_call.r.init-author-url) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["", require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["", require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-author-url = ""
+Array.isArray(some_function_with_external_call.r.init-version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-version = "1.0.0"
+Array.isArray(some_function_with_external_call.r.init-license) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.init-license = "ISC"
+Array.isArray(some_function_with_external_call.r.json) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.json = false
+Array.isArray(some_function_with_external_call.r.key) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.key = null
+Array.isArray(some_function_with_external_call.r.legacy-bundling) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.legacy-bundling = false
+Array.isArray(some_function_with_external_call.r.link) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.link = false
+Array.isArray(undefined) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(undefined) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.local-address = undefined
+Array.isArray(some_function_with_external_call.r.loglevel) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("silent") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("error") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("warn") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("notice") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.loglevel = "notice"
+Array.isArray(process.stderr) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("stream")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("stream")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.logstream = process.stderr
+Array.isArray(some_function_with_external_call.r.logs-max) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.logs-max) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.logs-max) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.logs-max = 10
+Array.isArray(some_function_with_external_call.r.long) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.long = false
+Array.isArray(some_function_with_external_call.r.maxsockets) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.maxsockets) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.maxsockets) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.maxsockets = 50
+Array.isArray(some_function_with_external_call.r.message) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.message = "%s"
+Array.isArray(some_function_with_external_call.r.metrics-registry) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.metrics-registry = null
+Array.isArray(some_function_with_external_call.r.node-options) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.node-options = null
+Array.isArray(process.version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, SemVer]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, SemVer]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.node-version = "10.0.0"
+Array.isArray(some_function_with_external_call.r.offline) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.offline = false
+Array.isArray(some_function_with_external_call.r.onload-script) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.onload-script = null
+Array.isArray(some_function_with_external_call.r.only) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "dev", "development", "prod", "production"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "dev", "development", "prod", "production"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.only = null
+Array.isArray(some_function_with_external_call.r.optional) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.optional = true
+Array.isArray(some_function_with_external_call.r.otp) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.otp = null
+Array.isArray(some_function_with_external_call.r.package-lock) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.package-lock = true
+Array.isArray(some_function_with_external_call.r.package-lock-only) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.package-lock-only = false
+Array.isArray(some_function_with_external_call.r.parseable) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.parseable = false
+Array.isArray(some_function_with_external_call.r.prefer-offline) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.prefer-offline = false
+Array.isArray(some_function_with_external_call.r.prefer-online) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.prefer-online = false
+Array.isArray(some_function_with_external_call.r.prefix) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.prefix = "C:\\Program Files\\nodejs"
+Array.isArray(some_function_with_external_call.r.preid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.preid = ""
+Array.isArray(process.env.NODE_ENV === "production") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.production = false
+Array.isArray(!process.env.CI) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.progress = true
+Array.isArray(some_function_with_external_call.r.proxy) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, false, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, false, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.proxy = null
+Array.isArray(some_function_with_external_call.r.https-proxy) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.https-proxy = null
+Array.isArray(some_function_with_external_call.r.noproxy) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.noproxy = null
+Array.isArray(some_function_with_external_call.r.user-agent) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.user-agent = "npm/{npm-version} node/{node-version} {platform} {arch}"
+Array.isArray(some_function_with_external_call.r.read-only) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.read-only = false
+Array.isArray(some_function_with_external_call.r.rebuild-bundle) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.rebuild-bundle = true
+Array.isArray(some_function_with_external_call.r.registry) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("url")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.registry = "https://registry.npmjs.org/"
+Array.isArray(some_function_with_external_call.r.rollback) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.rollback = true
+Array.isArray(some_function_with_external_call.r.save) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save = true
+Array.isArray(some_function_with_external_call.r.save-bundle) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-bundle = false
+Array.isArray(some_function_with_external_call.r.save-dev) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-dev = false
+Array.isArray(some_function_with_external_call.r.save-exact) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-exact = false
+Array.isArray(some_function_with_external_call.r.save-optional) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-optional = false
+Array.isArray(some_function_with_external_call.r.save-prefix) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-prefix = "^"
+Array.isArray(some_function_with_external_call.r.save-prod) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.save-prod = false
+Array.isArray(some_function_with_external_call.r.scope) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.scope = ""
+Array.isArray(some_function_with_external_call.r.script-shell) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.script-shell = null
+Array.isArray(some_function_with_external_call.r.scripts-prepend-node-path) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([false, true, "auto", "warn-only"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([false, true, "auto", "warn-only"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("auto") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("warn-only") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.scripts-prepend-node-path = "warn-only"
+Array.isArray(some_function_with_external_call.r.searchopts) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.searchopts = ""
+Array.isArray(some_function_with_external_call.r.searchexclude) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.searchexclude = null
+Array.isArray(some_function_with_external_call.r.searchlimit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.searchlimit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.searchlimit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.searchlimit = 20
+Array.isArray(some_function_with_external_call.r.searchstaleness) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.searchstaleness) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.searchstaleness) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.searchstaleness = 900
+Array.isArray(some_function_with_external_call.r.send-metrics) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.send-metrics = false
+Array.isArray(process.env.ComSpec) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.shell = "C:\\Windows\\system32\\cmd.exe"
+Array.isArray(some_function_with_external_call.r.shrinkwrap) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.shrinkwrap = true
+Array.isArray(some_function_with_external_call.r.sign-git-commit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.sign-git-commit = false
+Array.isArray(some_function_with_external_call.r.sign-git-tag) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.sign-git-tag = false
+Array.isArray(some_function_with_external_call.r.sso-poll-frequency) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.sso-poll-frequency) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(some_function_with_external_call.r.sso-poll-frequency) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.sso-poll-frequency = 500
+Array.isArray(some_function_with_external_call.r.sso-type) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "oauth", "saml"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "oauth", "saml"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("oauth") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.sso-type = "oauth"
+Array.isArray(some_function_with_external_call.r.strict-ssl) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.strict-ssl = true
+Array.isArray(some_function_with_external_call.r.tag) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.tag = "latest"
+Array.isArray(some_function_with_external_call.r.tag-version-prefix) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.tag-version-prefix = "v"
+Array.isArray(some_function_with_external_call.r.timing) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.timing = false
+Array.isArray(process.env.TEMP) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.tmp = "C:\\Users\\danie\\AppData\\Local\\Temp"
+Array.isArray(some_function_with_external_call.r.unicode) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.unicode = false
+Array.isArray(process.platform === "win32") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.unsafe-perm = true
+Array.isArray(some_function_with_external_call.r.update-notifier) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.update-notifier = true
+Array.isArray(some_function_with_external_call.r.usage) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.usage = false
+Array.isArray(require("fs").stat("C:\\Program Files\\nodejs", function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(require("fs").stat("C:\\Program Files\\nodejs", function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(require("fs").stat("C:\\Program Files\\nodejs", function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+assigned some_function_with_external_call.r.user = 0
+Array.isArray(some_function_with_external_call.r.userconfig) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.userconfig = "C:\\Users\\danie\\.npmrc"
+Array.isArray(some_function_with_external_call.r.umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(some_function_with_external_call.r.umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\umask\index.js:18:37
+assigned some_function_with_external_call.r.umask = 0
+Array.isArray(some_function_with_external_call.r.version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.version = false
+Array.isArray(some_function_with_external_call.r.versions) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.versions = false
+Array.isArray(some_function_with_external_call.r.viewer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r.viewer = "browser"
+Array.isArray(some_function_with_external_call.r._exit) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+assigned some_function_with_external_call.r._exit = true
+Array.isArray(some_function_with_external_call.r.globalignorefile) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([false, true, null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+assigned some_function_with_external_call.r.globalignorefile = "C:\\Program Files\\nodejs\\etc\\npmignore"
+assigned Object.keys({}).reduce(function(c, k) {}, {}).user-agent = "npm/6.9.0 node/v10.0.0 win32 x64"
+assigned Object.keys({}).reduce(function(c, k) {}, {}).metrics-registry = "https://registry.npmjs.org/"
+callback called without attaching to a global function WriteStream {
+  connecting: false,
+  _hadError: false,
+  _handle: TTY { owner: [Circular], onread: [Function: onread] },
+  _parent: null,
+  _host: null,
+  _readableState: 
+   ReadableState {
+     objectMode: false,
+     highWaterMark: 16384,
+     buffer: BufferList { length: 0 },
+     length: 0,
+     pipes: null,
+     pipesCount: 0,
+     flowing: null,
+     ended: false,
+     endEmitted: false,
+     reading: false,
+     errorEmitted: false,
+     sync: true,
+     needReadable: false,
+     emittedReadable: false,
+     readableListening: false,
+     resumeScheduled: false,
+     emitClose: false,
+     destroyed: false,
+     defaultEncoding: 'utf8',
+     awaitDrain: 0,
+     readingMore: false,
+     decoder: null,
+     encoding: null },
+  readable: false,
+  _events: 
+   { end: [Function: onReadableStreamEnd],
+     error: [Function: noop] },
+  _eventsCount: 2,
+  _maxListeners: undefined,
+  _writableState: 
+   WritableState {
+     objectMode: false,
+     highWaterMark: 16384,
+     finalCalled: false,
+     needDrain: false,
+     ending: false,
+     ended: false,
+     finished: false,
+     destroyed: false,
+     decodeStrings: false,
+     defaultEncoding: 'utf8',
+     length: 0,
+     writing: false,
+     corked: 0,
+     sync: false,
+     bufferProcessing: false,
+     onwrite: [Function: bound onwrite],
+     writecb: null,
+     writelen: 0,
+     bufferedRequest: null,
+     lastBufferedRequest: null,
+     pendingcb: 0,
+     prefinished: false,
+     errorEmitted: false,
+     emitClose: false,
+     bufferedRequestCount: 0,
+     corkedRequestsFree: 
+      { next: null,
+        entry: null,
+        finish: [Function: bound onCorkedFinish] } },
+  writable: true,
+  allowHalfOpen: false,
+  _sockname: null,
+  _writev: null,
+  _pendingData: null,
+  _pendingEncoding: '',
+  server: null,
+  _server: null,
+  columns: 388,
+  rows: 26,
+  _type: 'tty',
+  fd: 2,
+  _isStdio: true,
+  destroySoon: [Function: destroy],
+  _destroy: [Function],
+  [Symbol(asyncId)]: 3,
+  [Symbol(lastWriteQueueSize)]: 0,
+  [Symbol(timeout)]: null,
+  [Symbol(kBytesRead)]: 0,
+  [Symbol(kBytesWritten)]: 0 } C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\npmlog\log.js:14:8 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\mkdirp\\index.js:48:26',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\mkdirp\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:184:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:193:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\once\\once.js:25:22',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\once\\once.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:82:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js:83:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\lib\\config\\core.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+Array.isArray([387]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+require("os").type() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\has-unicode\index.js:11:7
+Array.isArray([{activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray({activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray([{activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray({activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+require("assert").equal("function", "function", "a callback must be provided for exit handler") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:32:3
+assigned process.__signal_exit_emitter__.count += 1
+process.on(Object(["SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGTERM"])[0], function listener() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:122:7
+process.on(Object(["SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGTERM"])[1], function listener() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:122:7
+process.on(Object(["SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGTERM"])[2], function listener() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:122:7
+process.on(Object(["SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGTERM"])[3], function listener() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:122:7
+process.on(Object(["SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGTERM"])[4], function listener() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:122:7
+assigned process.emit = processEmit
+assigned process.reallyExit = processReallyExit
+process.__signal_exit_emitter__.on("exit", function() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:50:3
+process.stderr.on("resize", function() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\gauge\index.js:152:3
+Array.isArray([]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\common.js:31:8
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\common.js:93:13
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("\\") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+require("assert")({silent: false, pattern: "C:\\Users\\danie\\AppData\\Roaming\\npm-cache\\_logs\\*-debug.log", strict: true, realpath: false, realpathCache: Object.create(null), follow: false, dot: false, mark: false, nodir: false, sync: false, nounique: false, nonull: false, nosort: false, nocase: false, stat: false, noprocess: false, absolute: false, maxLength: Infinity, cache: Object.create(null), statCache: Object.create(null), symlinks: Object.create(null), ignore: [], changedCwd: false, cwd: "C:\\Users\\danie\\Desktop\\simplify", root: "C:/", cwdAbs: "C:/Users/danie/Desktop/simplify", nomount: false, minimatch: {options: {nonegate: true, nocomment: true}, set: [["C:", "Users", "danie", "AppData", "Roaming", "npm-cache", "_logs", {_glob: "*-debug.log", _src: "(?!\\.)(?=.)[^/]*?-debug\\.log"}]], pattern: "C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log", regexp: null, negate: false, comment: false, empty: false, globSet: Object(["C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log"]), globParts: Object(["C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log".split({})])}, options: {nonegate: true, nocomment: true}, _didRealPath: false, matches: [], _events: {error: function(er, files) {}, end: function(matches) {}}, _eventsCount: 2, _processing: 0, _emitQueue: [], _processQueue: [], paused: false} instanceof Glob) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:299:3
+require("assert")(typeof done === "function") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:300:3
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+assigned Object.create(null).readdir C:/Users/danie/AppData/Roaming/npm-cache/_logs false = [function(er, entries) {}]
+require("fs").readdir("C:/Users/danie/AppData/Roaming/npm-cache/_logs", function(er, entries) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:547:3
+assigned Object.keys({}).reduce(function(c, k) {}, {}).scope = ""
+require("fs").readFileSync("C:\\Users\\danie\\Desktop\\simplify\\package.json") node_modules/npm/lib/npm.js:467:28
+JSON.parse(require("fs").readFileSync("C:\\Users\\danie\\Desktop\\simplify\\package.json")) node_modules/npm/lib/npm.js:467:17
+process.nextTick(some_function_with_external_call.cli.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, config: {_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: Object([Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, some_function_with_external_call.r)]), root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, builtin: {data: Object.setPrototypeOf({}, some_function_with_external_call.r)}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter, loaded: true}, commands: {access: getter, add: getter, add-user: getter, adduser: getter, apihelp: getter, audit: getter, author: getter, bin: getter, bugs: getter, c: getter, cache: getter, ci: getter, cit: getter, clean-install: getter, clean-install-test: getter, completion: getter, config: getter, create: getter, ddp: getter, dedupe: getter, deprecate: getter, dist-tag: getter, dist-tags: getter, docs: getter, doctor: getter, edit: getter, explore: getter, find: getter, find-dupes: getter, get: getter, help: getter, help-search: getter, home: getter, hook: getter, i: getter, ic: getter, info: getter, init: getter, innit: getter, install: getter, install-ci-test: getter, install-clean: getter, install-test: getter, isntall-clean: getter, issues: getter, it: getter, la: getter, link: getter, list: getter, ll: getter, ln: getter, login: getter, logout: getter, ls: getter, ogr: getter, org: getter, outdated: getter, owner: getter, pack: getter, ping: getter, prefix: getter, profile: getter, prune: getter, publish: getter, r: getter, rb: getter, rebuild: getter, remove: getter, repo: getter, restart: getter, rm: getter, root: getter, rum: getter, run: getter, run-script: getter, s: getter, se: getter, search: getter, set: getter, show: getter, shrinkwrap: getter, sit: getter, star: getter, stars: getter, start: getter, stop: getter, t: getter, team: getter, test: getter, token: getter, tst: getter, udpate: getter, un: getter, uninstall: getter, unlink: getter, unpublish: getter, unstar: getter, up: getter, update: getter, upgrade: getter, urn: getter, v: getter, version: getter, view: getter, whoami: getter}, limit: {fetch: 10, action: 50}, lockfileVersion: 1, rollbacks: [], name: "npm", version: "6.9.0", fullList: ["ci", "install-ci-test", "install", "install-test", "uninstall", "cache", "config", "set", "get", "update", "outdated", "prune", "pack", "dedupe", "hook", "rebuild", "link", "publish", "star", "stars", "adduser", "login", "logout", "unpublish", "owner", "access", "team", "deprecate", "shrinkwrap", "token", "profile", "audit", "org", "help", "help-search", "ls", "search", "view", "init", "version", "edit", "explore", "docs", "repo", "bugs", "root", "prefix", "bin", "whoami", "dist-tag", "ping", "test", "stop", "start", "restart", "run-script", "completion", "doctor", "un", "rb", "list", "ln", "create", "i", "it", "cit", "up", "c", "s", "se", "unstar", "tst", "t", "ddp", "v", "run", "clean-install", "clean-install-test", "la", "ll", "ic", "innit", "install-clean", "isntall-clean", "dist-tags", "apihelp", "find-dupes", "upgrade", "udpate", "login", "add-user", "author", "home", "issues", "info", "show", "find", "add", "unlink", "remove", "rm", "r", "rum", "sit", "urn", "ogr"], deref: function(c) {}, load: function(cli, cb_) {}, prefix: getter, bin: getter, dir: getter, globalDir: getter, cache: getter, tmp: getter, color: undefined, modes: {exec: 511, file: 438, umask: 0}, globalPrefix: getter, localPrefix: getter, projectScope: "", metricsProcess: undefined}, null, {_events: {}, _eventsCount: 0, _maxListeners: undefined, config: {_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: Object([Object.keys({}).reduce(function(c, k) {}, {}), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), Object.setPrototypeOf({}, some_function_with_external_call.r)]), root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: Object.keys({}).reduce(function(c, k) {}, {})}, env: {data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r)), source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini", data: Object.setPrototypeOf({}, Object.setPrototypeOf({}, some_function_with_external_call.r))}, builtin: {data: Object.setPrototypeOf({}, some_function_with_external_call.r)}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter, loaded: true}, commands: {access: getter, add: getter, add-user: getter, adduser: getter, apihelp: getter, audit: getter, author: getter, bin: getter, bugs: getter, c: getter, cache: getter, ci: getter, cit: getter, clean-install: getter, clean-install-test: getter, completion: getter, config: getter, create: getter, ddp: getter, dedupe: getter, deprecate: getter, dist-tag: getter, dist-tags: getter, docs: getter, doctor: getter, edit: getter, explore: getter, find: getter, find-dupes: getter, get: getter, help: getter, help-search: getter, home: getter, hook: getter, i: getter, ic: getter, info: getter, init: getter, innit: getter, install: getter, install-ci-test: getter, install-clean: getter, install-test: getter, isntall-clean: getter, issues: getter, it: getter, la: getter, link: getter, list: getter, ll: getter, ln: getter, login: getter, logout: getter, ls: getter, ogr: getter, org: getter, outdated: getter, owner: getter, pack: getter, ping: getter, prefix: getter, profile: getter, prune: getter, publish: getter, r: getter, rb: getter, rebuild: getter, remove: getter, repo: getter, restart: getter, rm: getter, root: getter, rum: getter, run: getter, run-script: getter, s: getter, se: getter, search: getter, set: getter, show: getter, shrinkwrap: getter, sit: getter, star: getter, stars: getter, start: getter, stop: getter, t: getter, team: getter, test: getter, token: getter, tst: getter, udpate: getter, un: getter, uninstall: getter, unlink: getter, unpublish: getter, unstar: getter, up: getter, update: getter, upgrade: getter, urn: getter, v: getter, version: getter, view: getter, whoami: getter}, limit: {fetch: 10, action: 50}, lockfileVersion: 1, rollbacks: [], name: "npm", version: "6.9.0", fullList: ["ci", "install-ci-test", "install", "install-test", "uninstall", "cache", "config", "set", "get", "update", "outdated", "prune", "pack", "dedupe", "hook", "rebuild", "link", "publish", "star", "stars", "adduser", "login", "logout", "unpublish", "owner", "access", "team", "deprecate", "shrinkwrap", "token", "profile", "audit", "org", "help", "help-search", "ls", "search", "view", "init", "version", "edit", "explore", "docs", "repo", "bugs", "root", "prefix", "bin", "whoami", "dist-tag", "ping", "test", "stop", "start", "restart", "run-script", "completion", "doctor", "un", "rb", "list", "ln", "create", "i", "it", "cit", "up", "c", "s", "se", "unstar", "tst", "t", "ddp", "v", "run", "clean-install", "clean-install-test", "la", "ll", "ic", "innit", "install-clean", "isntall-clean", "dist-tags", "apihelp", "find-dupes", "upgrade", "udpate", "login", "add-user", "author", "home", "issues", "info", "show", "find", "add", "unlink", "remove", "rm", "r", "rum", "sit", "urn", "ogr"], deref: function(c) {}, load: function(cli, cb_) {}, prefix: getter, bin: getter, dir: getter, globalDir: getter, cache: getter, tmp: getter, color: undefined, modes: {exec: 511, file: 438, umask: 0}, globalPrefix: getter, localPrefix: getter, projectScope: "", metricsProcess: undefined})) node_modules/npm/lib/npm.js:204:7
+assigned Object([some_function_with_external_call.cli]).length = 0
+assigned Object([function(er, config) {}]).length = 0
+callback called without attaching to a global function beforeExit C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 []
+callback called without attaching to a global function 0 C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 []
+callback called without attaching to a global function exit C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 []
+callback called without attaching to a global function 0 C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 []
+callback called without attaching to a global function removeListener C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function SIGABRT C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function removeListener C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function SIGALRM C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function removeListener C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function SIGHUP C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function removeListener C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function SIGINT C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function removeListener C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]
+callback called without attaching to a global function SIGTERM C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\signal-exit\index.js:144:1 [ [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:150:5',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:77:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:15:12',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:145:18',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js:162:27',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\gauge\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:47:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:62:3',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ './polyfill.js:142:7',
+    './polyfill.js',
+    SourceLocation { start: [Position], end: [Position] } ],
+  [ 'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js:64:7',
+    'C:\\Users\\danie\\Desktop\\simplify\\node_modules\\npm\\node_modules\\signal-exit\\index.js',
+    SourceLocation { start: [Position], end: [Position] } ] ]

@@ -1,0 +1,506 @@
+eriouhaisndjfksdjn C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\node-fetch-npm\src\index.js
+callback called without attaching to a global function function () { [native code] } node_modules/npm/lib/npm.js:209:14 []
+callback called without attaching to a global function undefined node_modules/npm/lib/npm.js:209:14 []
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\which\which.js:28:21
+require("fs").stat(require("path").join("", process.argv[0]) + "", function(er, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:35:3
+require("fs").stat(require("path").join("", process.argv[0]) + "", function(er, stat) {}).stat.isSymbolicLink() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:28:8
+require("fs").stat(require("path").join("", process.argv[0]) + "", function(er, stat) {}).stat.isFile() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\isexe\windows.js:28:34
+require("events").apply({}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:87:3
+require("os").type() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\has-unicode\index.js:11:7
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\defaults.js:245:28
+require("fs").readFile(require("path").resolve("node_modules/npm/lib", "..", "npmrc"), "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+require("events").apply({}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:87:3
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][17])})._resolve.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, list: [[].reduce(function(c, k) {}, {})], root: getter, _awaiting: 1, _saving: 0, sources: {cli: {data: [].reduce(function(c, k) {}, {})}}, usingBuiltin: true})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][17])})._resolve.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, list: [[].reduce(function(c, k) {}, {}), {}], root: getter, _awaiting: 2, _saving: 0, sources: {cli: {data: [].reduce(function(c, k) {}, {})}, env: {data: {}, source: {}, prefix: ""}}, usingBuiltin: true})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\load-prefix.js:46:16
+require("fs").readdir(require("path").resolve(process.cwd()), function(err, files) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\find-npm-prefix\find-prefix.js:38:5
+require("fs").readdir(require("path").resolve(process.cwd()), function(err, files) {}).files.indexOf("node_modules") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\find-npm-prefix\find-prefix.js:48:18
+require("fs").readFile(require("path").resolve("C:\\Users\\danie\\Desktop\\simplify", ".npmrc"), "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+require("fs").readFile([].reduce(function(c, k) {}, {}).userconfig, "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+require("fs").readFile([].reduce(function(c, k) {}, {}).globalconfig, "utf8", function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\core.js:312:3
+process.nextTick(Object.create(ProtoList.prototype, {constructor: {value: ConfigChain}, _events: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][0]), _eventsCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][1]), _maxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][2]), setMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][3]), getMaxListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][4]), emit: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][5]), addListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][6]), on: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][7]), prependListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][8]), once: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][9]), prependOnceListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][10]), removeListener: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][11]), off: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][12]), removeAllListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][13]), listeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][14]), rawListeners: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][15]), listenerCount: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][16]), eventNames: Object.getOwnPropertyDescriptor(require("events").prototype, ["_events", "_eventsCount", "_maxListeners", "setMaxListeners", "getMaxListeners", "emit", "addListener", "on", "prependListener", "once", "prependOnceListener", "removeListener", "off", "removeAllListeners", "listeners", "rawListeners", "listenerCount", "eventNames"][17])})._resolve.bind({_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: [[].reduce(function(c, k) {}, {}), {}, {}, {}, {__source__: "global"}, {}], root: getter, _awaiting: 2, _saving: 0, sources: {cli: {data: [].reduce(function(c, k) {}, {})}, env: {data: {}, source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: {}}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: {}}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini"}, builtin: {data: {}}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter})) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\config-chain\index.js:268:5
+require("assert")({access: null, allow-same-version: false, always-auth: false, also: null, audit: true, audit-level: "low", auth-type: "legacy", before: null, bin-links: true, browser: null, ca: null, cafile: null, cache: "C:\\Users\\danie\\AppData\\Roaming\\npm-cache", cache-lock-stale: 60000, cache-lock-retries: 10, cache-lock-wait: 10000, cache-max: Infinity, cache-min: 10, cert: null, cidr: null, color: true, depth: Infinity, description: true, dev: false, dry-run: false, editor: "notepad.exe", engine-strict: false, force: false, fetch-retries: 2, fetch-retry-factor: 10, fetch-retry-mintimeout: 10000, fetch-retry-maxtimeout: 60000, git: "git", git-tag-version: true, commit-hooks: true, global: false, globalconfig: "C:\\Program Files\\nodejs\\etc\\npmrc", global-style: false, group: 0, ham-it-up: false, heading: "npm", if-present: false, ignore-prepublish: false, ignore-scripts: false, init-module: "C:\\Users\\danie\\.npm-init.js", init-author-name: "", init-author-email: "", init-author-url: "", init-version: "1.0.0", init-license: "ISC", json: false, key: null, legacy-bundling: false, link: false, local-address: undefined, loglevel: "notice", logstream: process.stderr, logs-max: 10, long: false, maxsockets: 50, message: "C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\set-user.js:10:3", metrics-registry: null, node-options: null, node-version: "v10.0.0", offline: false, onload-script: false, only: null, optional: true, otp: null, package-lock: true, package-lock-only: false, parseable: false, prefer-offline: false, prefer-online: false, prefix: "C:\\Program Files\\nodejs", preid: "", production: false, progress: true, proxy: null, https-proxy: null, noproxy: null, user-agent: "npm/{npm-version} node/{node-version} {platform} {arch}", read-only: false, rebuild-bundle: true, registry: "https://registry.npmjs.org/", rollback: true, save: true, save-bundle: false, save-dev: false, save-exact: false, save-optional: false, save-prefix: "^", save-prod: false, scope: "", script-shell: null, scripts-prepend-node-path: "warn-only", searchopts: "", searchexclude: null, searchlimit: 20, searchstaleness: 900, send-metrics: false, shell: "C:\\Windows\\system32\\cmd.exe", shrinkwrap: true, sign-git-commit: false, sign-git-tag: false, sso-poll-frequency: 500, sso-type: "oauth", strict-ssl: true, tag: "latest", tag-version-prefix: "v", timing: false, tmp: "C:\\Users\\danie\\AppData\\Local\\Temp", unicode: false, unsafe-perm: true, update-notifier: true, usage: false, user: 0, userconfig: "C:\\Users\\danie\\.npmrc", umask: 0, version: false, versions: false, viewer: "browser", _exit: true, globalignorefile: "C:\\Program Files\\nodejs\\etc\\npmignore"} !== Object.prototype)
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:20:26
+require("fs").mkdir(require("path").resolve(require("path").resolve([].reduce(function(c, k) {}, {}).prefix)), parseInt("0777", 8) & ~process.umask(), function(er) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:27:5
+require("fs").stat(require("path").resolve(require("path").resolve([].reduce(function(c, k) {}, {}).prefix)), function(er2, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:44:17
+require("fs").stat(require("path").resolve(require("path").resolve([].reduce(function(c, k) {}, {}).prefix)), function(er2, stat) {}).stat.isDirectory() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:47:33
+require("fs").stat(require("path").resolve([].reduce(function(c, k) {}, {}).prefix), function(er, st) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\set-user.js:24:5
+process.nextTick(function) C:\Users\danie\Desktop\simplify\node_modules\npm\lib\config\load-uid.js:13:5
+process.umask() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:20:26
+require("fs").mkdir(require("path").resolve("C:\\Users\\danie\\Desktop\\simplify"), parseInt("0777", 8) & ~process.umask(), function(er) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:27:5
+require("fs").stat(require("path").resolve("C:\\Users\\danie\\Desktop\\simplify"), function(er2, stat) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:44:17
+require("fs").stat(require("path").resolve("C:\\Users\\danie\\Desktop\\simplify"), function(er2, stat) {}).stat.isDirectory() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\mkdirp\index.js:47:33
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "restricted", "public"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "restricted", "public"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "dev", "development"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "dev", "development"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("low") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["low", "moderate", "high", "critical"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["low", "moderate", "high", "critical"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("low") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("legacy") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["legacy", "sso", "saml", "oauth"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["legacy", "sso", "saml", "oauth"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("legacy") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, Date]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, Date]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("path").resolve(process.env.APPDATA, "npm-cache")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(60000) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([60000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([60000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(10) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(10000) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(10) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.env.NO_COLOR == null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["always", Boolean]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["always", Boolean]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("always") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(Infinity) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("notepad.exe") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(2) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([2][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([2][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(10) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(10000) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(60000) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([60000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([60000][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray("git") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("path").resolve(require("path").resolve([].reduce(function(c, k) {}, {}).prefix, "etc"), "npmrc")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(0) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([0][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([0][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("npm") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("path").resolve("C:\\Users\\danie", ".npm-init.js")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["", require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["", require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("1.0.0") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("ISC") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(undefined) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(undefined) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("notice") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(["silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(["silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("silent") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("error") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("warn") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("notice") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.stderr) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("stream")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("stream")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(10) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([10][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(50) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([50][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([50][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray("C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19")
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.version) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, SemVer]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, SemVer]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(SemVer) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "dev", "development", "prod", "production"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "dev", "development", "prod", "production"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("path").dirname(process.execPath)) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.env.NODE_ENV === "production") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(!process.env.CI) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, false, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, false, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("npm/{npm-version} node/{node-version} {platform} {arch}") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("https://registry.npmjs.org/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, require("url")]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("url")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("^") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("warn-only") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([false, true, "auto", "warn-only"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([false, true, "auto", "warn-only"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("auto") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("warn-only") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(20) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([20][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([20][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(900) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([900][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([900][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.env.ComSpec) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(500) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN([500][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN([500][0]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray("oauth") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([null, "oauth", "saml"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([null, "oauth", "saml"]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(null) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("oauth") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("latest") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("v") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.env.TEMP) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.platform === "win32") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("fs").stat(require("path").resolve([].reduce(function(c, k) {}, {}).prefix), function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray([Number, String]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(Number) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(require("fs").stat(require("path").resolve([].reduce(function(c, k) {}, {}).prefix), function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:149:45
+isNaN(require("fs").stat(require("path").resolve([].reduce(function(c, k) {}, {}).prefix), function(er, st) {}).st.uid) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:150:7
+Array.isArray(require("path").resolve("C:\\Users\\danie", ".npmrc")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(require("path")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(process.umask()) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Umask) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+isNaN(process.umask()) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\umask\index.js:18:37
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray("browser") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(String) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(true) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+Array.isArray(Boolean) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:184:7
+Array.isArray(require("path").resolve(require("path").resolve([].reduce(function(c, k) {}, {}).prefix, "etc"), "npmignore")) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:61:19
+Array.isArray([false, true, null, String, Array]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\nopt\lib\nopt.js:66:10
+assigned [].reduce(function(c, k) {}, {}).user-agent = "npm/6.9.0 node/v10.0.0 win32 x64"
+assigned [].reduce(function(c, k) {}, {}).metrics-registry = "https://registry.npmjs.org/"
+Array.isArray([387]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+require("os").type() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\has-unicode\index.js:11:7
+Array.isArray([{activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray({activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray([{activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+Array.isArray({activityIndicator: function(values, theme, width) {}, progressbar: function(values, theme, width) {}, preProgressbar: "[", postProgressbar: "]", progressbarTheme: {complete: "#", remaining: "."}, activityIndicatorTheme: "-\\|/", preSubsection: ">"}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\aproba\index.js:10:35
+require("signal-exit")(function() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\gauge\index.js:150:26
+process.stderr.on("resize", function() {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\gauge\index.js:152:3
+Array.isArray([]) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\common.js:31:8
+process.cwd() C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\common.js:93:13
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("\\") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+require("assert")({silent: false, pattern: "C:\\Users\\danie\\AppData\\Roaming\\npm-cache\\_logs\\*-debug.log", strict: true, realpath: false, realpathCache: Object.create(null), follow: false, dot: false, mark: false, nodir: false, sync: false, nounique: false, nonull: false, nosort: false, nocase: false, stat: false, noprocess: false, absolute: false, maxLength: Infinity, cache: Object.create(null), statCache: Object.create(null), symlinks: Object.create(null), ignore: [], changedCwd: false, cwd: "C:\\Users\\danie\\Desktop\\simplify", root: "C:/", cwdAbs: "C:/Users/danie/Desktop/simplify", nomount: false, minimatch: {options: {nonegate: true, nocomment: true}, set: [["C:", "Users", "danie", "AppData", "Roaming", "npm-cache", "_logs", {_glob: "*-debug.log", _src: "(?!\\.)(?=.)[^/]*?-debug\\.log"}]], pattern: "C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log", regexp: null, negate: false, comment: false, empty: false, globSet: ["C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log"], globParts: ["C:/Users/danie/AppData/Roaming/npm-cache/_logs/*-debug.log".split({})]}, options: {nonegate: true, nocomment: true}, _didRealPath: false, matches: [], _events: {error: function(er, files) {}, end: function(matches) {}}, _eventsCount: 2, _processing: 0, _emitQueue: [], _processQueue: [], paused: false} instanceof Glob) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:299:3
+require("assert")(typeof done === "function") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:300:3
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+Boolean(false) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:12:14
+Boolean("/") C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\path-is-absolute\index.js:15:9
+assigned {}.readdir C:/Users/danie/AppData/Roaming/npm-cache/_logs false = [function(er, entries) {}]
+require("fs").readdir("C:/Users/danie/AppData/Roaming/npm-cache/_logs", function(er, entries) {}) C:\Users\danie\Desktop\simplify\node_modules\npm\node_modules\glob\glob.js:547:3
+assigned [].reduce(function(c, k) {}, {}).scope = ""
+require("fs").readFileSync(require("path").join("C:\\Users\\danie\\Desktop\\simplify", "package.json")) node_modules/npm/lib/npm.js:467:28
+JSON.parse(require("fs").readFileSync(require("path").join("C:\\Users\\danie\\Desktop\\simplify", "package.json"))) node_modules/npm/lib/npm.js:467:17
+process.nextTick(some_function_with_external_call.cli.bind({_events: {}, _eventsCount: 0, _maxListeners: undefined, config: {_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], {}][5]], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: [].reduce(function(c, k) {}, {})}, env: {data: [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2]}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3]}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4]}, builtin: {data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], {}][5]}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter, loaded: true}, commands: {access: getter, add: getter, add-user: getter, adduser: getter, apihelp: getter, audit: getter, author: getter, bin: getter, bugs: getter, c: getter, cache: getter, ci: getter, cit: getter, clean-install: getter, clean-install-test: getter, completion: getter, config: getter, create: getter, ddp: getter, dedupe: getter, deprecate: getter, dist-tag: getter, dist-tags: getter, docs: getter, doctor: getter, edit: getter, explore: getter, find: getter, find-dupes: getter, get: getter, help: getter, help-search: getter, home: getter, hook: getter, i: getter, ic: getter, info: getter, init: getter, innit: getter, install: getter, install-ci-test: getter, install-clean: getter, install-test: getter, isntall-clean: getter, issues: getter, it: getter, la: getter, link: getter, list: getter, ll: getter, ln: getter, login: getter, logout: getter, ls: getter, ogr: getter, org: getter, outdated: getter, owner: getter, pack: getter, ping: getter, prefix: getter, profile: getter, prune: getter, publish: getter, r: getter, rb: getter, rebuild: getter, remove: getter, repo: getter, restart: getter, rm: getter, root: getter, rum: getter, run: getter, run-script: getter, s: getter, se: getter, search: getter, set: getter, show: getter, shrinkwrap: getter, sit: getter, star: getter, stars: getter, start: getter, stop: getter, t: getter, team: getter, test: getter, token: getter, tst: getter, udpate: getter, un: getter, uninstall: getter, unlink: getter, unpublish: getter, unstar: getter, up: getter, update: getter, upgrade: getter, urn: getter, v: getter, version: getter, view: getter, whoami: getter}, limit: {fetch: 10, action: 50}, lockfileVersion: 1, rollbacks: [], name: "npm", version: "6.9.0", fullList: ["ci", "install-ci-test", "install", "install-test", "uninstall", "cache", "config", "set", "get", "update", "outdated", "prune", "pack", "dedupe", "hook", "rebuild", "link", "publish", "star", "stars", "adduser", "login", "logout", "unpublish", "owner", "access", "team", "deprecate", "shrinkwrap", "token", "profile", "audit", "org", "help", "help-search", "ls", "search", "view", "init", "version", "edit", "explore", "docs", "repo", "bugs", "root", "prefix", "bin", "whoami", "dist-tag", "ping", "test", "stop", "start", "restart", "run-script", "completion", "doctor", "un", "rb", "list", "ln", "create", "i", "it", "cit", "up", "c", "s", "se", "unstar", "tst", "t", "ddp", "v", "run", "clean-install", "clean-install-test", "la", "ll", "ic", "innit", "install-clean", "isntall-clean", "dist-tags", "apihelp", "find-dupes", "upgrade", "udpate", "login", "add-user", "author", "home", "issues", "info", "show", "find", "add", "unlink", "remove", "rm", "r", "rum", "sit", "urn", "ogr"], deref: function(c) {}, load: function(cli, cb_) {}, prefix: getter, bin: getter, dir: getter, globalDir: getter, cache: getter, tmp: getter, color: undefined, modes: {exec: 511, file: 438, umask: 0}, globalPrefix: getter, localPrefix: getter, projectScope: "", metricsProcess: undefined}, null, {_events: {}, _eventsCount: 0, _maxListeners: undefined, config: {_events: {error: function}, _eventsCount: 1, _maxListeners: undefined, list: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], {}][5]], root: getter, _awaiting: 0, _saving: 0, sources: {cli: {data: [].reduce(function(c, k) {}, {})}, env: {data: [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], source: {}, prefix: ""}, project: {path: "C:\\Users\\danie\\Desktop\\simplify\\.npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2]}, user: {path: "C:\\Users\\danie\\.npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3]}, global: {path: "C:\\Program Files\\nodejs\\etc\\npmrc", type: "ini", data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4]}, builtin: {data: [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], [[].reduce(function(c, k) {}, {}), [[].reduce(function(c, k) {}, {}), {}, {}, {}, {}, {}][1], {}, {}, {}, {}][2], {}, {}, {}][3], {}, {}][4], {}][5]}}, usingBuiltin: true, prefix: getter, globalPrefix: getter, localPrefix: getter, loaded: true}, commands: {access: getter, add: getter, add-user: getter, adduser: getter, apihelp: getter, audit: getter, author: getter, bin: getter, bugs: getter, c: getter, cache: getter, ci: getter, cit: getter, clean-install: getter, clean-install-test: getter, completion: getter, config: getter, create: getter, ddp: getter, dedupe: getter, deprecate: getter, dist-tag: getter, dist-tags: getter, docs: getter, doctor: getter, edit: getter, explore: getter, find: getter, find-dupes: getter, get: getter, help: getter, help-search: getter, home: getter, hook: getter, i: getter, ic: getter, info: getter, init: getter, innit: getter, install: getter, install-ci-test: getter, install-clean: getter, install-test: getter, isntall-clean: getter, issues: getter, it: getter, la: getter, link: getter, list: getter, ll: getter, ln: getter, login: getter, logout: getter, ls: getter, ogr: getter, org: getter, outdated: getter, owner: getter, pack: getter, ping: getter, prefix: getter, profile: getter, prune: getter, publish: getter, r: getter, rb: getter, rebuild: getter, remove: getter, repo: getter, restart: getter, rm: getter, root: getter, rum: getter, run: getter, run-script: getter, s: getter, se: getter, search: getter, set: getter, show: getter, shrinkwrap: getter, sit: getter, star: getter, stars: getter, start: getter, stop: getter, t: getter, team: getter, test: getter, token: getter, tst: getter, udpate: getter, un: getter, uninstall: getter, unlink: getter, unpublish: getter, unstar: getter, up: getter, update: getter, upgrade: getter, urn: getter, v: getter, version: getter, view: getter, whoami: getter}, limit: {fetch: 10, action: 50}, lockfileVersion: 1, rollbacks: [], name: "npm", version: "6.9.0", fullList: ["ci", "install-ci-test", "install", "install-test", "uninstall", "cache", "config", "set", "get", "update", "outdated", "prune", "pack", "dedupe", "hook", "rebuild", "link", "publish", "star", "stars", "adduser", "login", "logout", "unpublish", "owner", "access", "team", "deprecate", "shrinkwrap", "token", "profile", "audit", "org", "help", "help-search", "ls", "search", "view", "init", "version", "edit", "explore", "docs", "repo", "bugs", "root", "prefix", "bin", "whoami", "dist-tag", "ping", "test", "stop", "start", "restart", "run-script", "completion", "doctor", "un", "rb", "list", "ln", "create", "i", "it", "cit", "up", "c", "s", "se", "unstar", "tst", "t", "ddp", "v", "run", "clean-install", "clean-install-test", "la", "ll", "ic", "innit", "install-clean", "isntall-clean", "dist-tags", "apihelp", "find-dupes", "upgrade", "udpate", "login", "add-user", "author", "home", "issues", "info", "show", "find", "add", "unlink", "remove", "rm", "r", "rum", "sit", "urn", "ogr"], deref: function(c) {}, load: function(cli, cb_) {}, prefix: getter, bin: getter, dir: getter, globalDir: getter, cache: getter, tmp: getter, color: undefined, modes: {exec: 511, file: 438, umask: 0}, globalPrefix: getter, localPrefix: getter, projectScope: "", metricsProcess: undefined})) node_modules/npm/lib/npm.js:204:7

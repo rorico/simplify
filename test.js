@@ -35,8 +35,19 @@ if (!ret) ret = JSON.parse(tryR)
 
 var out = simplify(code, {})
 var func = out.call(func, fArgs)
-if (!sameOut(func.ret, ret)) {
-	console.log("incorrect output", func.ret, "!==", ret)
+function check(val) {
+	if (!sameOut(val, ret)) {
+		console.log("incorrect output", val, "!==", ret)
+	} else {
+		console.log("correct output", val)
+	}
+}
+if (func instanceof Promise) {
+	func.then(f => {
+		f.ret.then(check)
+	})
+} else {
+	check(func.ret)
 }
 
 function sameOut(v1, v2) {
